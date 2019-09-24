@@ -8,9 +8,7 @@ public:
 
 	void DataReading();
 
-
 private:
-
 	enum class Automat
 	{
 		UNKNOWN,
@@ -19,8 +17,10 @@ private:
 	};
 
 	void SetAutomat(const std::string automat);
-	void FillingData();
-
+	bool IsFillingData();
+	void TransferAutomatMealy();
+	void TransferAutomatMoore();
+	void PrintInfo();
 
 	std::istream& m_input;
 	std::ostream& m_output;
@@ -30,6 +30,7 @@ private:
 	int m_countVertice;
 	Automat m_automat;
 
-	std::vector<Edge> m_edges;
-	std::vector<std::string> m_outputCharacter;
+	std::vector<std::vector<int>> m_state;
+	std::vector<Edge> m_edge;
+	std::vector<int> m_outputCharacter;
 };

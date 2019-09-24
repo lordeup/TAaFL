@@ -26,12 +26,23 @@ void CAutomatController::SetAutomat(const std::string automat)
 	}
 }
 
+void CAutomatController::FillingData()
+{
+	m_edges.resize(m_sizeInputCharacter);
+
+	for (int i = 0; i < m_edges.size(); ++i)
+	{
+		m_edges[i].resize(m_countVertice);
+		for (int j = 0; j < m_countVertice; ++j)
+		{
+			m_input >> m_edges[i][j];
+		}
+	}
+}
+
 void CAutomatController::DataReading()
 {
 	std::string nameAutomat;
-	std::string str;
-
-	//	std::istringstream iss(str);
 
 	m_input >> m_sizeInputCharacter;
 	m_input >> m_sizeOutputCharacter;
@@ -42,9 +53,17 @@ void CAutomatController::DataReading()
 
 	if (m_automat == Automat::MOORE)
 	{
+		m_outputCharacter.resize(m_countVertice);
+
 		for (int i = 0; i < m_countVertice; ++i)
 		{
-			std::getline(m_input, str);
+			m_input >> m_outputCharacter[i];
 		}
+
+		FillingData();
+	}
+	else if (m_automat == Automat::MEALY)
+	{
+		FillingData();
 	}
 }

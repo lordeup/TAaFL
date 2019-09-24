@@ -19,6 +19,7 @@ private:
 	};
 
 	void SetAutomat(const std::string automat);
+	void FillingData();
 
 
 	std::istream& m_input;
@@ -28,5 +29,7 @@ private:
 	int m_sizeOutputCharacter;
 	int m_countVertice;
 	Automat m_automat;
+
 	std::vector<Edge> m_edges;
+	std::vector<std::string> m_outputCharacter;
 };

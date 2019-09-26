@@ -45,7 +45,7 @@ void CAutomatController::DataReading()
 			m_output << ERROR_WRONG_DATA;
 		}
 
-		//PrintInfoTransferMealy();
+		PrintInfoTransferMealy();
 	}
 }
 
@@ -106,9 +106,10 @@ void CAutomatController::TransferAutomatMealy()
 
 void CAutomatController::PrintInfoTransferMoore()
 {
+	size_t lineFeed = m_edge.size() / m_sizeInputCharacter;
 	for (size_t i = 0; i < m_edge.size(); ++i)
 	{
-		if (i == m_edge.size() / 2)
+		if (i % lineFeed == 0 && i != 0)
 		{
 			m_output << std::endl;
 		}
@@ -141,30 +142,35 @@ void CAutomatController::TransferAutomatMoore()
 	size_t size = m_sizeInputCharacter * copyMealyEdge.size();
 	m_mealy_edge_output.resize(size);
 
-	for (int i = 0, index = 0, nextIndex = m_countVertice; i < copyMealyEdge.size(); ++i, ++index, ++nextIndex)
+	for (int i = 0; i < copyMealyEdge.size(); ++i)
 	{
-		auto it = std::find(copyMealyEdge.begin(), copyMealyEdge.end(), m_mealy_edge[index]);
-		int indexFindCopy = std::distance(copyMealyEdge.begin(), it);
-		//if (copyMealyEdge[i] == m_mealy_edge[index])
+		int index = copyMealyEdge[i].first;
+		int nextIndex = index + m_countVertice;
+		int ind = copyMealyEdge.size() + i;
+
+		for (int j = 0; j < copyMealyEdge.size(); ++j)
 		{
-			m_mealy_edge_output[index] = { indexFindCopy, copyMealyEdge[i].second };
 		}
 
+		auto it = std::find(copyMealyEdge.begin(), copyMealyEdge.end(), m_mealy_edge[index]);
+		int indexFindCopy = int(std::distance(copyMealyEdge.begin(), it));
+		m_mealy_edge_output[i] = { indexFindCopy, copyMealyEdge[i].second };
+
 		auto itNext = std::find(copyMealyEdge.begin(), copyMealyEdge.end(), m_mealy_edge[nextIndex]);
-		int indexFindCopyNext = std::distance(copyMealyEdge.begin(), itNext);
-		m_mealy_edge_output[nextIndex] = { indexFindCopyNext, copyMealyEdge[i].second };
+		int indexFindCopyNext = int(std::distance(copyMealyEdge.begin(), itNext));
+		m_mealy_edge_output[ind] = { indexFindCopyNext, copyMealyEdge[i].second };
 	}
 }
 
 void CAutomatController::PrintInfoTransferMealy()
 {
+	size_t lineFeed = m_mealy_edge_output.size() / m_sizeInputCharacter;
 	for (size_t i = 0; i < m_mealy_edge_output.size(); ++i)
 	{
-		if (i == m_mealy_edge_output.size() / 2)
+		if (i % lineFeed == 0 && i != 0)
 		{
 			m_output << std::endl;
 		}
-		m_output << m_edge[i].first << " "
-				 << "\t";
+		m_output << m_mealy_edge_output[i].first << "\t";
 	}
 }

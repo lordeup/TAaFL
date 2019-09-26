@@ -10,7 +10,7 @@
 
 // dot -Tpng -odia.png test.dot
 
-const std::string INPUT_FILE_NAME = "input3.txt";
+const std::string INPUT_FILE_NAME = "input4.txt";
 const std::string OUTPUT_FILE_NAME = "output.txt";
 const std::string AUTOMAT_MOORE = "moore";
 const std::string AUTOMAT_MEALY = "mealy";

@@ -17,27 +17,25 @@ private:
 	};
 
 	void SetAutomat(const std::string automat);
+	void PrintInfo(const EdgeVector& edge) const;
 
 	bool IsFillingDataMoore();
 	void TransferAutomatMealy();
-	void PrintInfoTransferMoore();
 
 	bool IsFillingDataMealy();
 	void TransferAutomatMoore();
-	void PrintInfoTransferMealy();
 
 	std::istream& m_input;
 	std::ostream& m_output;
 
-	int m_sizeInputCharacter;
-	int m_sizeOutputCharacter;
-	int m_countVertice;
+	int m_inputSize;
+	int m_outputSize;
+	int m_stateCount;
 	Automat m_automat;
 
-	std::vector<Edge> m_mealy_edge;
-	std::vector<Edge> m_mealy_edge_output;
+	EdgeVector m_mealyEdge;
 
 	std::vector<std::vector<int>> m_state;
-	std::vector<Edge> m_edge;
+	EdgeVector m_edge;
 	std::vector<int> m_outputCharacter;
 };

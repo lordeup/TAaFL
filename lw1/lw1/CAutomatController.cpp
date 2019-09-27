@@ -4,9 +4,9 @@ CAutomatController::CAutomatController(std::istream& input, std::ostream& output
 	: m_input(input)
 	, m_output(output)
 {
-	m_sizeInputCharacter = 0;
-	m_sizeOutputCharacter = 0;
-	m_countVertice = 0;
+	m_inputSize = 0;
+	m_outputSize = 0;
+	m_stateCount = 0;
 	m_automat = Automat::UNKNOWN;
 }
 
@@ -14,9 +14,9 @@ void CAutomatController::DataReading()
 {
 	std::string nameAutomat;
 
-	m_input >> m_sizeInputCharacter;
-	m_input >> m_sizeOutputCharacter;
-	m_input >> m_countVertice;
+	m_input >> m_inputSize;
+	m_input >> m_outputSize;
+	m_input >> m_stateCount;
 	m_input >> nameAutomat;
 
 	SetAutomat(nameAutomat);
@@ -31,8 +31,6 @@ void CAutomatController::DataReading()
 		{
 			m_output << ERROR_WRONG_DATA;
 		}
-
-		PrintInfoTransferMoore();
 	}
 	else if (m_automat == Automat::MEALY)
 	{
@@ -44,9 +42,9 @@ void CAutomatController::DataReading()
 		{
 			m_output << ERROR_WRONG_DATA;
 		}
-
-		PrintInfoTransferMealy();
 	}
+
+	PrintInfo(m_edge);
 }
 
 void CAutomatController::SetAutomat(const std::string automat)
@@ -65,25 +63,46 @@ void CAutomatController::SetAutomat(const std::string automat)
 	}
 }
 
+void CAutomatController::PrintInfo(const EdgeVector& edge) const
+{
+	size_t lineFeed = edge.size() / m_inputSize;
+	for (size_t i = 0; i < edge.size(); ++i)
+	{
+		if (i % lineFeed == 0 && i != 0)
+		{
+			m_output << std::endl;
+		}
+
+		if (m_automat == Automat::MOORE)
+		{
+			m_output << edge[i].first << " " << edge[i].second << "\t";
+		}
+		else if (m_automat == Automat::MEALY)
+		{
+			m_output << edge[i].first << "\t";
+		}
+	}
+}
+
 bool CAutomatController::IsFillingDataMoore()
 {
-	m_outputCharacter.resize(m_countVertice);
+	m_outputCharacter.resize(m_stateCount);
 
-	for (int i = 0; i < m_countVertice; ++i)
+	for (int i = 0; i < m_stateCount; ++i)
 	{
 		m_input >> m_outputCharacter[i];
 	}
 
-	m_state.resize(m_sizeInputCharacter);
+	m_state.resize(m_inputSize);
 	int number;
 
 	for (size_t i = 0; i < m_state.size(); ++i)
 	{
-		m_state[i].resize(m_countVertice);
-		for (int j = 0; j < m_countVertice; ++j)
+		m_state[i].resize(m_stateCount);
+		for (int j = 0; j < m_stateCount; ++j)
 		{
 			m_input >> number;
-			if (number >= m_countVertice)
+			if (number >= m_stateCount)
 			{
 				return false;
 			}
@@ -104,73 +123,47 @@ void CAutomatController::TransferAutomatMealy()
 	}
 }
 
-void CAutomatController::PrintInfoTransferMoore()
-{
-	size_t lineFeed = m_edge.size() / m_sizeInputCharacter;
-	for (size_t i = 0; i < m_edge.size(); ++i)
-	{
-		if (i % lineFeed == 0 && i != 0)
-		{
-			m_output << std::endl;
-		}
-		m_output << m_edge[i].first << " " << m_edge[i].second << "\t";
-	}
-}
-
 bool CAutomatController::IsFillingDataMealy()
 {
-	int size = m_sizeInputCharacter * m_countVertice;
-	m_mealy_edge.resize(size);
+	int size = m_inputSize * m_stateCount;
+	m_mealyEdge.resize(size);
 	int state, outputCharacter;
 
-	for (size_t i = 0; i < m_mealy_edge.size(); ++i)
+	for (size_t i = 0; i < m_mealyEdge.size(); ++i)
 	{
 		m_input >> state >> outputCharacter;
-		m_mealy_edge[i] = { state, outputCharacter };
+		m_mealyEdge[i] = { state, outputCharacter };
 	}
 	return true;
 }
 
 void CAutomatController::TransferAutomatMoore()
 {
-	std::vector<Edge> copyMealyEdge(m_mealy_edge);
+	EdgeVector copyMealyEdge(m_mealyEdge);
 
-	std::copy(m_mealy_edge.begin(), m_mealy_edge.end(), copyMealyEdge.begin());
+	std::copy(m_mealyEdge.begin(), m_mealyEdge.end(), copyMealyEdge.begin());
 	std::sort(copyMealyEdge.begin(), copyMealyEdge.end());
 	copyMealyEdge.erase(std::unique(copyMealyEdge.begin(), copyMealyEdge.end()), copyMealyEdge.end());
 
-	size_t size = m_sizeInputCharacter * copyMealyEdge.size();
-	m_mealy_edge_output.resize(size);
+	size_t size = m_inputSize * copyMealyEdge.size();
+	m_edge.resize(size);
 
-	for (int i = 0; i < copyMealyEdge.size(); ++i)
+	for (size_t i = 0; i < copyMealyEdge.size(); ++i)
 	{
+		size_t indexEdge = i;
 		int index = copyMealyEdge[i].first;
-		int nextIndex = index + m_countVertice;
-		int ind = copyMealyEdge.size() + i;
 
-		for (int j = 0; j < copyMealyEdge.size(); ++j)
+		for (int j = 0; j < m_inputSize; ++j)
 		{
+			auto it = std::find(copyMealyEdge.begin(), copyMealyEdge.end(), m_mealyEdge[index]);
+			int indexFindCopy = int(std::distance(copyMealyEdge.begin(), it));
+			m_edge[indexEdge] = { indexFindCopy, copyMealyEdge[i].second };
+
+			if (j < m_inputSize - 1)
+			{
+				indexEdge += copyMealyEdge.size();
+				index += m_stateCount;
+			}
 		}
-
-		auto it = std::find(copyMealyEdge.begin(), copyMealyEdge.end(), m_mealy_edge[index]);
-		int indexFindCopy = int(std::distance(copyMealyEdge.begin(), it));
-		m_mealy_edge_output[i] = { indexFindCopy, copyMealyEdge[i].second };
-
-		auto itNext = std::find(copyMealyEdge.begin(), copyMealyEdge.end(), m_mealy_edge[nextIndex]);
-		int indexFindCopyNext = int(std::distance(copyMealyEdge.begin(), itNext));
-		m_mealy_edge_output[ind] = { indexFindCopyNext, copyMealyEdge[i].second };
-	}
-}
-
-void CAutomatController::PrintInfoTransferMealy()
-{
-	size_t lineFeed = m_mealy_edge_output.size() / m_sizeInputCharacter;
-	for (size_t i = 0; i < m_mealy_edge_output.size(); ++i)
-	{
-		if (i % lineFeed == 0 && i != 0)
-		{
-			m_output << std::endl;
-		}
-		m_output << m_mealy_edge_output[i].first << "\t";
 	}
 }

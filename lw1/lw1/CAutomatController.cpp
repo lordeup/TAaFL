@@ -19,29 +19,33 @@ void CAutomatController::DataReading()
 	m_input >> m_stateCount;
 	m_input >> nameAutomat;
 
-	SetAutomat(nameAutomat);
+	try
+	{
+		SetAutomat(nameAutomat);
+	}
+	catch (const std::invalid_argument& error)
+	{
+		m_output << error.what();
+		return;
+	}
 
 	if (m_automat == Automat::MOORE)
 	{
-		if (IsFillingDataMoore())
+		try
 		{
+			FillingDataMoore();
 			TransferAutomatMealy();
 		}
-		else
+		catch (const std::invalid_argument& error)
 		{
-			m_output << ERROR_WRONG_DATA;
+			m_output << error.what();
+			return;
 		}
 	}
 	else if (m_automat == Automat::MEALY)
 	{
-		if (IsFillingDataMealy())
-		{
-			TransferAutomatMoore();
-		}
-		else
-		{
-			m_output << ERROR_WRONG_DATA;
-		}
+		FillingDataMealy();
+		TransferAutomatMoore();
 	}
 
 	PrintInfo(m_edge);
@@ -59,7 +63,7 @@ void CAutomatController::SetAutomat(const std::string automat)
 	}
 	else
 	{
-		m_automat = Automat::UNKNOWN;
+		throw std::invalid_argument(ERROR_UNKNOWN_MACHINE);
 	}
 }
 
@@ -84,7 +88,7 @@ void CAutomatController::PrintInfo(const EdgeVector& edge) const
 	}
 }
 
-bool CAutomatController::IsFillingDataMoore()
+void CAutomatController::FillingDataMoore()
 {
 	m_outputCharacter.resize(m_stateCount);
 
@@ -104,12 +108,11 @@ bool CAutomatController::IsFillingDataMoore()
 			m_input >> number;
 			if (number >= m_stateCount)
 			{
-				return false;
+				throw std::invalid_argument(ERROR_WRONG_DATA);
 			}
 			m_state[i][j] = number;
 		}
 	}
-	return true;
 }
 
 void CAutomatController::TransferAutomatMealy()
@@ -123,18 +126,15 @@ void CAutomatController::TransferAutomatMealy()
 	}
 }
 
-bool CAutomatController::IsFillingDataMealy()
+void CAutomatController::FillingDataMealy()
 {
 	int size = m_inputSize * m_stateCount;
 	m_mealyEdge.resize(size);
-	int state, outputCharacter;
 
 	for (size_t i = 0; i < m_mealyEdge.size(); ++i)
 	{
-		m_input >> state >> outputCharacter;
-		m_mealyEdge[i] = { state, outputCharacter };
+		m_input >> m_mealyEdge[i].first >> m_mealyEdge[i].second;
 	}
-	return true;
 }
 
 void CAutomatController::TransferAutomatMoore()
@@ -145,8 +145,7 @@ void CAutomatController::TransferAutomatMoore()
 	std::sort(copyMealyEdge.begin(), copyMealyEdge.end());
 	copyMealyEdge.erase(std::unique(copyMealyEdge.begin(), copyMealyEdge.end()), copyMealyEdge.end());
 
-	size_t size = m_inputSize * copyMealyEdge.size();
-	m_edge.resize(size);
+	m_edge.resize(m_inputSize * copyMealyEdge.size());
 
 	for (size_t i = 0; i < copyMealyEdge.size(); ++i)
 	{

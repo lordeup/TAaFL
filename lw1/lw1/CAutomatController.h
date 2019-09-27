@@ -19,10 +19,10 @@ private:
 	void SetAutomat(const std::string automat);
 	void PrintInfo(const EdgeVector& edge) const;
 
-	bool IsFillingDataMoore();
+	void FillingDataMoore();
 	void TransferAutomatMealy();
 
-	bool IsFillingDataMealy();
+	void FillingDataMealy();
 	void TransferAutomatMoore();
 
 	std::istream& m_input;

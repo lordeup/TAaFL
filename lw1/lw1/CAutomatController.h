@@ -1,7 +1,6 @@
 #pragma once
 #include "CAutomatMealy.h"
 #include "CAutomatMoore.h"
-#include "Header.h"
 
 class CAutomatController
 {
@@ -11,6 +10,13 @@ public:
 	void ProcessingCommand();
 
 private:
+	enum class Automat
+	{
+		UNKNOWN,
+		MOORE,
+		MEALY
+	};
+
 	void SetAutomat(const std::string automat);
 
 	std::vector<VectorInt> FillingDataMoore(const int inputSize, const int stateCount);

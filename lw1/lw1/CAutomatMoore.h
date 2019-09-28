@@ -1,15 +1,16 @@
 #pragma once
+#include "Header.h"
 #include "IAutomat.h"
 
 class CAutomatMoore : public IAutomat
 {
 public:
-	CAutomatMoore(std::ostream& output, const int stateCount, VectorInt& outputState, std::vector<VectorInt>& state);
+	CAutomatMoore(std::ostream& output, const int stateCount, const VectorInt& outputState, const std::vector<VectorInt>& state);
 	~CAutomatMoore() = default;
 
-	void GraphView() override;
+	void GraphView() const override;
 	void TransferAutomat() override;
-	void PrintInfo() override;
+	void PrintInfo() const override;
 
 private:
 	int m_stateCount;

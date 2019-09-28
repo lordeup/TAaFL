@@ -1,6 +1,6 @@
 #include "CAutomatMealy.h"
 
-CAutomatMealy::CAutomatMealy(std::ostream& output, const int inputSize, const int stateCount, VectorEdge& edge)
+CAutomatMealy::CAutomatMealy(std::ostream& output, const int inputSize, const int stateCount, const VectorEdge& edge)
 	: m_output(output)
 	, m_inputSize(inputSize)
 	, m_stateCount(stateCount)
@@ -8,15 +8,13 @@ CAutomatMealy::CAutomatMealy(std::ostream& output, const int inputSize, const in
 {
 }
 
-void CAutomatMealy::GraphView()
+void CAutomatMealy::GraphView() const
 {
 	VectorString weights(m_edge.size());
 	VectorEdge edge(m_edge.size());
 	std::ofstream ofs(OUTPUT_GRAPH_NAME);
 
-	int x = 1;
-
-	for (int i = 0, index = 0; i < m_edge.size(); ++i, ++index)
+	for (int i = 0, x = 1, index = 0; i < m_edge.size(); ++i, ++index)
 	{
 		if (i % m_copyEdge.size() == 0 && i != 0)
 		{
@@ -66,13 +64,14 @@ void CAutomatMealy::TransferAutomat()
 	}
 }
 
-void CAutomatMealy::PrintInfo()
+void CAutomatMealy::PrintInfo() const
 {
 	for (size_t i = 0; i < m_copyEdge.size(); ++i)
 	{
 		if (i == 0)
 		{
-			m_output << AUTOMAT_MOORE << std::endl;
+			m_output << AUTOMAT_MOORE << std::endl
+					 << TAB;
 		}
 
 		m_output << SYMBOL_Z << std::to_string(i) << SLASH << SYMBOL_Y << std::to_string(m_copyEdge[i].second) << TAB;
@@ -80,11 +79,13 @@ void CAutomatMealy::PrintInfo()
 
 	m_output << std::endl;
 
-	for (size_t i = 0; i < m_edge.size(); ++i)
+	for (size_t i = 0, x = 0; i < m_edge.size(); ++i)
 	{
 		if (i % m_copyEdge.size() == 0)
 		{
-			m_output << std::endl;
+			++x;
+			m_output << std::endl
+					 << SYMBOL_X << std::to_string(x) << TAB;
 		}
 
 		m_output << SYMBOL_Z << std::to_string(m_edge[i].first) << TAB;

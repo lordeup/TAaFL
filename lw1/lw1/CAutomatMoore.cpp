@@ -1,6 +1,6 @@
 #include "CAutomatMoore.h"
 
-CAutomatMoore::CAutomatMoore(std::ostream& output,  const int stateCount, VectorInt& outputState, std::vector<VectorInt>& state)
+CAutomatMoore::CAutomatMoore(std::ostream& output, const int stateCount, const VectorInt& outputState, const std::vector<VectorInt>& state)
 	: m_output(output)
 	, m_stateCount(stateCount)
 	, m_outputState(outputState)
@@ -8,14 +8,13 @@ CAutomatMoore::CAutomatMoore(std::ostream& output,  const int stateCount, Vector
 {
 }
 
-void CAutomatMoore::GraphView()
+void CAutomatMoore::GraphView() const
 {
 	VectorString weights(m_edge.size());
 	VectorEdge edge(m_edge.size());
 	std::ofstream ofs(OUTPUT_GRAPH_NAME);
-	int x = 1;
 
-	for (int i = 0, index = 0; i < m_edge.size(); ++i, ++index)
+	for (int i = 0, x = 1, index = 0; i < m_edge.size(); ++i, ++index)
 	{
 		if (i % m_stateCount == 0 && i != 0)
 		{
@@ -46,13 +45,14 @@ void CAutomatMoore::TransferAutomat()
 	}
 }
 
-void CAutomatMoore::PrintInfo()
+void CAutomatMoore::PrintInfo() const
 {
 	for (size_t i = 0; i < m_stateCount; ++i)
 	{
 		if (i == 0)
 		{
-			m_output << AUTOMAT_MEALY << std::endl;
+			m_output << AUTOMAT_MEALY << std::endl
+					 << TAB;
 		}
 
 		m_output << SYMBOL_S << std::to_string(i) << TAB;
@@ -60,11 +60,13 @@ void CAutomatMoore::PrintInfo()
 
 	m_output << std::endl;
 
-	for (size_t i = 0; i < m_edge.size(); ++i)
+	for (size_t i = 0, x = 0; i < m_edge.size(); ++i)
 	{
 		if (i % m_stateCount == 0)
 		{
-			m_output << std::endl;
+			++x;
+			m_output << std::endl
+					 << SYMBOL_X << std::to_string(x) << TAB;
 		}
 
 		m_output << SYMBOL_S << std::to_string(m_edge[i].first) << SLASH << SYMBOL_Y << std::to_string(m_edge[i].second) << TAB;

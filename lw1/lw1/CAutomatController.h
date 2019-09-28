@@ -1,4 +1,6 @@
 #pragma once
+#include "CAutomatMealy.h"
+#include "CAutomatMoore.h"
 #include "Header.h"
 
 class CAutomatController
@@ -6,37 +8,19 @@ class CAutomatController
 public:
 	CAutomatController(std::istream& input, std::ostream& output);
 
-	void DataReading();
+	void ProcessingCommand();
 
 private:
-	enum class Automat
-	{
-		UNKNOWN,
-		MOORE,
-		MEALY
-	};
-
 	void SetAutomat(const std::string automat);
-	void PrintInfo(const EdgeVector& edge) const;
-	void PrintChart() const;
 
-	void FillingDataMoore();
-	void TransferAutomatMealy();
+	std::vector<VectorInt> FillingDataMoore(const int inputSize, const int stateCount);
 
-	void FillingDataMealy();
-	void TransferAutomatMoore();
+	VectorEdge FillingDataMealy(const int inputSize, const int stateCount);
+
+	VectorInt FillOutputState(const int stateCount);
 
 	std::istream& m_input;
 	std::ostream& m_output;
 
-	int m_inputSize;
-	int m_outputSize;
-	int m_stateCount;
 	Automat m_automat;
-
-	EdgeVector m_mealyEdge;
-
-	std::vector<IntVector> m_state;
-	EdgeVector m_edge;
-	IntVector m_outputCharacter;
 };

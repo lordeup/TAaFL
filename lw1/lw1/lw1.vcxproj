@@ -164,11 +164,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CAutomatController.cpp" />
+    <ClCompile Include="CAutomatMealy.cpp" />
+    <ClCompile Include="CAutomatMoore.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CAutomatController.h" />
+    <ClInclude Include="CAutomatMealy.h" />
+    <ClInclude Include="CAutomatMoore.h" />
     <ClInclude Include="Header.h" />
+    <ClInclude Include="IAutomat.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,6 +5,7 @@
 int main()
 {
 	std::ifstream fileInput(INPUT_FILE_NAME);
+	std::ofstream fileOutput(OUTPUT_FILE_NAME);
 
 	if (!fileInput.is_open())
 	{
@@ -12,8 +13,8 @@ int main()
 		return 1;
 	}
 
-	CAutomatController automatController(fileInput, std::cout);
-	automatController.DataReading();
+	CAutomatController automatController(fileInput, fileOutput);
+	automatController.ProcessingCommand();
 
 	return 0;
 }

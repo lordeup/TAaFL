@@ -4,20 +4,15 @@ CAutomatController::CAutomatController(std::istream& input, std::ostream& output
 	: m_input(input)
 	, m_output(output)
 {
-	m_inputSize = 0;
-	m_outputSize = 0;
-	m_stateCount = 0;
 	m_automat = Automat::UNKNOWN;
 }
 
-void CAutomatController::DataReading()
+void CAutomatController::ProcessingCommand()
 {
+	int inputSize, outputSize, stateCount;
 	std::string nameAutomat;
 
-	m_input >> m_inputSize;
-	m_input >> m_outputSize;
-	m_input >> m_stateCount;
-	m_input >> nameAutomat;
+	m_input >> inputSize >> outputSize >> stateCount >> nameAutomat;
 
 	try
 	{
@@ -31,25 +26,79 @@ void CAutomatController::DataReading()
 
 	if (m_automat == Automat::MOORE)
 	{
+		VectorInt outputState = FillOutputState(stateCount);
+		std::vector<VectorInt> state;
+
 		try
 		{
-			FillingDataMoore();
-			TransferAutomatMealy();
+			state = FillingDataMoore(inputSize, stateCount);
 		}
 		catch (const std::invalid_argument& error)
 		{
 			m_output << error.what();
 			return;
 		}
+
+		CAutomatMoore automatMoore(m_output, stateCount, outputState, state);
+		automatMoore.TransferAutomat();
+		automatMoore.PrintInfo();
+		automatMoore.GraphView();
 	}
 	else if (m_automat == Automat::MEALY)
 	{
-		FillingDataMealy();
-		TransferAutomatMoore();
+		VectorEdge edge = FillingDataMealy(inputSize, stateCount);
+
+		CAutomatMealy automatMealy(m_output, inputSize, stateCount, edge);
+		automatMealy.TransferAutomat();
+		automatMealy.PrintInfo();
+		automatMealy.GraphView();
+	}
+}
+
+VectorInt CAutomatController::FillOutputState(const int stateCount)
+{
+	VectorInt outputCharacter(stateCount);
+
+	for (int i = 0; i < stateCount; ++i)
+	{
+		m_input >> outputCharacter[i];
 	}
 
-	PrintInfo(m_edge);
-	PrintChart();
+	return outputCharacter;
+}
+
+std::vector<VectorInt> CAutomatController::FillingDataMoore(const int inputSize, const int stateCount)
+{
+	std::vector<VectorInt> state(inputSize);
+	int number;
+
+	for (size_t i = 0; i < state.size(); ++i)
+	{
+		state[i].resize(stateCount);
+		for (int j = 0; j < stateCount; ++j)
+		{
+			m_input >> number;
+			if (number >= stateCount)
+			{
+				throw std::invalid_argument(ERROR_WRONG_DATA);
+			}
+			state[i][j] = number;
+		}
+	}
+
+	return state;
+}
+
+VectorEdge CAutomatController::FillingDataMealy(const int inputSize, const int stateCount)
+{
+	int size = inputSize * stateCount;
+	VectorEdge mealyEdge(size);
+
+	for (size_t i = 0; i < mealyEdge.size(); ++i)
+	{
+		m_input >> mealyEdge[i].first >> mealyEdge[i].second;
+	}
+	return mealyEdge;
 }
 
 void CAutomatController::SetAutomat(const std::string automat)
@@ -65,208 +114,5 @@ void CAutomatController::SetAutomat(const std::string automat)
 	else
 	{
 		throw std::invalid_argument(ERROR_UNKNOWN_MACHINE);
-	}
-}
-
-void CAutomatController::PrintInfo(const EdgeVector& edge) const
-{
-	size_t lineFeed = edge.size() / m_inputSize;
-	for (size_t i = 0; i < edge.size(); ++i)
-	{
-		if (i % lineFeed == 0 && i != 0)
-		{
-			m_output << std::endl;
-		}
-
-		if (m_automat == Automat::MOORE)
-		{
-			m_output << "S" << edge[i].first << "/y" << edge[i].second << "\t";
-		}
-		else if (m_automat == Automat::MEALY)
-		{
-			m_output << edge[i].first << "\t";
-		}
-	}
-}
-
-void CAutomatController::PrintChart() const
-{
-	VectorString weights(m_edge.size());
-	EdgeVector edge(m_edge.size());
-	size_t lineFeed = m_edge.size() / m_inputSize;
-	std::ofstream ofs(OUTPUT_GRAPH_NAME);
-	int x = 1;
-
-	if (m_automat == Automat::MEALY)
-	{
-		for (int i = 0, index = 0; i < m_edge.size(); ++i, ++index)
-		{
-			if (i % lineFeed == 0 && i != 0)
-			{
-				++x;
-				index = 0;
-			}
-			weights[i] = "x" + std::to_string(x);
-			edge[i] = { index, m_edge[i].first };
-		}
-
-		Graph graph(edge.begin(), edge.end(), weights.begin(), m_stateCount);
-
-		dynamic_properties dp;
-		dp.property("label", get(edge_weight, graph));
-		dp.property("node_id", get(vertex_index, graph));
-
-		write_graphviz_dp(ofs, graph, dp);
-	}
-	else if (m_automat == Automat::MOORE)
-	{
-		for (int i = 0, index = 0; i < m_edge.size(); ++i, ++index)
-		{
-			if (i % lineFeed == 0 && i != 0)
-			{
-				++x;
-				index = 0;
-			}
-			weights[i] = "x" + std::to_string(x) + "/" + "y" + std::to_string(m_edge[i].second);
-			edge[i] = { index, m_edge[i].first };
-		}
-
-		Graph graph(edge.begin(), edge.end(), weights.begin(), m_stateCount);
-
-		dynamic_properties dp;
-		dp.property("label", get(edge_weight, graph));
-		dp.property("node_id", get(vertex_index, graph));
-		write_graphviz_dp(ofs, graph, dp);
-	}
-
-	//if (m_automat == Automat::MEALY)
-	//{
-	//	VectorString weights(m_edge.size());
-	//	EdgeVector edge(m_edge.size());
-	//	size_t lineFeed = m_edge.size() / m_inputSize;
-	//	int count = 1;
-	//	for (int i = 0, index = 0; i < m_edge.size(); ++i, ++index)
-	//	{
-	//		if (i % lineFeed == 0 && i != 0)
-	//		{
-	//			++count;
-	//			index = 0;
-	//		}
-	//		weights[i] = "x" + std::to_string(count);
-	//		edge[i] = { index, m_edge[i].first };
-	//	}
-
-	//	Graph graph(edge.begin(), edge.end(), weights.begin(), m_stateCount);
-
-	//	dynamic_properties dp;
-	//	dp.property("label", get(edge_weight, graph));
-	//	dp.property("node_id", get(vertex_index, graph));
-	//	std::ofstream ofs(OUTPUT_GRAPH_NAME);
-	//	write_graphviz_dp(ofs, graph, dp);
-	//}
-
-	//if (m_automat == Automat::MOORE)
-	//{
-	//	VectorString weights(m_edge.size());
-	//	EdgeVector edge(m_edge.size());
-	//	size_t lineFeed = m_edge.size() / m_inputSize;
-	//	int count = 1;
-	//	for (int i = 0, index = 0; i < m_edge.size(); ++i, ++index)
-	//	{
-	//		if (i % lineFeed == 0 && i != 0)
-	//		{
-	//			++count;
-	//			index = 0;
-	//		}
-	//		weights[i] = "x" + std::to_string(count) + "/" + "y" + std::to_string(m_edge[i].second);
-	//		edge[i] = { index, m_edge[i].first };
-	//	}
-
-	//	Graph graph(edge.begin(), edge.end(), weights.begin(), m_stateCount);
-
-	//	dynamic_properties dp;
-	//	dp.property("label", get(edge_weight, graph));
-	//	dp.property("node_id", get(vertex_index, graph));
-	//	std::ofstream ofs(OUTPUT_GRAPH_NAME);
-	//	write_graphviz_dp(ofs, graph, dp);
-	//}
-}
-
-void CAutomatController::FillingDataMoore()
-{
-	m_outputCharacter.resize(m_stateCount);
-
-	for (int i = 0; i < m_stateCount; ++i)
-	{
-		m_input >> m_outputCharacter[i];
-	}
-
-	m_state.resize(m_inputSize);
-	int number;
-
-	for (size_t i = 0; i < m_state.size(); ++i)
-	{
-		m_state[i].resize(m_stateCount);
-		for (int j = 0; j < m_stateCount; ++j)
-		{
-			m_input >> number;
-			if (number >= m_stateCount)
-			{
-				throw std::invalid_argument(ERROR_WRONG_DATA);
-			}
-			m_state[i][j] = number;
-		}
-	}
-}
-
-void CAutomatController::TransferAutomatMealy()
-{
-	for (size_t i = 0; i < m_state.size(); ++i)
-	{
-		for (size_t j = 0; j < m_outputCharacter.size(); ++j)
-		{
-			m_edge.push_back({ m_state[i][j], m_outputCharacter[m_state[i][j]] });
-		}
-	}
-}
-
-void CAutomatController::FillingDataMealy()
-{
-	int size = m_inputSize * m_stateCount;
-	m_mealyEdge.resize(size);
-
-	for (size_t i = 0; i < m_mealyEdge.size(); ++i)
-	{
-		m_input >> m_mealyEdge[i].first >> m_mealyEdge[i].second;
-	}
-}
-
-void CAutomatController::TransferAutomatMoore()
-{
-	EdgeVector copyMealyEdge(m_mealyEdge);
-
-	std::copy(m_mealyEdge.begin(), m_mealyEdge.end(), copyMealyEdge.begin());
-	std::sort(copyMealyEdge.begin(), copyMealyEdge.end());
-	copyMealyEdge.erase(std::unique(copyMealyEdge.begin(), copyMealyEdge.end()), copyMealyEdge.end());
-
-	m_edge.resize(m_inputSize * copyMealyEdge.size());
-
-	for (size_t i = 0; i < copyMealyEdge.size(); ++i)
-	{
-		size_t indexEdge = i;
-		int index = copyMealyEdge[i].first;
-
-		for (int j = 0; j < m_inputSize; ++j)
-		{
-			auto it = std::find(copyMealyEdge.begin(), copyMealyEdge.end(), m_mealyEdge[index]);
-			int indexFindCopy = int(std::distance(copyMealyEdge.begin(), it));
-			m_edge[indexEdge] = { indexFindCopy, copyMealyEdge[i].second };
-
-			if (j < m_inputSize - 1)
-			{
-				indexEdge += copyMealyEdge.size();
-				index += m_stateCount;
-			}
-		}
 	}
 }

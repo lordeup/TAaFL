@@ -16,6 +16,12 @@
     <Filter Include="Исходные файлы\CAutomatController">
       <UniqueIdentifier>{0e06a3b7-8e17-430a-a060-5231d5f39c38}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\CAutomatMoore">
+      <UniqueIdentifier>{350d54be-88be-4e3d-9ff7-26a7eb02d988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\CAutomatMealy">
+      <UniqueIdentifier>{65fb16ef-2132-4f7b-8690-a7d5335038d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CAutomatController.cpp">
@@ -24,6 +30,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="CAutomatMealy.cpp">
+      <Filter>Исходные файлы\CAutomatMealy</Filter>
+    </ClCompile>
+    <ClCompile Include="CAutomatMoore.cpp">
+      <Filter>Исходные файлы\CAutomatMoore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header.h">
@@ -31,6 +43,15 @@
     </ClInclude>
     <ClInclude Include="CAutomatController.h">
       <Filter>Исходные файлы\CAutomatController</Filter>
+    </ClInclude>
+    <ClInclude Include="CAutomatMealy.h">
+      <Filter>Исходные файлы\CAutomatMealy</Filter>
+    </ClInclude>
+    <ClInclude Include="CAutomatMoore.h">
+      <Filter>Исходные файлы\CAutomatMoore</Filter>
+    </ClInclude>
+    <ClInclude Include="IAutomat.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,6 +19,8 @@ private:
 	void SetAutomat(const std::string automat);
 	void PrintInfo(const EdgeVector& edge) const;
 
+	void PrintChart() const;
+
 	void FillingDataMoore();
 	void TransferAutomatMealy();
 
@@ -35,7 +37,7 @@ private:
 
 	EdgeVector m_mealyEdge;
 
-	std::vector<std::vector<int>> m_state;
+	std::vector<IntVector> m_state;
 	EdgeVector m_edge;
-	std::vector<int> m_outputCharacter;
+	IntVector m_outputCharacter;
 };

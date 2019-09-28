@@ -26,11 +26,12 @@ void CAutomatController::ProcessingCommand()
 
 	if (m_automat == Automat::MOORE)
 	{
-		VectorInt outputState = FillOutputState(stateCount);
+		VectorInt outputState;
 		std::vector<VectorInt> state;
 
 		try
 		{
+			outputState = FillOutputState(stateCount);
 			state = FillingDataMoore(inputSize, stateCount);
 		}
 		catch (const std::invalid_argument& error)
@@ -55,13 +56,33 @@ void CAutomatController::ProcessingCommand()
 	}
 }
 
+int CAutomatController::SearchNumberInString(const std::string str)
+{
+	std::smatch match;
+	std::regex strRegex(NUMBER_REGULAR_EXPRESSION);
+	int number;
+
+	if (std::regex_search(str, match, strRegex))
+	{
+		number = std::stoi(match[0]);
+	}
+	else
+	{
+		throw std::invalid_argument(ERROR_WRONG_DATA);
+	}
+
+	return number;
+}
+
 VectorInt CAutomatController::FillOutputState(const int stateCount)
 {
 	VectorInt outputCharacter(stateCount);
+	std::string str;
 
 	for (int i = 0; i < stateCount; ++i)
 	{
-		m_input >> outputCharacter[i];
+		m_input >> str;
+		outputCharacter[i] = SearchNumberInString(str);
 	}
 
 	return outputCharacter;
@@ -71,13 +92,15 @@ std::vector<VectorInt> CAutomatController::FillingDataMoore(const int inputSize,
 {
 	std::vector<VectorInt> state(inputSize);
 	int number;
+	std::string str;
 
 	for (size_t i = 0; i < state.size(); ++i)
 	{
 		state[i].resize(stateCount);
 		for (int j = 0; j < stateCount; ++j)
 		{
-			m_input >> number;
+			m_input >> str;
+			number = SearchNumberInString(str);
 			if (number >= stateCount)
 			{
 				throw std::invalid_argument(ERROR_WRONG_DATA);
@@ -93,10 +116,14 @@ VectorEdge CAutomatController::FillingDataMealy(const int inputSize, const int s
 {
 	int size = inputSize * stateCount;
 	VectorEdge mealyEdge(size);
+	std::string str1;
+	std::string str2;
 
 	for (size_t i = 0; i < mealyEdge.size(); ++i)
 	{
-		m_input >> mealyEdge[i].first >> mealyEdge[i].second;
+		m_input >> str1 >> str2;
+		mealyEdge[i].first = SearchNumberInString(str1);
+		mealyEdge[i].second = SearchNumberInString(str2);
 	}
 	return mealyEdge;
 }

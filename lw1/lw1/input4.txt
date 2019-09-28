@@ -2,7 +2,7 @@
 6
 6
 mealy
-2 5 5 0 2 3 4 4 0 5 1 0
-0 4 4 4 5 5 0 3 0 4 5 0
-2 3 5 5 1 0 5 0 0 3 0 2
-0 3 2 5 4 4 1 5 2 4 2 5
+s2 y5 s5 y0 s2 y3 s4 y4 s0 y5 s1 y0
+s0 y4 s4 y4 s5 y5 s0 y3 s0 y4 s5 y0
+s2 y3 s5 y5 s1 y0 s5 y0 s0 y3 s0 y2
+s0 y3 s2 y5 s4 y4 s1 y5 s2 y4 s2 y5

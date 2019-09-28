@@ -17,6 +17,8 @@ private:
 		MEALY
 	};
 
+	int SearchNumberInString(const std::string str);
+
 	void SetAutomat(const std::string automat);
 
 	std::vector<VectorInt> FillingDataMoore(const int inputSize, const int stateCount);

@@ -74,7 +74,7 @@ void CAutomatMealy::PrintInfo() const
 					 << TAB;
 		}
 
-		m_output << SYMBOL_Z << std::to_string(i) << SLASH << SYMBOL_Y << std::to_string(m_copyEdge[i].second) << TAB;
+		m_output << SYMBOL_Z << i << SLASH << SYMBOL_Y << m_copyEdge[i].second << TAB;
 	}
 
 	m_output << std::endl;
@@ -85,9 +85,9 @@ void CAutomatMealy::PrintInfo() const
 		{
 			++x;
 			m_output << std::endl
-					 << SYMBOL_X << std::to_string(x) << TAB;
+					 << SYMBOL_X << x << TAB;
 		}
 
-		m_output << SYMBOL_Z << std::to_string(m_edge[i].first) << TAB;
+		m_output << SYMBOL_Z << m_edge[i].first << TAB;
 	}
 }

@@ -3,10 +3,13 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphviz.hpp>
 #include <boost/graph/iteration_macros.hpp>
+#include <regex>
 #include <string>
 #include <vector>
 
 using namespace boost;
+
+const std::string NUMBER_REGULAR_EXPRESSION = "[[:digit:]]+";
 
 const std::string INPUT_FILE_NAME = "input5.txt";
 const std::string OUTPUT_FILE_NAME = "output.txt";

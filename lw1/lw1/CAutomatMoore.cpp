@@ -55,7 +55,7 @@ void CAutomatMoore::PrintInfo() const
 					 << TAB;
 		}
 
-		m_output << SYMBOL_S << std::to_string(i) << TAB;
+		m_output << SYMBOL_S << i << TAB;
 	}
 
 	m_output << std::endl;
@@ -66,9 +66,9 @@ void CAutomatMoore::PrintInfo() const
 		{
 			++x;
 			m_output << std::endl
-					 << SYMBOL_X << std::to_string(x) << TAB;
+					 << SYMBOL_X << x << TAB;
 		}
 
-		m_output << SYMBOL_S << std::to_string(m_edge[i].first) << SLASH << SYMBOL_Y << std::to_string(m_edge[i].second) << TAB;
+		m_output << SYMBOL_S << m_edge[i].first << SLASH << SYMBOL_Y << m_edge[i].second << TAB;
 	}
 }

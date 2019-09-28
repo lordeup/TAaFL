@@ -80,7 +80,7 @@ void CAutomatController::PrintInfo(const EdgeVector& edge) const
 
 		if (m_automat == Automat::MOORE)
 		{
-			m_output << edge[i].first << " " << edge[i].second << "\t";
+			m_output << "S" << edge[i].first << "/y" << edge[i].second << "\t";
 		}
 		else if (m_automat == Automat::MEALY)
 		{
@@ -91,53 +91,105 @@ void CAutomatController::PrintInfo(const EdgeVector& edge) const
 
 void CAutomatController::PrintChart() const
 {
+	VectorString weights(m_edge.size());
+	EdgeVector edge(m_edge.size());
+	size_t lineFeed = m_edge.size() / m_inputSize;
+	std::ofstream ofs(OUTPUT_GRAPH_NAME);
+	int x = 1;
+
 	if (m_automat == Automat::MEALY)
 	{
-		IntVector weights(m_edge.size());
-		size_t lineFeed = m_edge.size() / m_inputSize;
-		int count = 1;
-		for (size_t i = 0; i < m_edge.size(); ++i)
+		for (int i = 0, index = 0; i < m_edge.size(); ++i, ++index)
 		{
 			if (i % lineFeed == 0 && i != 0)
 			{
-				++count;
+				++x;
+				index = 0;
 			}
-			weights[i] = count;
+			weights[i] = "x" + std::to_string(x);
+			edge[i] = { index, m_edge[i].first };
 		}
 
-		Graph graph(m_edge.begin(), m_edge.end(), weights.begin(), m_stateCount);
+		Graph graph(edge.begin(), edge.end(), weights.begin(), m_stateCount);
 
 		dynamic_properties dp;
-		dp.property("weight", get(edge_weight, graph));
 		dp.property("label", get(edge_weight, graph));
 		dp.property("node_id", get(vertex_index, graph));
-		std::ofstream ofs(OUTPUT_GRAPH_NAME);
+
 		write_graphviz_dp(ofs, graph, dp);
 	}
-
-		if (m_automat == Automat::MOORE)
+	else if (m_automat == Automat::MOORE)
 	{
-		IntVector weights(m_edge.size());
-		size_t lineFeed = m_edge.size() / m_inputSize;
-		int count = 1;
-		for (size_t i = 0; i < m_edge.size(); ++i)
+		for (int i = 0, index = 0; i < m_edge.size(); ++i, ++index)
 		{
 			if (i % lineFeed == 0 && i != 0)
 			{
-				++count;
+				++x;
+				index = 0;
 			}
-			weights[i] = count;
+			weights[i] = "x" + std::to_string(x) + "/" + "y" + std::to_string(m_edge[i].second);
+			edge[i] = { index, m_edge[i].first };
 		}
 
-		Graph graph(m_edge.begin(), m_edge.end(), weights.begin(), m_stateCount);
+		Graph graph(edge.begin(), edge.end(), weights.begin(), m_stateCount);
 
 		dynamic_properties dp;
-		dp.property("weight", get(edge_weight, graph));
 		dp.property("label", get(edge_weight, graph));
 		dp.property("node_id", get(vertex_index, graph));
-		std::ofstream ofs(OUTPUT_GRAPH_NAME);
 		write_graphviz_dp(ofs, graph, dp);
 	}
+
+	//if (m_automat == Automat::MEALY)
+	//{
+	//	VectorString weights(m_edge.size());
+	//	EdgeVector edge(m_edge.size());
+	//	size_t lineFeed = m_edge.size() / m_inputSize;
+	//	int count = 1;
+	//	for (int i = 0, index = 0; i < m_edge.size(); ++i, ++index)
+	//	{
+	//		if (i % lineFeed == 0 && i != 0)
+	//		{
+	//			++count;
+	//			index = 0;
+	//		}
+	//		weights[i] = "x" + std::to_string(count);
+	//		edge[i] = { index, m_edge[i].first };
+	//	}
+
+	//	Graph graph(edge.begin(), edge.end(), weights.begin(), m_stateCount);
+
+	//	dynamic_properties dp;
+	//	dp.property("label", get(edge_weight, graph));
+	//	dp.property("node_id", get(vertex_index, graph));
+	//	std::ofstream ofs(OUTPUT_GRAPH_NAME);
+	//	write_graphviz_dp(ofs, graph, dp);
+	//}
+
+	//if (m_automat == Automat::MOORE)
+	//{
+	//	VectorString weights(m_edge.size());
+	//	EdgeVector edge(m_edge.size());
+	//	size_t lineFeed = m_edge.size() / m_inputSize;
+	//	int count = 1;
+	//	for (int i = 0, index = 0; i < m_edge.size(); ++i, ++index)
+	//	{
+	//		if (i % lineFeed == 0 && i != 0)
+	//		{
+	//			++count;
+	//			index = 0;
+	//		}
+	//		weights[i] = "x" + std::to_string(count) + "/" + "y" + std::to_string(m_edge[i].second);
+	//		edge[i] = { index, m_edge[i].first };
+	//	}
+
+	//	Graph graph(edge.begin(), edge.end(), weights.begin(), m_stateCount);
+
+	//	dynamic_properties dp;
+	//	dp.property("label", get(edge_weight, graph));
+	//	dp.property("node_id", get(vertex_index, graph));
+	//	std::ofstream ofs(OUTPUT_GRAPH_NAME);
+	//	write_graphviz_dp(ofs, graph, dp);
+	//}
 }
 
 void CAutomatController::FillingDataMoore()

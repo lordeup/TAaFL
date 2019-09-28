@@ -18,7 +18,6 @@ private:
 
 	void SetAutomat(const std::string automat);
 	void PrintInfo(const EdgeVector& edge) const;
-
 	void PrintChart() const;
 
 	void FillingDataMoore();

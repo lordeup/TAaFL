@@ -7,8 +7,6 @@
 #include <string>
 #include <vector>
 
-// dot -Tpng -odia.png test.dot
-
 using namespace boost;
 
 const std::string INPUT_FILE_NAME = "input.txt";
@@ -24,4 +22,5 @@ const std::string ERROR_UNKNOWN_MACHINE = "Unknown machine\n";
 using Edge = std::pair<int, int>;
 using EdgeVector = std::vector<Edge>;
 using IntVector = std::vector<int>;
-using Graph = adjacency_list<vecS, vecS, directedS, property<vertex_color_t, default_color_type>, property<edge_weight_t, int>>;
+using VectorString = std::vector<std::string>;
+using Graph = adjacency_list<vecS, vecS, directedS, property<vertex_color_t, default_color_type>, property<edge_weight_t, std::string>>;

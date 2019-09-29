@@ -14,7 +14,7 @@ void CAutomatMoore::GraphView() const
 	VectorEdge edge(m_edge.size());
 	std::ofstream ofs(OUTPUT_GRAPH_NAME);
 
-	for (int i = 0, x = 1, index = 0; i < m_edge.size(); ++i, ++index)
+	for (size_t i = 0, x = 1, index = 0; i < m_edge.size(); ++i, ++index)
 	{
 		if (i % m_stateCount == 0 && i != 0)
 		{
@@ -47,7 +47,7 @@ void CAutomatMoore::TransferAutomat()
 
 void CAutomatMoore::PrintInfo() const
 {
-	for (size_t i = 0; i < m_stateCount; ++i)
+	for (int i = 0; i < m_stateCount; ++i)
 	{
 		if (i == 0)
 		{

@@ -47,9 +47,9 @@ void CAutomatController::ProcessingCommand()
 	}
 	else if (m_automat == Automat::MEALY)
 	{
-		VectorEdge edge = FillingDataMealy(inputSize, stateCount);
+		VectorEdge inputEdge = FillingDataMealy(inputSize, stateCount);
 
-		CAutomatMealy automatMealy(m_output, inputSize, stateCount, edge);
+		CAutomatMealy automatMealy(m_output, inputSize, stateCount, inputEdge);
 		automatMealy.TransferAutomat();
 		automatMealy.PrintInfo();
 		automatMealy.GraphView();
@@ -115,17 +115,17 @@ std::vector<VectorInt> CAutomatController::FillingDataMoore(const int inputSize,
 VectorEdge CAutomatController::FillingDataMealy(const int inputSize, const int stateCount)
 {
 	int size = inputSize * stateCount;
-	VectorEdge mealyEdge(size);
+	VectorEdge inputEdge(size);
 	std::string str1;
 	std::string str2;
 
-	for (size_t i = 0; i < mealyEdge.size(); ++i)
+	for (size_t i = 0; i < inputEdge.size(); ++i)
 	{
 		m_input >> str1 >> str2;
-		mealyEdge[i].first = SearchNumberInString(str1);
-		mealyEdge[i].second = SearchNumberInString(str2);
+		inputEdge[i].first = SearchNumberInString(str1);
+		inputEdge[i].second = SearchNumberInString(str2);
 	}
-	return mealyEdge;
+	return inputEdge;
 }
 
 void CAutomatController::SetAutomat(const std::string automat)

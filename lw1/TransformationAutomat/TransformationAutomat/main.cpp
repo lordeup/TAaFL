@@ -2,9 +2,15 @@
 #include <fstream>
 #include <iostream>
 
-int main()
+int main(int argc, char* argv[])
 {
-	std::ifstream fileInput(INPUT_FILE_NAME);
+	if (argc != 2)
+	{
+		std::cerr << ERROR_NOT_ENOUGH_ARGUMENTS;
+		return 1;
+	}
+
+	std::ifstream fileInput(argv[1]);
 	std::ofstream fileOutput(OUTPUT_FILE_NAME);
 
 	if (!fileInput.is_open())

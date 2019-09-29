@@ -5,7 +5,7 @@
 class CAutomatMealy : public IAutomat
 {
 public:
-	CAutomatMealy(std::ostream& output, const int inputSize, const int stateCount, const VectorEdge& edge);
+	CAutomatMealy(std::ostream& output, const int inputSize, const int stateCount, const VectorEdge& inputEdge);
 	~CAutomatMealy() = default;
 
 	void GraphView() const override;
@@ -18,8 +18,8 @@ private:
 
 	std::ostream& m_output;
 
-	VectorEdge m_edge;
-	VectorEdge m_mealyEdge;
+	VectorEdge m_inputEdge;
+	VectorEdge m_outputEdge;
 	VectorEdge m_copyEdge;
 
 	std::vector<VectorInt> m_state;

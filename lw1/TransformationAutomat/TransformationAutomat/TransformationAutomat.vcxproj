@@ -18,11 +18,24 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CAutomatController.cpp" />
+    <ClCompile Include="CAutomatMealy.cpp" />
+    <ClCompile Include="CAutomatMoore.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CAutomatController.h" />
+    <ClInclude Include="CAutomatMealy.h" />
+    <ClInclude Include="CAutomatMoore.h" />
+    <ClInclude Include="Header.h" />
+    <ClInclude Include="IAutomat.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{9F7B5DA9-93E5-47D9-A722-AFB3C2EFC1EC}</ProjectGuid>
+    <ProjectGuid>{F41CEA9B-65D5-4BFF-8DD8-F2F089AB9C49}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>lw1</RootNamespace>
+    <RootNamespace>TransformationAutomat</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -162,19 +175,6 @@
       <AdditionalLibraryDirectories>C:\Windows\boost_1_71_0\boost;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="CAutomatController.cpp" />
-    <ClCompile Include="CAutomatMealy.cpp" />
-    <ClCompile Include="CAutomatMoore.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CAutomatController.h" />
-    <ClInclude Include="CAutomatMealy.h" />
-    <ClInclude Include="CAutomatMoore.h" />
-    <ClInclude Include="Header.h" />
-    <ClInclude Include="IAutomat.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

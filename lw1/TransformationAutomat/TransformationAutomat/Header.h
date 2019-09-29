@@ -11,7 +11,6 @@ using namespace boost;
 
 const std::string NUMBER_REGULAR_EXPRESSION = "[[:digit:]]+";
 
-const std::string INPUT_FILE_NAME = "input5.txt";
 const std::string OUTPUT_FILE_NAME = "output.txt";
 const std::string OUTPUT_GRAPH_NAME = "outputGraph.dot";
 const std::string AUTOMAT_MOORE = "moore";
@@ -28,6 +27,8 @@ const std::string LABEL = "label";
 const std::string NODE_ID = "node_id";
 
 const std::string ERROR_FILE_NOT_EXIST = "This file does not exist";
+const std::string ERROR_NOT_ENOUGH_ARGUMENTS = "The number of arguments does not match the task condition\n"
+											   "Input should look: TransformationAutomat.exe <input file>\n";
 const std::string ERROR_WRONG_DATA = "Wrong data\n";
 const std::string ERROR_UNKNOWN_MACHINE = "Unknown machine\n";
 

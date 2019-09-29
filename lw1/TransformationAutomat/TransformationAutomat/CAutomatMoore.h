@@ -5,7 +5,7 @@
 class CAutomatMoore : public IAutomat
 {
 public:
-	CAutomatMoore(std::ostream& output, const int stateCount, const VectorInt& outputState, const std::vector<VectorInt>& state);
+	CAutomatMoore(std::ostream& output, const int stateCount, const VectorInt& outputCharacter, const std::vector<VectorInt>& state);
 	~CAutomatMoore() = default;
 
 	void GraphView() const override;
@@ -19,5 +19,5 @@ private:
 
 	std::vector<VectorInt> m_state;
 	VectorEdge m_edge;
-	VectorInt m_outputState;
+	VectorInt m_outputCharacter;
 };

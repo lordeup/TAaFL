@@ -19,9 +19,7 @@ private:
 	std::ostream& m_output;
 
 	VectorEdge m_inputEdge;
-	VectorEdge m_outputEdge;
-	VectorEdge m_copyEdge;
+	VectorEdge m_uniqueEdge;
 
-	std::vector<VectorInt> m_state;
-	VectorInt m_outputCharacter;
+	VectorInt m_outputState;
 };

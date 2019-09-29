@@ -26,12 +26,12 @@ void CAutomatController::ProcessingCommand()
 
 	if (m_automat == Automat::MOORE)
 	{
-		VectorInt outputState;
+		VectorInt outputCharacter;
 		std::vector<VectorInt> state;
 
 		try
 		{
-			outputState = FillOutputState(stateCount);
+			outputCharacter = FillOutputState(stateCount);
 			state = FillingDataMoore(inputSize, stateCount);
 		}
 		catch (const std::invalid_argument& error)
@@ -40,7 +40,7 @@ void CAutomatController::ProcessingCommand()
 			return;
 		}
 
-		CAutomatMoore automatMoore(m_output, stateCount, outputState, state);
+		CAutomatMoore automatMoore(m_output, stateCount, outputCharacter, state);
 		automatMoore.TransferAutomat();
 		automatMoore.PrintInfo();
 		automatMoore.GraphView();

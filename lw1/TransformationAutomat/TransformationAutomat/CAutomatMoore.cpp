@@ -1,9 +1,9 @@
 #include "CAutomatMoore.h"
 
-CAutomatMoore::CAutomatMoore(std::ostream& output, const int stateCount, const VectorInt& outputState, const std::vector<VectorInt>& state)
+CAutomatMoore::CAutomatMoore(std::ostream& output, const int stateCount, const VectorInt& outputCharacter, const std::vector<VectorInt>& state)
 	: m_output(output)
 	, m_stateCount(stateCount)
-	, m_outputState(outputState)
+	, m_outputCharacter(outputCharacter)
 	, m_state(state)
 {
 }
@@ -14,7 +14,7 @@ void CAutomatMoore::GraphView() const
 	VectorEdge edge(m_edge.size());
 	std::ofstream ofs(OUTPUT_GRAPH_NAME);
 
-	for (size_t i = 0, x = 1, index = 0; i < m_edge.size(); ++i, ++index)
+	for (int i = 0, x = 1, index = 0; i < m_edge.size(); ++i, ++index)
 	{
 		if (i % m_stateCount == 0 && i != 0)
 		{
@@ -38,9 +38,9 @@ void CAutomatMoore::TransferAutomat()
 {
 	for (size_t i = 0; i < m_state.size(); ++i)
 	{
-		for (size_t j = 0; j < m_outputState.size(); ++j)
+		for (size_t j = 0; j < m_outputCharacter.size(); ++j)
 		{
-			m_edge.push_back({ m_state[i][j], m_outputState[m_state[i][j]] });
+			m_edge.push_back({ m_state[i][j], m_outputCharacter[m_state[i][j]] });
 		}
 	}
 }

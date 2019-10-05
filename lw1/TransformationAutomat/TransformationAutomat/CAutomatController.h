@@ -17,7 +17,8 @@ private:
 		MEALY
 	};
 
-	int SearchNumberInString(const std::string str);
+	int SearchNumberInStringMoore(const std::string str);
+	Edge SearchNumberInStringMealy(const std::string str);
 
 	void SetAutomat(const std::string automat);
 

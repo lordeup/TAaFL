@@ -56,7 +56,7 @@ void CAutomatController::ProcessingCommand()
 	}
 }
 
-int CAutomatController::SearchNumberInString(const std::string str)
+int CAutomatController::SearchNumberInStringMoore(const std::string str)
 {
 	std::smatch match;
 	std::regex strRegex(NUMBER_REGULAR_EXPRESSION);
@@ -74,6 +74,30 @@ int CAutomatController::SearchNumberInString(const std::string str)
 	return number;
 }
 
+Edge CAutomatController::SearchNumberInStringMealy(const std::string str)
+{
+	std::smatch match;
+	std::regex strRegex(NUMBER_REGULAR_EXPRESSION);
+	std::string str2;
+	Edge num;
+
+	if (std::regex_search(str, match, strRegex))
+	{
+		num.first = std::stoi(match[0]);
+		str2 = match.suffix();
+		if (std::regex_search(str2, match, strRegex))
+		{
+			num.second = std::stoi(match[0]);
+		}
+	}
+	else
+	{
+		throw std::invalid_argument(ERROR_WRONG_DATA);
+	}
+
+	return num;
+}
+
 VectorInt CAutomatController::FillOutputState(const int stateCount)
 {
 	VectorInt outputCharacter(stateCount);
@@ -82,7 +106,7 @@ VectorInt CAutomatController::FillOutputState(const int stateCount)
 	for (int i = 0; i < stateCount; ++i)
 	{
 		m_input >> str;
-		outputCharacter[i] = SearchNumberInString(str);
+		outputCharacter[i] = SearchNumberInStringMoore(str);
 	}
 
 	return outputCharacter;
@@ -100,7 +124,7 @@ std::vector<VectorInt> CAutomatController::FillingDataMoore(const int inputSize,
 		for (int j = 0; j < stateCount; ++j)
 		{
 			m_input >> str;
-			number = SearchNumberInString(str);
+			number = SearchNumberInStringMoore(str);
 			if (number >= stateCount)
 			{
 				throw std::invalid_argument(ERROR_WRONG_DATA);
@@ -116,14 +140,12 @@ VectorEdge CAutomatController::FillingDataMealy(const int inputSize, const int s
 {
 	int size = inputSize * stateCount;
 	VectorEdge inputEdge(size);
-	std::string str1;
-	std::string str2;
+	std::string str;
 
 	for (size_t i = 0; i < inputEdge.size(); ++i)
 	{
-		m_input >> str1 >> str2;
-		inputEdge[i].first = SearchNumberInString(str1);
-		inputEdge[i].second = SearchNumberInString(str2);
+		m_input >> str;
+		inputEdge[i] = SearchNumberInStringMealy(str);
 	}
 	return inputEdge;
 }

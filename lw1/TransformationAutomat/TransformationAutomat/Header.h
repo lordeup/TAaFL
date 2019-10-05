@@ -16,10 +16,9 @@ const std::string OUTPUT_GRAPH_NAME = "outputGraph.dot";
 const std::string AUTOMAT_MOORE = "moore";
 const std::string AUTOMAT_MEALY = "mealy";
 
-const std::string TAB = "\t";
-const std::string SLASH = "/";
+const std::string SPASE = " ";
 const std::string SYMBOL_Z = "z";
-const std::string SYMBOL_S = "S";
+const std::string SYMBOL_Q = "q";
 const std::string SYMBOL_X = "x";
 const std::string SYMBOL_Y = "y";
 

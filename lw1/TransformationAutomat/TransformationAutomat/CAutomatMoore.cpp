@@ -14,14 +14,14 @@ void CAutomatMoore::GraphView() const
 	VectorEdge edge(m_edge.size());
 	std::ofstream ofs(OUTPUT_GRAPH_NAME);
 
-	for (int i = 0, x = 1, index = 0; i < m_edge.size(); ++i, ++index)
+	for (int i = 0, x = 0, index = 0; i < m_edge.size(); ++i, ++index)
 	{
 		if (i % m_stateCount == 0 && i != 0)
 		{
 			++x;
 			index = 0;
 		}
-		weights[i] = SYMBOL_X + std::to_string(x) + SLASH + SYMBOL_Y + std::to_string(m_edge[i].second);
+		weights[i] = SYMBOL_X + std::to_string(x) + SYMBOL_Y + std::to_string(m_edge[i].second);
 		edge[i] = { index, m_edge[i].first };
 	}
 
@@ -47,28 +47,15 @@ void CAutomatMoore::TransferAutomat()
 
 void CAutomatMoore::PrintInfo() const
 {
-	for (int i = 0; i < m_stateCount; ++i)
+	m_output << AUTOMAT_MEALY << std::endl;
+
+	for (size_t i = 0; i < m_edge.size(); ++i)
 	{
-		if (i == 0)
+		if (i % m_stateCount == 0 && i != 0)
 		{
-			m_output << AUTOMAT_MEALY << std::endl
-					 << TAB;
+			m_output << std::endl;
 		}
 
-		m_output << SYMBOL_S << i << TAB;
-	}
-
-	m_output << std::endl;
-
-	for (size_t i = 0, x = 0; i < m_edge.size(); ++i)
-	{
-		if (i % m_stateCount == 0)
-		{
-			++x;
-			m_output << std::endl
-					 << SYMBOL_X << x << TAB;
-		}
-
-		m_output << SYMBOL_S << m_edge[i].first << SLASH << SYMBOL_Y << m_edge[i].second << TAB;
+		m_output << SYMBOL_Q << m_edge[i].first << SYMBOL_Y << m_edge[i].second << SPASE;
 	}
 }

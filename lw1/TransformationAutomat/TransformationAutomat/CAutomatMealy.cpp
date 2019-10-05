@@ -14,7 +14,7 @@ void CAutomatMealy::GraphView() const
 	VectorEdge edge(m_outputState.size());
 	std::ofstream ofs(OUTPUT_GRAPH_NAME);
 
-	for (int i = 0, x = 1, index = 0; i < m_outputState.size(); ++i, ++index)
+	for (int i = 0, x = 0, index = 0; i < m_outputState.size(); ++i, ++index)
 	{
 		if (i % m_uniqueEdge.size() == 0 && i != 0)
 		{
@@ -65,28 +65,15 @@ void CAutomatMealy::TransferAutomat()
 
 void CAutomatMealy::PrintInfo() const
 {
-	for (size_t i = 0; i < m_uniqueEdge.size(); ++i)
+	m_output << AUTOMAT_MOORE << std::endl;
+
+	for (size_t i = 0; i < m_outputState.size(); ++i)
 	{
-		if (i == 0)
+		if (i % m_uniqueEdge.size() == 0 && i != 0)
 		{
-			m_output << AUTOMAT_MOORE << std::endl
-					 << TAB;
+			m_output << std::endl;
 		}
 
-		m_output << SYMBOL_Z << i << SLASH << SYMBOL_Y << m_uniqueEdge[i].second << TAB;
-	}
-
-	m_output << std::endl;
-
-	for (size_t i = 0, x = 0; i < m_outputState.size(); ++i)
-	{
-		if (i % m_uniqueEdge.size() == 0)
-		{
-			++x;
-			m_output << std::endl
-					 << SYMBOL_X << x << TAB;
-		}
-
-		m_output << SYMBOL_Z << m_outputState[i] << TAB;
+		m_output << SYMBOL_Z << m_outputState[i] << SPASE;
 	}
 }

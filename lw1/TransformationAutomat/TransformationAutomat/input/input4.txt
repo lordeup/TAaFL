@@ -1,8 +1,0 @@
-4
-6
-6
-mealy
-s2 y5 s5 y0 s2 y3 s4 y4 s0 y5 s1 y0
-s0 y4 s4 y4 s5 y5 s0 y3 s0 y4 s5 y0
-s2 y3 s5 y5 s1 y0 s5 y0 s0 y3 s0 y2
-s0 y3 s2 y5 s4 y4 s1 y5 s2 y4 s2 y5

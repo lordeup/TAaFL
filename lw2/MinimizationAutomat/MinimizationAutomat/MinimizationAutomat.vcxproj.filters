@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\CAutomatController">
+      <UniqueIdentifier>{138f1941-e632-463e-9547-778eb08da7e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\CAutomatMealy">
+      <UniqueIdentifier>{3866067b-3fb6-4529-a1e1-67c0f9bce960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\CAutomatMoore">
+      <UniqueIdentifier>{cba5d782-e779-42e3-b21b-952f9862c2c0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="CAutomatController.cpp">
+      <Filter>Исходные файлы\CAutomatController</Filter>
+    </ClCompile>
+    <ClCompile Include="CAutomatMealy.cpp">
+      <Filter>Исходные файлы\CAutomatMealy</Filter>
+    </ClCompile>
+    <ClCompile Include="CAutomatMoore.cpp">
+      <Filter>Исходные файлы\CAutomatMoore</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Header.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CAutomatController.h">
+      <Filter>Исходные файлы\CAutomatController</Filter>
+    </ClInclude>
+    <ClInclude Include="IAutomat.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CAutomatMealy.h">
+      <Filter>Исходные файлы\CAutomatMealy</Filter>
+    </ClInclude>
+    <ClInclude Include="CAutomatMoore.h">
+      <Filter>Исходные файлы\CAutomatMoore</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

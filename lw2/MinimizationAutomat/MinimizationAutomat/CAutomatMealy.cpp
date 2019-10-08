@@ -39,6 +39,7 @@ void CAutomatMealy::MinimizationAutomat()
 	m_groupStateEdge.resize(m_stateCount);
 	m_uniqueEdge.resize(m_stateCount);
 	m_conformityGroupEdge.resize(m_stateCount);
+	VectorInt conformityGroupEdge(m_stateCount);
 
 	for (size_t i = 0; i < m_groupStateEdge.size(); ++i)
 	{
@@ -55,22 +56,34 @@ void CAutomatMealy::MinimizationAutomat()
 		{
 			if (m_groupStateEdge[j] == m_uniqueEdge[i])
 			{
+				conformityGroupEdge[j] = i;
 				m_conformityGroupEdge[j] = { i, j };
 			}
 		}
 	}
 
-	std::sort(m_conformityGroupEdge.begin(), m_conformityGroupEdge.end());
+	//std::sort(m_conformityGroupEdge.begin(), m_conformityGroupEdge.end());
 
-	VectorInt outputState(m_stateCount * 2);
+	int size = m_stateCount * 2;
+	VectorEdge outputState(size);
+	VectorInt outputStateInt(size);
 
-	for (int i = 0; i < m_inputEdge.size(); ++i)
+	for (int i = 0; i < m_stateCount; ++i)
 	{
-		int index = m_inputEdge[i].first;
-		for (int j = 0; j < m_groupStateEdge.size(); ++j)
+		int indexEdge = i;
+		int index = m_inputEdge[indexEdge].first;
+
+		for (int j = 0; j < m_inputSize; ++j)
 		{
-			//auto it = std::find(m_uniqueEdge.begin(), m_uniqueEdge.end(), m_inputEdge[index]);
-			//outputState[indexEdge] = int(std::distance(m_uniqueEdge.begin(), it));
+			auto it = std::find_if(m_conformityGroupEdge.begin(), m_conformityGroupEdge.end(), [&index](const Edge& edge) { return edge.second == index; });
+
+			outputStateInt[indexEdge] = (*it).first;
+
+			if (j < m_inputSize - 1)
+			{
+				indexEdge += m_stateCount;
+				index = m_inputEdge[indexEdge].first;
+			}
 		}
 	}
 

@@ -34,69 +34,87 @@ void CAutomatMealy::GraphView() const
 	//write_graphviz_dp(ofs, graph, dp);
 }
 
-void CAutomatMealy::MinimizationAutomat()
+VectorEdge CAutomatMealy::GettingGroupOutputEdge(const VectorEdge& inputEdge)
 {
-	m_groupStateEdge.resize(m_stateCount);
-	m_uniqueEdge.resize(m_stateCount);
-	m_conformityGroupEdge.resize(m_stateCount);
-	VectorInt conformityGroupEdge(m_stateCount);
+	VectorEdge groupOutputEdge(m_stateCount);
 
-	for (size_t i = 0; i < m_groupStateEdge.size(); ++i)
+	for (size_t i = 0; i < groupOutputEdge.size(); ++i)
 	{
-		m_groupStateEdge[i] = { m_inputEdge[i].second, m_inputEdge[i + m_stateCount].second };
+		groupOutputEdge[i] = std::make_pair(inputEdge[i].second, inputEdge[i + m_stateCount].second);
 	}
 
-	std::copy(m_groupStateEdge.begin(), m_groupStateEdge.end(), m_uniqueEdge.begin());
-	std::sort(m_uniqueEdge.begin(), m_uniqueEdge.end());
-	m_uniqueEdge.erase(std::unique(m_uniqueEdge.begin(), m_uniqueEdge.end()), m_uniqueEdge.end());
+	return groupOutputEdge;
+}
 
-	for (int i = 0; i < m_uniqueEdge.size(); ++i)
+VectorEdge CAutomatMealy::GettingUniqueEdge(const VectorEdge& groupOutputEdge)
+{
+	VectorEdge uniqueEdge(m_stateCount);
+
+	std::copy(groupOutputEdge.begin(), groupOutputEdge.end(), uniqueEdge.begin());
+	std::sort(uniqueEdge.begin(), uniqueEdge.end());
+	uniqueEdge.erase(std::unique(uniqueEdge.begin(), uniqueEdge.end()), uniqueEdge.end());
+
+	return uniqueEdge;
+}
+
+VectorEdge CAutomatMealy::GettingConformityGroupEdge(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge)
+{
+	VectorEdge conformityGroupEdge(m_stateCount);
+
+	for (int i = 0; i < uniqueEdge.size(); ++i)
 	{
-		for (int j = 0; j < m_groupStateEdge.size(); ++j)
+		for (int j = 0; j < groupOutputEdge.size(); ++j)
 		{
-			if (m_groupStateEdge[j] == m_uniqueEdge[i])
+			if (uniqueEdge[i] == groupOutputEdge[j])
 			{
-				conformityGroupEdge[j] = i;
-				m_conformityGroupEdge[j] = { i, j };
+				conformityGroupEdge[j] = std::make_pair(i, j);
 			}
 		}
 	}
 
-	//std::sort(m_conformityGroupEdge.begin(), m_conformityGroupEdge.end());
+	return conformityGroupEdge;
+}
+
+void CAutomatMealy::MinimizationAutomat()
+{
+	VectorEdge groupOutputEdge = GettingGroupOutputEdge(m_inputEdge);
+	VectorEdge uniqueEdge = GettingUniqueEdge(groupOutputEdge);
+	VectorEdge conformityGroupEdge = GettingConformityGroupEdge(groupOutputEdge, uniqueEdge);
 
 	int size = m_stateCount * 2;
 	VectorEdge outputState(size);
-	VectorInt outputStateInt(size);
 
 	for (int i = 0; i < m_stateCount; ++i)
 	{
 		int indexEdge = i;
-		int index = m_inputEdge[indexEdge].first;
+		int unit = m_inputEdge[indexEdge].first;
 
 		for (int j = 0; j < m_inputSize; ++j)
 		{
-			auto it = std::find_if(m_conformityGroupEdge.begin(), m_conformityGroupEdge.end(), [&index](const Edge& edge) { return edge.second == index; });
+			auto it = std::find_if(conformityGroupEdge.begin(), conformityGroupEdge.end(), [&unit](const Edge& edge) { return edge.second == unit; });
 
-			outputStateInt[indexEdge] = (*it).first;
+			outputState[indexEdge] = std::make_pair((*it).second, (*it).first);
 
 			if (j < m_inputSize - 1)
 			{
 				indexEdge += m_stateCount;
-				index = m_inputEdge[indexEdge].first;
+				unit = m_inputEdge[indexEdge].first;
 			}
 		}
 	}
+
+	VectorEdge groupOutputEdge2 = GettingGroupOutputEdge(outputState);
+	VectorEdge uniqueEdge2 = GettingUniqueEdge(groupOutputEdge2);
+	VectorEdge conformityGroupEdge2 = GettingConformityGroupEdge(groupOutputEdge2, uniqueEdge2);
 
 	m_output << std::endl;
 }
 
 void CAutomatMealy::PrintInfo() const
 {
-	m_output << AUTOMAT_MEALY << std::endl;
-
 	for (size_t i = 0; i < m_outputState.size(); ++i)
 	{
-		if (i % m_uniqueEdge.size() == 0 && i != 0)
+		if (i % m_stateCount == 0 && i != 0)
 		{
 			m_output << std::endl;
 		}

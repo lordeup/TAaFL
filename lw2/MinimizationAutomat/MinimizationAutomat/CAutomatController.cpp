@@ -39,6 +39,11 @@ void CAutomatController::ProcessingCommand()
 			m_output << error.what();
 			return;
 		}
+
+		CAutomatMoore automatMoore(m_output, stateCount, outputCharacter, state);
+		automatMoore.MinimizationAutomat();
+		automatMoore.PrintInfo();
+		automatMoore.GraphView();
 	}
 	else if (m_automat == Automat::MEALY)
 	{

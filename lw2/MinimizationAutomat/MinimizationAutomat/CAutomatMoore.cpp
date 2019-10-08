@@ -34,21 +34,43 @@ void CAutomatMoore::GraphView() const
 	//write_graphviz_dp(ofs, graph, dp);
 }
 
-void CAutomatMoore::MinimizationAutomat()
+VectorInt CAutomatMoore::GettingUniqueItem(const VectorInt& outputCharacter)
 {
-	for (size_t i = 0; i < m_state.size(); ++i)
+	VectorInt uniqueItem(m_stateCount);
+
+	std::copy(outputCharacter.begin(), outputCharacter.end(), uniqueItem.begin());
+	std::sort(uniqueItem.begin(), uniqueItem.end());
+	uniqueItem.erase(std::unique(uniqueItem.begin(), uniqueItem.end()), uniqueItem.end());
+
+	return uniqueItem;
+}
+
+VectorEdge CAutomatMoore::GettingConformityGroupEdge(const VectorInt& outputCharacter, const VectorInt& uniqueItem)
+{
+	VectorEdge conformityGroupEdge(m_stateCount);
+
+	for (int i = 0; i < uniqueItem.size(); ++i)
 	{
-		for (size_t j = 0; j < m_outputCharacter.size(); ++j)
+		for (int j = 0; j < outputCharacter.size(); ++j)
 		{
-			m_edge.push_back({ m_state[i][j], m_outputCharacter[m_state[i][j]] });
+			if (uniqueItem[i] == outputCharacter[j])
+			{
+				conformityGroupEdge[j] = std::make_pair(i, j);
+			}
 		}
 	}
+
+	return conformityGroupEdge;
+}
+
+void CAutomatMoore::MinimizationAutomat()
+{
+	VectorInt uniqueItem = GettingUniqueItem(m_outputCharacter);
+	VectorEdge conformityGroupEdge = GettingConformityGroupEdge(m_outputCharacter, uniqueItem);
 }
 
 void CAutomatMoore::PrintInfo() const
 {
-	m_output << AUTOMAT_MOORE << std::endl;
-
 	for (size_t i = 0; i < m_edge.size(); ++i)
 	{
 		if (i % m_stateCount == 0 && i != 0)

@@ -13,15 +13,15 @@ public:
 	void PrintInfo() const override;
 
 private:
+	VectorEdge GettingGroupOutputEdge(const VectorEdge& inputEdge);
+	VectorEdge GettingUniqueEdge(const VectorEdge& groupOutputState);
+	VectorEdge GettingConformityGroupEdge(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge);
+
 	int m_inputSize;
 	int m_stateCount;
 
 	std::ostream& m_output;
 
 	VectorEdge m_inputEdge;
-	VectorEdge m_groupStateEdge;
-	VectorEdge m_uniqueEdge;
-	VectorEdge m_conformityGroupEdge;
-
 	VectorInt m_outputState;
 };

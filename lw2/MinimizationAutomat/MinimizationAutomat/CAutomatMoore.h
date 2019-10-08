@@ -13,6 +13,9 @@ public:
 	void PrintInfo() const override;
 
 private:
+	VectorInt GettingUniqueItem(const VectorInt& outputCharacter);
+	VectorEdge GettingConformityGroupEdge(const VectorInt& outputCharacter, const VectorInt& uniqueItem);
+
 	int m_stateCount;
 
 	std::ostream& m_output;

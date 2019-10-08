@@ -1,5 +1,6 @@
 #pragma once
 #include "CAutomatMealy.h"
+#include "CAutomatMoore.h"
 
 class CAutomatController
 {

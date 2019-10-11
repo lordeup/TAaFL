@@ -15,7 +15,10 @@ public:
 private:
 	VectorEdge GettingGroupOutputEdge(const VectorEdge& inputEdge);
 	VectorEdge GettingUniqueEdge(const VectorEdge& groupOutputState);
-	VectorEdge GettingConformityGroupEdge(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge);
+	VectorEdge GettingConformityGroupEdge(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, DualVectorInt& conformityGroupVector);
+
+	VectorEdge GettingUniqueEdgeNext(const VectorEdge& groupOutputState, const DualVectorInt& conformityGroupVector);
+	VectorEdge GettingConformityGroupEdgeNext(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, const VectorEdge& conformityGroupEdgeStart, DualVectorInt& conformityGroupVector);
 
 	int m_inputSize;
 	int m_stateCount;

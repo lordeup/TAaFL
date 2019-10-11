@@ -35,4 +35,5 @@ using Edge = std::pair<int, int>;
 using VectorEdge = std::vector<Edge>;
 using VectorInt = std::vector<int>;
 using VectorString = std::vector<std::string>;
+using DualVectorInt = std::vector<VectorInt>;
 //using Graph = adjacency_list<vecS, vecS, directedS, property<vertex_color_t, default_color_type>, property<edge_weight_t, std::string>>;

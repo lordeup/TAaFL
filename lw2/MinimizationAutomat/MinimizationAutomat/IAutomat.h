@@ -10,3 +10,10 @@ public:
 	virtual void MinimizationAutomat() = 0;
 	virtual void PrintInfo() const = 0;
 };
+
+enum class Automat
+{
+	UNKNOWN,
+	MOORE,
+	MEALY
+};

@@ -10,13 +10,6 @@ public:
 	void ProcessingCommand();
 
 private:
-	enum class Automat
-	{
-		UNKNOWN,
-		MOORE,
-		MEALY
-	};
-
 	int SearchNumberInStringMoore(const std::string str);
 	Edge SearchNumberInStringMealy(const std::string str);
 

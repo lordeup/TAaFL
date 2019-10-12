@@ -18,6 +18,7 @@ const std::string AUTOMAT_MEALY = "mealy";
 
 const std::string SPASE = " ";
 const std::string SYMBOL_Z = "z";
+const std::string SYMBOL_S = "s";
 const std::string SYMBOL_Q = "q";
 const std::string SYMBOL_X = "x";
 const std::string SYMBOL_Y = "y";

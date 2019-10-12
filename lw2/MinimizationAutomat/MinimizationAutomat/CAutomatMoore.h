@@ -1,11 +1,10 @@
 #pragma once
-#include "Header.h"
-#include "IAutomat.h"
+#include "SharedMinimization.h"
 
 class CAutomatMoore : public IAutomat
 {
 public:
-	CAutomatMoore(std::ostream& output, const int stateCount, const VectorInt& outputCharacter, const std::vector<VectorInt>& state);
+	CAutomatMoore(std::ostream& output, const int inputSize, const int stateCount, const VectorInt& outputCharacter, const std::vector<VectorInt>& state);
 	~CAutomatMoore() = default;
 
 	void GraphView() const override;
@@ -13,10 +12,8 @@ public:
 	void PrintInfo() const override;
 
 private:
-	VectorInt GettingUniqueItem(const VectorInt& outputCharacter);
-	VectorEdge GettingConformityGroupEdge(const VectorInt& outputCharacter, const VectorInt& uniqueItem);
-
 	int m_stateCount;
+	int m_inputSize;
 
 	std::ostream& m_output;
 

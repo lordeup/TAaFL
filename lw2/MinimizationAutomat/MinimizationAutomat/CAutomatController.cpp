@@ -40,7 +40,7 @@ void CAutomatController::ProcessingCommand()
 			return;
 		}
 
-		CAutomatMoore automatMoore(m_output, stateCount, outputCharacter, state);
+		CAutomatMoore automatMoore(m_output, inputSize, stateCount, outputCharacter, state);
 		automatMoore.MinimizationAutomat();
 		automatMoore.PrintInfo();
 		automatMoore.GraphView();

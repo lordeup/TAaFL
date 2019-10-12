@@ -22,6 +22,9 @@
     <Filter Include="Исходные файлы\CAutomatMoore">
       <UniqueIdentifier>{cba5d782-e779-42e3-b21b-952f9862c2c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\SharedMinimization">
+      <UniqueIdentifier>{d3af1386-a396-4348-96e5-63f47f115447}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,6 +38,9 @@
     </ClCompile>
     <ClCompile Include="CAutomatMoore.cpp">
       <Filter>Исходные файлы\CAutomatMoore</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedMinimization.cpp">
+      <Filter>Исходные файлы\SharedMinimization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="CAutomatMoore.h">
       <Filter>Исходные файлы\CAutomatMoore</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedMinimization.h">
+      <Filter>Исходные файлы\SharedMinimization</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

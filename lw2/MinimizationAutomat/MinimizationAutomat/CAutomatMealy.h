@@ -1,6 +1,5 @@
 #pragma once
-#include "Header.h"
-#include "IAutomat.h"
+#include "SharedMinimization.h"
 
 class CAutomatMealy : public IAutomat
 {
@@ -13,18 +12,12 @@ public:
 	void PrintInfo() const override;
 
 private:
-	VectorEdge GettingGroupOutputEdge(const VectorEdge& inputEdge);
-	VectorEdge GettingUniqueEdge(const VectorEdge& groupOutputState);
-	VectorEdge GettingConformityGroupEdge(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, DualVectorInt& conformityGroupVector);
-
-	VectorEdge GettingUniqueEdgeNext(const VectorEdge& groupOutputState, const DualVectorInt& conformityGroupVector);
-	VectorEdge GettingConformityGroupEdgeNext(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, const VectorEdge& conformityGroupEdgeStart, DualVectorInt& conformityGroupVector);
-
 	int m_inputSize;
 	int m_stateCount;
+	int m_outputStateSize;
 
 	std::ostream& m_output;
 
 	VectorEdge m_inputEdge;
-	VectorInt m_outputState;
+	VectorEdge m_outputState;
 };

@@ -1,7 +1,8 @@
 #include "CAutomatMoore.h"
 
-CAutomatMoore::CAutomatMoore(std::ostream& output, const int stateCount, const VectorInt& outputCharacter, const std::vector<VectorInt>& state)
+CAutomatMoore::CAutomatMoore(std::ostream& output, const int inputSize, const int stateCount, const VectorInt& outputCharacter, const std::vector<VectorInt>& state)
 	: m_output(output)
+	, m_inputSize(inputSize)
 	, m_stateCount(stateCount)
 	, m_outputCharacter(outputCharacter)
 	, m_state(state)
@@ -34,39 +35,11 @@ void CAutomatMoore::GraphView() const
 	//write_graphviz_dp(ofs, graph, dp);
 }
 
-VectorInt CAutomatMoore::GettingUniqueItem(const VectorInt& outputCharacter)
-{
-	VectorInt uniqueItem(m_stateCount);
-
-	std::copy(outputCharacter.begin(), outputCharacter.end(), uniqueItem.begin());
-	std::sort(uniqueItem.begin(), uniqueItem.end());
-	uniqueItem.erase(std::unique(uniqueItem.begin(), uniqueItem.end()), uniqueItem.end());
-
-	return uniqueItem;
-}
-
-VectorEdge CAutomatMoore::GettingConformityGroupEdge(const VectorInt& outputCharacter, const VectorInt& uniqueItem)
-{
-	VectorEdge conformityGroupEdge(m_stateCount);
-
-	for (int i = 0; i < uniqueItem.size(); ++i)
-	{
-		for (int j = 0; j < outputCharacter.size(); ++j)
-		{
-			if (uniqueItem[i] == outputCharacter[j])
-			{
-				conformityGroupEdge[j] = std::make_pair(i, j);
-			}
-		}
-	}
-
-	return conformityGroupEdge;
-}
-
 void CAutomatMoore::MinimizationAutomat()
 {
-	VectorInt uniqueItem = GettingUniqueItem(m_outputCharacter);
-	VectorEdge conformityGroupEdge = GettingConformityGroupEdge(m_outputCharacter, uniqueItem);
+	SharedMinimization sharedMinimization(m_inputSize, m_stateCount, m_outputCharacter, m_state, Automat::MOORE);
+	//VectorInt uniqueItem = GettingUniqueItem(m_outputCharacter);
+	//VectorEdge conformityGroupEdge = GettingConformityGroupEdge(m_outputCharacter, uniqueItem);
 }
 
 void CAutomatMoore::PrintInfo() const

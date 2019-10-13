@@ -1,13 +1,13 @@
 #pragma once
 #include <algorithm>
-//#include <boost/graph/adjacency_list.hpp>
-//#include <boost/graph/graphviz.hpp>
-//#include <boost/graph/iteration_macros.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graphviz.hpp>
+#include <boost/graph/iteration_macros.hpp>
 #include <regex>
 #include <string>
 #include <vector>
 
-//using namespace boost;
+using namespace boost;
 
 const std::string NUMBER_REGULAR_EXPRESSION = "[[:digit:]]+";
 
@@ -37,4 +37,4 @@ using VectorEdge = std::vector<Edge>;
 using VectorInt = std::vector<int>;
 using VectorString = std::vector<std::string>;
 using DualVectorInt = std::vector<VectorInt>;
-//using Graph = adjacency_list<vecS, vecS, directedS, property<vertex_color_t, default_color_type>, property<edge_weight_t, std::string>>;
+using Graph = adjacency_list<vecS, vecS, directedS, property<vertex_color_t, default_color_type>, property<edge_weight_t, std::string>>;

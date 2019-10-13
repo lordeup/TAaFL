@@ -1,5 +1,6 @@
 #pragma once
 #include "SharedMinimization.h"
+#include "Visualization.h"
 
 class CAutomatMoore : public IAutomat
 {
@@ -14,10 +15,14 @@ public:
 private:
 	int m_stateCount;
 	int m_inputSize;
+	int m_outputStateSize;
 
 	std::ostream& m_output;
 
 	std::vector<VectorInt> m_state;
 	VectorEdge m_edge;
 	VectorInt m_outputCharacter;
+
+	VectorInt m_outputCharacterMoore;
+	VectorInt m_outputStateMoore;
 };

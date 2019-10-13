@@ -1,5 +1,6 @@
 #pragma once
 #include "SharedMinimization.h"
+#include "Visualization.h"
 
 class CAutomatMealy : public IAutomat
 {

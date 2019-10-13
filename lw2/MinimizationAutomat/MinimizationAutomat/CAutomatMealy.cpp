@@ -1,6 +1,4 @@
 #include "CAutomatMealy.h"
-#include <boost/functional/hash.hpp>
-#include <unordered_set>
 
 CAutomatMealy::CAutomatMealy(std::ostream& output, const int inputSize, const int stateCount, const VectorEdge& inputEdge)
 	: m_output(output)
@@ -13,34 +11,37 @@ CAutomatMealy::CAutomatMealy(std::ostream& output, const int inputSize, const in
 
 void CAutomatMealy::GraphView() const
 {
+	Visualization visualization(m_outputState, m_outputStateSize, Automat::MEALY);
+	visualization.GraphView();
 	//VectorString weights(m_outputState.size());
 	//VectorEdge edge(m_outputState.size());
 	//std::ofstream ofs(OUTPUT_GRAPH_NAME);
 
 	//for (int i = 0, x = 0, index = 0; i < m_outputState.size(); ++i, ++index)
 	//{
-	//	if (i % m_uniqueEdge.size() == 0 && i != 0)
+	//	if (i % m_outputStateSize == 0 && i != 0)
 	//	{
 	//		++x;
 	//		index = 0;
 	//	}
-	//	weights[i] = SYMBOL_X + std::to_string(x);
-	//	edge[i] = { index, m_outputState[i] };
+	//	weights[i] = SYMBOL_X + std::to_string(x) + SYMBOL_Y + std::to_string(m_outputState[i].second);
+	//	edge[i] = { index, m_outputState[i].first };
 	//}
 
-	//Graph graph(edge.begin(), edge.end(), weights.begin(), m_uniqueEdge.size());
+	//Graph graph(edge.begin(), edge.end(), weights.begin(), m_outputStateSize);
 
 	//dynamic_properties dp;
 	//dp.property(LABEL, get(edge_weight, graph));
 	//dp.property(NODE_ID, get(vertex_index, graph));
 
 	//write_graphviz_dp(ofs, graph, dp);
+
 }
 
 void CAutomatMealy::MinimizationAutomat()
 {
 	SharedMinimization sharedMinimization(m_inputSize, m_stateCount, m_inputEdge, Automat::MEALY);
-	m_outputState = sharedMinimization.Minimization();
+	m_outputState = sharedMinimization.MinimizationMealy();
 	m_outputStateSize = sharedMinimization.GetOutputStateSize();
 }
 

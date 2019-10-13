@@ -25,6 +25,9 @@
     <Filter Include="Исходные файлы\SharedMinimization">
       <UniqueIdentifier>{d3af1386-a396-4348-96e5-63f47f115447}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Visualization">
+      <UniqueIdentifier>{03a7cdf4-b959-46d4-92de-111e3271f20d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,6 +44,9 @@
     </ClCompile>
     <ClCompile Include="SharedMinimization.cpp">
       <Filter>Исходные файлы\SharedMinimization</Filter>
+    </ClCompile>
+    <ClCompile Include="Visualization.cpp">
+      <Filter>Исходные файлы\Visualization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="SharedMinimization.h">
       <Filter>Исходные файлы\SharedMinimization</Filter>
+    </ClInclude>
+    <ClInclude Include="Visualization.h">
+      <Filter>Исходные файлы\Visualization</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

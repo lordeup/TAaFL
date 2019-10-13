@@ -1,16 +1,14 @@
 #pragma once
 #include "Header.h"
 #include "IAutomat.h"
-#include <boost/functional/hash.hpp>
-#include <unordered_set>
 #include <set>
 
-class SharedMinimization
+class Minimization
 {
 public:
-	SharedMinimization(const int inputSize, const int stateCount, const VectorEdge& inputEdge, const Automat automat);
-	SharedMinimization(const int inputSize, const int stateCount, const VectorInt& outputCharacter, const DualVectorInt& state, const Automat automat);
-	~SharedMinimization() = default;
+	Minimization(const int inputSize, const int stateCount, const VectorEdge& inputEdge, const Automat automat);
+	Minimization(const int inputSize, const int stateCount, const VectorInt& outputCharacter, const DualVectorInt& state, const Automat automat);
+	~Minimization() = default;
 
 	VectorEdge MinimizationMealy();
 	VectorInt MinimizationMoore();

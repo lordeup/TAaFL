@@ -1,5 +1,5 @@
 #pragma once
-#include "SharedMinimization.h"
+#include "Minimization.h"
 #include "Visualization.h"
 
 class CAutomatMoore : public IAutomat

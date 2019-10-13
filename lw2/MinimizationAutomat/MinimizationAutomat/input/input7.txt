@@ -1,0 +1,7 @@
+3
+2
+9
+mealy
+s1y0 s0y1 s0y1 s7y0 s5y1 s7y0 s5y1 s3y1 s6y0
+s3y1 s0y0 s5y0 s0y1 s3y1 s8y1 s0y1 s3y0 s8y1
+s3y1 s4y0 s4y0 s0y1 s2y0 s5y1 s2y0 s6y0 s6y1

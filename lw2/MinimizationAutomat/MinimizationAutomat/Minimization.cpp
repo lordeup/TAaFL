@@ -1,6 +1,6 @@
-#include "SharedMinimization.h"
+#include "Minimization.h"
 
-SharedMinimization::SharedMinimization(const int inputSize, const int stateCount, const VectorEdge& inputEdge, const Automat automat)
+Minimization::Minimization(const int inputSize, const int stateCount, const VectorEdge& inputEdge, const Automat automat)
 	: m_inputSize(inputSize)
 	, m_stateCount(stateCount)
 	, m_inputEdge(inputEdge)
@@ -8,7 +8,7 @@ SharedMinimization::SharedMinimization(const int inputSize, const int stateCount
 {
 }
 
-SharedMinimization::SharedMinimization(const int inputSize, const int stateCount, const VectorInt& outputCharacter, const DualVectorInt& state, const Automat automat)
+Minimization::Minimization(const int inputSize, const int stateCount, const VectorInt& outputCharacter, const DualVectorInt& state, const Automat automat)
 	: m_inputSize(inputSize)
 	, m_stateCount(stateCount)
 	, m_outputCharacter(outputCharacter)
@@ -17,7 +17,7 @@ SharedMinimization::SharedMinimization(const int inputSize, const int stateCount
 {
 }
 
-VectorEdge SharedMinimization::GettingGroupOutputEdgeMealy(const VectorEdge& inputEdge)
+VectorEdge Minimization::GettingGroupOutputEdgeMealy(const VectorEdge& inputEdge)
 {
 	VectorEdge groupOutputEdge(m_stateCount);
 
@@ -29,7 +29,7 @@ VectorEdge SharedMinimization::GettingGroupOutputEdgeMealy(const VectorEdge& inp
 	return groupOutputEdge;
 }
 
-VectorEdge SharedMinimization::GettingGroupOutputEdgeMoore(const VectorInt& outputCharacter, const VectorInt& uniqueItem, DualVectorInt& conformityGroupVector)
+VectorEdge Minimization::GettingGroupOutputEdgeMoore(const VectorInt& outputCharacter, const VectorInt& uniqueItem, DualVectorInt& conformityGroupVector)
 {
 	VectorEdge conformityGroupEdge(m_stateCount);
 	conformityGroupVector.resize(uniqueItem.size());
@@ -49,17 +49,17 @@ VectorEdge SharedMinimization::GettingGroupOutputEdgeMoore(const VectorInt& outp
 	return conformityGroupEdge;
 }
 
-int SharedMinimization::GetOutputStateSize() const
+int Minimization::GetOutputStateSize() const
 {
 	return (int)m_conformityGroupVectorPrevious.size();
 }
 
-VectorInt SharedMinimization::GetOutputCharacterMoore() const
+VectorInt Minimization::GetOutputCharacterMoore() const
 {
 	return m_outputCharacterMoore;
 }
 
-VectorEdge SharedMinimization::GettingUniqueMealy(const VectorEdge& groupOutputEdge, const int size)
+VectorEdge Minimization::GettingUniqueMealy(const VectorEdge& groupOutputEdge, const int size)
 {
 	VectorEdge uniqueEdge(size);
 
@@ -70,10 +70,9 @@ VectorEdge SharedMinimization::GettingUniqueMealy(const VectorEdge& groupOutputE
 	return uniqueEdge;
 }
 
-VectorInt SharedMinimization::GettingUniqueMoore(const VectorInt& groupOutputEdge)
+VectorInt Minimization::GettingUniqueMoore(const VectorInt& groupOutputEdge)
 {
 	VectorInt uniqueEdge;
-	//std::unordered_set<int> setUnique;
 	std::set<int> setUnique;
 
 	for (const auto& group : groupOutputEdge)
@@ -87,13 +86,12 @@ VectorInt SharedMinimization::GettingUniqueMoore(const VectorInt& groupOutputEdg
 	return uniqueEdge;
 }
 
-VectorEdge SharedMinimization::GettingUniqueEdgeNext(const VectorEdge& groupOutputEdge, const DualVectorInt& conformityGroupVector)
+VectorEdge Minimization::GettingUniqueEdgeNext(const VectorEdge& groupOutputEdge, const DualVectorInt& conformityGroupVector)
 {
 	VectorEdge uniqueEdge;
 
 	for (auto it = conformityGroupVector.begin(); it != conformityGroupVector.end(); ++it)
 	{
-		//std::unordered_set<Edge, boost::hash<Edge>> setUnique;
 		std::set<Edge> setUnique;
 
 		for (auto it2 = (*it).begin(); it2 != (*it).end(); ++it2)
@@ -109,7 +107,7 @@ VectorEdge SharedMinimization::GettingUniqueEdgeNext(const VectorEdge& groupOutp
 	return uniqueEdge;
 }
 
-VectorEdge SharedMinimization::GettingConformityGroupEdge(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, DualVectorInt& conformityGroupVector)
+VectorEdge Minimization::GettingConformityGroupEdge(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, DualVectorInt& conformityGroupVector)
 {
 	VectorEdge conformityGroupEdge(m_stateCount);
 	conformityGroupVector.resize(uniqueEdge.size());
@@ -129,7 +127,7 @@ VectorEdge SharedMinimization::GettingConformityGroupEdge(const VectorEdge& grou
 	return conformityGroupEdge;
 }
 
-VectorEdge SharedMinimization::GettingConformityGroupEdgeNext(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, DualVectorInt& conformityGroupVector)
+VectorEdge Minimization::GettingConformityGroupEdgeNext(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, DualVectorInt& conformityGroupVector)
 {
 	VectorEdge conformityGroupEdge(m_stateCount);
 	conformityGroupVector.resize(uniqueEdge.size());
@@ -164,10 +162,10 @@ VectorEdge SharedMinimization::GettingConformityGroupEdgeNext(const VectorEdge& 
 	return conformityGroupEdge;
 }
 
-VectorEdge SharedMinimization::GetConformityPreviousGroupEdge(DualVectorInt& conformityGroupVectorPrevious, const DualVectorInt& conformityGroupVector, const VectorEdge& conformityGroupEdge)
+VectorEdge Minimization::GetConformityPreviousGroupEdge(DualVectorInt& conformityGroupVectorPrevious, const DualVectorInt& conformityGroupVector, const VectorEdge& conformityGroupEdge)
 {
 	VectorEdge conformityPreviousGroupEdge;
-	int size = m_stateCount * 2;
+	int size = m_stateCount * m_inputSize;
 	VectorEdge outputState(size);
 
 	for (size_t i = 0; i < size; ++i)
@@ -227,7 +225,7 @@ VectorEdge SharedMinimization::GetConformityPreviousGroupEdge(DualVectorInt& con
 					if (k < m_inputSize - 1)
 					{
 						++indexRow;
-						unit = m_state[indexRow][indexColumn];
+						unit = m_state[indexRow][j];
 						indexColumn += m_stateCount;
 					}
 				}
@@ -246,7 +244,7 @@ VectorEdge SharedMinimization::GetConformityPreviousGroupEdge(DualVectorInt& con
 	return conformityPreviousGroupEdge;
 }
 
-void SharedMinimization::FillOutput(const DualVectorInt& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge)
+void Minimization::FillOutput(const DualVectorInt& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge)
 {
 	int size = GetOutputStateSize();
 	int sizeOutput = size * m_inputSize;
@@ -278,7 +276,7 @@ void SharedMinimization::FillOutput(const DualVectorInt& conformityGroupVectorPr
 	}
 }
 
-void SharedMinimization::FillOutputMoore(const DualVectorInt& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge)
+void Minimization::FillOutputMoore(const DualVectorInt& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge)
 {
 	int size = GetOutputStateSize();
 	int sizeOutput = size * m_inputSize;
@@ -310,7 +308,7 @@ void SharedMinimization::FillOutputMoore(const DualVectorInt& conformityGroupVec
 	}
 }
 
-VectorEdge SharedMinimization::MinimizationMealy()
+VectorEdge Minimization::MinimizationMealy()
 {
 	VectorEdge groupOutputEdge = GettingGroupOutputEdgeMealy(m_inputEdge);
 
@@ -325,7 +323,7 @@ VectorEdge SharedMinimization::MinimizationMealy()
 	return m_outputState;
 }
 
-VectorInt SharedMinimization::MinimizationMoore()
+VectorInt Minimization::MinimizationMoore()
 {
 	VectorInt uniqueItem = GettingUniqueMoore(m_outputCharacter);
 

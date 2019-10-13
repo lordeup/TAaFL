@@ -18,10 +18,10 @@ void CAutomatMoore::GraphView() const
 
 void CAutomatMoore::MinimizationAutomat()
 {
-	SharedMinimization sharedMinimization(m_inputSize, m_stateCount, m_outputCharacter, m_state, Automat::MOORE);
-	m_outputStateMoore = sharedMinimization.MinimizationMoore();
-	m_outputCharacterMoore = sharedMinimization.GetOutputCharacterMoore();
-	m_outputStateSize = sharedMinimization.GetOutputStateSize();
+	Minimization minimization(m_inputSize, m_stateCount, m_outputCharacter, m_state, Automat::MOORE);
+	m_outputStateMoore = minimization.MinimizationMoore();
+	m_outputCharacterMoore = minimization.GetOutputCharacterMoore();
+	m_outputStateSize = minimization.GetOutputStateSize();
 }
 
 void CAutomatMoore::PrintInfo() const

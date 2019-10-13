@@ -17,9 +17,9 @@ void CAutomatMealy::GraphView() const
 
 void CAutomatMealy::MinimizationAutomat()
 {
-	SharedMinimization sharedMinimization(m_inputSize, m_stateCount, m_inputEdge, Automat::MEALY);
-	m_outputState = sharedMinimization.MinimizationMealy();
-	m_outputStateSize = sharedMinimization.GetOutputStateSize();
+	Minimization minimization(m_inputSize, m_stateCount, m_inputEdge, Automat::MEALY);
+	m_outputState = minimization.MinimizationMealy();
+	m_outputStateSize = minimization.GetOutputStateSize();
 }
 
 void CAutomatMealy::PrintInfo() const

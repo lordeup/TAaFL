@@ -161,7 +161,7 @@
     <ClCompile Include="CAutomatMealy.cpp" />
     <ClCompile Include="CAutomatMoore.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SharedMinimization.cpp" />
+    <ClCompile Include="Minimization.cpp" />
     <ClCompile Include="Visualization.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,7 +170,7 @@
     <ClInclude Include="CAutomatMoore.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="IAutomat.h" />
-    <ClInclude Include="SharedMinimization.h" />
+    <ClInclude Include="Minimization.h" />
     <ClInclude Include="Visualization.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

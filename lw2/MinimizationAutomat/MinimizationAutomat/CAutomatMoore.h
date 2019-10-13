@@ -20,7 +20,6 @@ private:
 	std::ostream& m_output;
 
 	std::vector<VectorInt> m_state;
-	VectorEdge m_edge;
 	VectorInt m_outputCharacter;
 
 	VectorInt m_outputCharacterMoore;

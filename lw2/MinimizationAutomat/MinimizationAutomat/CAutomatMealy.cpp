@@ -13,29 +13,6 @@ void CAutomatMealy::GraphView() const
 {
 	Visualization visualization(m_outputState, m_outputStateSize, Automat::MEALY);
 	visualization.GraphView();
-	//VectorString weights(m_outputState.size());
-	//VectorEdge edge(m_outputState.size());
-	//std::ofstream ofs(OUTPUT_GRAPH_NAME);
-
-	//for (int i = 0, x = 0, index = 0; i < m_outputState.size(); ++i, ++index)
-	//{
-	//	if (i % m_outputStateSize == 0 && i != 0)
-	//	{
-	//		++x;
-	//		index = 0;
-	//	}
-	//	weights[i] = SYMBOL_X + std::to_string(x) + SYMBOL_Y + std::to_string(m_outputState[i].second);
-	//	edge[i] = { index, m_outputState[i].first };
-	//}
-
-	//Graph graph(edge.begin(), edge.end(), weights.begin(), m_outputStateSize);
-
-	//dynamic_properties dp;
-	//dp.property(LABEL, get(edge_weight, graph));
-	//dp.property(NODE_ID, get(vertex_index, graph));
-
-	//write_graphviz_dp(ofs, graph, dp);
-
 }
 
 void CAutomatMealy::MinimizationAutomat()

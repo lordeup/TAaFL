@@ -47,8 +47,6 @@ void CAutomatMoore::TransferAutomat()
 
 void CAutomatMoore::PrintInfo() const
 {
-	m_output << AUTOMAT_MEALY << std::endl;
-
 	for (size_t i = 0; i < m_edge.size(); ++i)
 	{
 		if (i % m_stateCount == 0 && i != 0)

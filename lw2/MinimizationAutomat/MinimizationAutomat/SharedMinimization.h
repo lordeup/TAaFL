@@ -3,6 +3,7 @@
 #include "IAutomat.h"
 #include <boost/functional/hash.hpp>
 #include <unordered_set>
+#include <set>
 
 class SharedMinimization
 {

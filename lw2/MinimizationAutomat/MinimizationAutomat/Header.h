@@ -28,7 +28,7 @@ const std::string NODE_ID = "node_id";
 
 const std::string ERROR_FILE_NOT_EXIST = "This file does not exist";
 const std::string ERROR_NOT_ENOUGH_ARGUMENTS = "The number of arguments does not match the task condition\n"
-											   "Input should look: TransformationAutomat.exe <input file>\n";
+											   "Input should look: TransformationAutomat.exe <input file> <output file>\n";
 const std::string ERROR_WRONG_DATA = "Wrong data\n";
 const std::string ERROR_UNKNOWN_MACHINE = "Unknown machine\n";
 

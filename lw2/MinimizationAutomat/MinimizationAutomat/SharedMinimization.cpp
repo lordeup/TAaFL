@@ -46,8 +46,6 @@ VectorEdge SharedMinimization::GettingGroupOutputEdgeMoore(const VectorInt& outp
 		}
 	}
 
-	//std::sort(conformityGroupEdge.begin(), conformityGroupEdge.end());
-
 	return conformityGroupEdge;
 }
 
@@ -75,7 +73,8 @@ VectorEdge SharedMinimization::GettingUniqueMealy(const VectorEdge& groupOutputE
 VectorInt SharedMinimization::GettingUniqueMoore(const VectorInt& groupOutputEdge)
 {
 	VectorInt uniqueEdge;
-	std::unordered_set<int> setUnique;
+	//std::unordered_set<int> setUnique;
+	std::set<int> setUnique;
 
 	for (const auto& group : groupOutputEdge)
 	{
@@ -94,7 +93,8 @@ VectorEdge SharedMinimization::GettingUniqueEdgeNext(const VectorEdge& groupOutp
 
 	for (auto it = conformityGroupVector.begin(); it != conformityGroupVector.end(); ++it)
 	{
-		std::unordered_set<Edge, boost::hash<Edge>> setUnique;
+		//std::unordered_set<Edge, boost::hash<Edge>> setUnique;
+		std::set<Edge> setUnique;
 
 		for (auto it2 = (*it).begin(); it2 != (*it).end(); ++it2)
 		{
@@ -155,9 +155,11 @@ VectorEdge SharedMinimization::GettingConformityGroupEdgeNext(const VectorEdge& 
 
 			break;
 		}
-
-		//continue;
 	}
+
+	std::sort(conformityGroupVector.begin(), conformityGroupVector.end(), [](const auto& a, const auto& b) {
+		return *(a.begin()) < *(b.begin());
+	});
 
 	return conformityGroupEdge;
 }

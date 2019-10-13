@@ -14,28 +14,6 @@ void CAutomatMoore::GraphView() const
 {
 	Visualization visualization(m_outputStateMoore, m_outputStateSize, Automat::MOORE);
 	visualization.GraphView();
-	//VectorString weights(m_outputStateMoore.size());
-	//VectorEdge edge(m_outputStateMoore.size());
-	//std::ofstream ofs(OUTPUT_GRAPH_NAME);
-
-	//for (int i = 0, x = 0, index = 0; i < m_outputStateMoore.size(); ++i, ++index)
-	//{
-	//	if (i % m_outputStateSize == 0 && i != 0)
-	//	{
-	//		++x;
-	//		index = 0;
-	//	}
-	//	weights[i] = SYMBOL_X + std::to_string(x);
-	//	edge[i] = { index, m_outputStateMoore[i] };
-	//}
-
-	//Graph graph(edge.begin(), edge.end(), weights.begin(), m_outputStateSize);
-
-	//dynamic_properties dp;
-	//dp.property(LABEL, get(edge_weight, graph));
-	//dp.property(NODE_ID, get(vertex_index, graph));
-
-	//write_graphviz_dp(ofs, graph, dp);
 }
 
 void CAutomatMoore::MinimizationAutomat()
@@ -60,6 +38,6 @@ void CAutomatMoore::PrintInfo() const
 			m_output << std::endl;
 		}
 
-		m_output << SYMBOL_Q << m_outputStateMoore[i] << SPASE;
+		m_output << SYMBOL_Z << m_outputStateMoore[i] << SPASE;
 	}
 }

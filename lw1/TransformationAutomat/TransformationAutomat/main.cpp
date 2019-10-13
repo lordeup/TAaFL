@@ -4,14 +4,14 @@
 
 int main(int argc, char* argv[])
 {
-	if (argc != 2)
+	if (argc != 3)
 	{
 		std::cerr << ERROR_NOT_ENOUGH_ARGUMENTS;
 		return 1;
 	}
 
 	std::ifstream fileInput(argv[1]);
-	std::ofstream fileOutput(OUTPUT_FILE_NAME);
+	std::ofstream fileOutput(argv[2]);
 
 	if (!fileInput.is_open())
 	{

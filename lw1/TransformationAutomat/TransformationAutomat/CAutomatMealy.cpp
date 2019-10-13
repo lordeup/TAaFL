@@ -65,8 +65,6 @@ void CAutomatMealy::TransferAutomat()
 
 void CAutomatMealy::PrintInfo() const
 {
-	m_output << AUTOMAT_MOORE << std::endl;
-
 	for (size_t i = 0; i < m_outputState.size(); ++i)
 	{
 		if (i % m_uniqueEdge.size() == 0 && i != 0)

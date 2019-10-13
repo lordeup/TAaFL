@@ -1,0 +1,4 @@
+2 3 12
+mealy
+q9y2 q11y2 q4y3 q6y3 q2y3 q6y3 q2y3 q9y2 q6y3 q0y1 q4y3 q1y1
+q4y3 q6y3 q5y2 q10y2 q8y2 q10y2 q5y2 q3y3 q5y2 q7y1 q8y2 q7y1

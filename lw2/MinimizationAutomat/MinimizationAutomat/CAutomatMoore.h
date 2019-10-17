@@ -5,7 +5,7 @@
 class CAutomatMoore : public IAutomat
 {
 public:
-	CAutomatMoore(std::ostream& output, const int inputSize, const int stateCount, const VectorInt& outputCharacter, const std::vector<VectorInt>& state);
+	CAutomatMoore(std::ostream& output, const size_t inputSize, const size_t stateCount, const VectorSize_t& outputCharacter, const DualVectorSize_t& state);
 	~CAutomatMoore() = default;
 
 	void GraphView() const override;
@@ -13,15 +13,15 @@ public:
 	void PrintInfo() const override;
 
 private:
-	int m_stateCount;
-	int m_inputSize;
-	int m_outputStateSize;
+	size_t m_stateCount;
+	size_t m_inputSize;
+	size_t m_outputStateSize;
 
 	std::ostream& m_output;
 
-	std::vector<VectorInt> m_state;
-	VectorInt m_outputCharacter;
+	DualVectorSize_t m_state;
+	VectorSize_t m_outputCharacter;
 
-	VectorInt m_outputCharacterMoore;
-	VectorInt m_outputStateMoore;
+	VectorSize_t m_outputCharacterMoore;
+	VectorSize_t m_outputStateMoore;
 };

@@ -6,59 +6,49 @@
 class Minimization
 {
 public:
-	Minimization(const int inputSize, const int stateCount, const VectorEdge& inputEdge, const Automat automat);
-	Minimization(const int inputSize, const int stateCount, const VectorInt& outputCharacter, const DualVectorInt& state, const Automat automat);
+	Minimization(const size_t inputSize, const size_t stateCount, const VectorEdge& inputEdge);
+	Minimization(const size_t inputSize, const size_t stateCount, const VectorSize_t& outputCharacter, const DualVectorSize_t& state);
 	~Minimization() = default;
 
 	VectorEdge MinimizationMealy();
-	VectorInt MinimizationMoore();
-	int GetOutputStateSize() const;
-	VectorInt GetOutputCharacterMoore() const;
-
-	int GetOutputStateSizeTest() const;
+	VectorSize_t MinimizationMoore();
+	size_t GetOutputStateSize() const;
+	VectorSize_t GetOutputCharacterMoore() const;
 
 private:
-	VectorEdge GetConformityPreviousGroupEdge(DualVectorInt& conformityGroupVectorPrevious, const DualVectorInt& conformityGroupVector, const VectorEdge& conformityGroupEdge);
-	void FillOutput(const DualVectorInt& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge);
-	void FillOutputMoore(const DualVectorInt& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge);
+	VectorEdge GetConformityPreviousGroupEdge(DualVectorSize_t& conformityGroupVectorPrevious, const DualVectorSize_t& conformityGroupVector, const VectorEdge& conformityGroupEdge);
+	void FillOutput(const DualVectorSize_t& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge);
+	void FillOutputMoore(const DualVectorSize_t& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge);
 
-	DualVectorInt GetTest(const VectorEdge& inputEdge);
-	DualVectorInt GetUniqueTest(const DualVectorInt& groupOutputEdge);
-	VectorEdge GetConfTest(const DualVectorInt& groupOutputEdge, const DualVectorInt& uniqueEdge);
-	VectorEdge GetPrevTest(DualVectorInt& conformityGroupVectorPrevious, const DualVectorInt& conformityGroupVector, const VectorEdge& conformityGroupEdge);
-	DualVectorInt GetNextUnicTest(const DualVectorInt& groupOutputEdge, const DualVectorInt& conformityGroupVector);
+	DualVectorSize_t GetTest(const VectorEdge& inputEdge);
+	DualVectorSize_t GettingUniqueMealy(const DualVectorSize_t& groupOutputEdge);
+	VectorEdge GettingConformityGroupEdge(const DualVectorSize_t& groupOutputEdge, const DualVectorSize_t& uniqueEdge);
+	VectorEdge GetPrevTest(DualVectorSize_t& conformityGroupVectorPrevious, const DualVectorSize_t& conformityGroupVector, const VectorEdge& conformityGroupEdge);
+	DualVectorSize_t GetNextUnicTest(const DualVectorSize_t& groupOutputEdge, const DualVectorSize_t& conformityGroupVector);
 
-	VectorEdge GettingUniqueMealy(const VectorEdge& groupOutputEdge, const int size);
-	VectorInt GettingUniqueMoore(const VectorInt& groupOutputEdge);
+	VectorSize_t GettingUniqueMoore(const VectorSize_t& groupOutputEdge);
 
-	VectorEdge GeConfGrouptTest(const DualVectorInt& groupOutputEdge, const DualVectorInt& uniqueEdge, DualVectorInt& conformityGroupVector);
+	VectorEdge GeConfGrouptTest(const DualVectorSize_t& groupOutputEdge, const DualVectorSize_t& uniqueEdge, DualVectorSize_t& conformityGroupVector);
 
 	VectorEdge GettingGroupOutputEdgeMealy(const VectorEdge& inputEdge);
-	VectorEdge GettingGroupOutputEdgeMoore(const VectorInt& outputCharacter, const VectorInt& uniqueItem, DualVectorInt& conformityGroupVector);
+	VectorEdge GettingGroupOutputEdgeMoore(const VectorSize_t& outputCharacter, const VectorSize_t& uniqueItem, DualVectorSize_t& conformityGroupVector);
 
-	VectorEdge GettingConformityGroupEdge(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, DualVectorInt& conformityGroupVector);
+	VectorEdge GettingUniqueEdgeNext(const VectorEdge& groupOutputState, const DualVectorSize_t& conformityGroupVector);
 
-	VectorEdge GettingUniqueEdgeNext(const VectorEdge& groupOutputState, const DualVectorInt& conformityGroupVector);
+	VectorEdge GettingConformityGroupEdgeNext(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, DualVectorSize_t& conformityGroupVector);
 
-	VectorEdge GettingConformityGroupEdgeNext(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, DualVectorInt& conformityGroupVector);
-
-	int m_stateCount;
-	int m_inputSize;
-	DualVectorInt m_conformityGroupVectorPrevious;
-	DualVectorInt m_conformityGroupVector;
-
-	DualVectorInt m_confTest;
-	DualVectorInt m_prevTest;
+	size_t m_stateCount;
+	size_t m_inputSize;
+	DualVectorSize_t m_conformityGroupVectorPrevious;
+	DualVectorSize_t m_conformityGroupVector;
 
 	VectorEdge m_inputEdge;
-	std::vector<VectorEdge> m_inputMatrix;
 
 	VectorEdge m_outputState;
-	Automat m_automat;
 
-	DualVectorInt m_state;
-	VectorInt m_outputCharacter;
+	DualVectorSize_t m_state;
+	VectorSize_t m_outputCharacter;
 
-	VectorInt m_outputCharacterMoore;
-	VectorInt m_outputStateMoore;
+	VectorSize_t m_outputCharacterMoore;
+	VectorSize_t m_outputStateMoore;
 };

@@ -9,7 +9,7 @@ CAutomatController::CAutomatController(std::istream& input, std::ostream& output
 
 void CAutomatController::ProcessingCommand()
 {
-	int inputSize, outputSize, stateCount;
+	size_t inputSize, outputSize, stateCount;
 	std::string nameAutomat;
 
 	m_input >> inputSize >> outputSize >> stateCount >> nameAutomat;
@@ -26,8 +26,8 @@ void CAutomatController::ProcessingCommand()
 
 	if (m_automat == Automat::MOORE)
 	{
-		VectorInt outputCharacter;
-		std::vector<VectorInt> state;
+		VectorSize_t outputCharacter;
+		std::vector<VectorSize_t> state;
 
 		try
 		{
@@ -56,11 +56,11 @@ void CAutomatController::ProcessingCommand()
 	}
 }
 
-int CAutomatController::SearchNumberInStringMoore(const std::string str)
+size_t CAutomatController::SearchNumberInStringMoore(const std::string str)
 {
 	std::smatch match;
 	std::regex strRegex(NUMBER_REGULAR_EXPRESSION);
-	int number;
+	size_t number;
 
 	if (std::regex_search(str, match, strRegex))
 	{
@@ -98,12 +98,12 @@ Edge CAutomatController::SearchNumberInStringMealy(const std::string str)
 	return num;
 }
 
-VectorInt CAutomatController::FillOutputState(const int stateCount)
+VectorSize_t CAutomatController::FillOutputState(const size_t stateCount)
 {
-	VectorInt outputCharacter(stateCount);
+	VectorSize_t outputCharacter(stateCount);
 	std::string str;
 
-	for (int i = 0; i < stateCount; ++i)
+	for (size_t i = 0; i < stateCount; ++i)
 	{
 		m_input >> str;
 		outputCharacter[i] = SearchNumberInStringMoore(str);
@@ -112,16 +112,16 @@ VectorInt CAutomatController::FillOutputState(const int stateCount)
 	return outputCharacter;
 }
 
-std::vector<VectorInt> CAutomatController::FillingDataMoore(const int inputSize, const int stateCount)
+std::vector<VectorSize_t> CAutomatController::FillingDataMoore(const size_t inputSize, const size_t stateCount)
 {
-	std::vector<VectorInt> state(inputSize);
-	int number;
+	std::vector<VectorSize_t> state(inputSize);
+	size_t number;
 	std::string str;
 
 	for (size_t i = 0; i < state.size(); ++i)
 	{
 		state[i].resize(stateCount);
-		for (int j = 0; j < stateCount; ++j)
+		for (size_t j = 0; j < stateCount; ++j)
 		{
 			m_input >> str;
 			number = SearchNumberInStringMoore(str);
@@ -136,9 +136,9 @@ std::vector<VectorInt> CAutomatController::FillingDataMoore(const int inputSize,
 	return state;
 }
 
-VectorEdge CAutomatController::FillingDataMealy(const int inputSize, const int stateCount)
+VectorEdge CAutomatController::FillingDataMealy(const size_t inputSize, const size_t stateCount)
 {
-	int size = inputSize * stateCount;
+	size_t size = inputSize * stateCount;
 	VectorEdge inputEdge(size);
 	std::string str;
 

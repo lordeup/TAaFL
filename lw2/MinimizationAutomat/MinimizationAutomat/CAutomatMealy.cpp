@@ -1,11 +1,10 @@
 #include "CAutomatMealy.h"
 
-CAutomatMealy::CAutomatMealy(std::ostream& output, const int inputSize, const int stateCount, const VectorEdge& inputEdge)
+CAutomatMealy::CAutomatMealy(std::ostream& output, const size_t inputSize, const size_t stateCount, const VectorEdge& inputEdge)
 	: m_output(output)
 	, m_inputSize(inputSize)
 	, m_stateCount(stateCount)
 	, m_inputEdge(inputEdge)
-	, m_outputStateSize(0)
 {
 }
 
@@ -17,9 +16,9 @@ void CAutomatMealy::GraphView() const
 
 void CAutomatMealy::MinimizationAutomat()
 {
-	Minimization minimization(m_inputSize, m_stateCount, m_inputEdge, Automat::MEALY);
+	Minimization minimization(m_inputSize, m_stateCount, m_inputEdge);
 	m_outputState = minimization.MinimizationMealy();
-	m_outputStateSize = minimization.GetOutputStateSizeTest();
+	m_outputStateSize = minimization.GetOutputStateSize();
 }
 
 void CAutomatMealy::PrintInfo() const

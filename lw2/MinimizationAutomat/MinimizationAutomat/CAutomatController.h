@@ -10,16 +10,16 @@ public:
 	void ProcessingCommand();
 
 private:
-	int SearchNumberInStringMoore(const std::string str);
+	size_t SearchNumberInStringMoore(const std::string str);
 	Edge SearchNumberInStringMealy(const std::string str);
 
 	void SetAutomat(const std::string automat);
 
-	std::vector<VectorInt> FillingDataMoore(const int inputSize, const int stateCount);
+	std::vector<VectorSize_t> FillingDataMoore(const size_t inputSize, const size_t stateCount);
 
-	VectorEdge FillingDataMealy(const int inputSize, const int stateCount);
+	VectorEdge FillingDataMealy(const size_t inputSize, const size_t stateCount);
 
-	VectorInt FillOutputState(const int stateCount);
+	VectorSize_t FillOutputState(const size_t stateCount);
 
 	std::istream& m_input;
 	std::ostream& m_output;

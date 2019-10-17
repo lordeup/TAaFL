@@ -15,13 +15,23 @@ public:
 	int GetOutputStateSize() const;
 	VectorInt GetOutputCharacterMoore() const;
 
+	int GetOutputStateSizeTest() const;
+
 private:
 	VectorEdge GetConformityPreviousGroupEdge(DualVectorInt& conformityGroupVectorPrevious, const DualVectorInt& conformityGroupVector, const VectorEdge& conformityGroupEdge);
 	void FillOutput(const DualVectorInt& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge);
 	void FillOutputMoore(const DualVectorInt& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge);
 
+	DualVectorInt GetTest(const VectorEdge& inputEdge);
+	DualVectorInt GetUniqueTest(const DualVectorInt& groupOutputEdge);
+	VectorEdge GetConfTest(const DualVectorInt& groupOutputEdge, const DualVectorInt& uniqueEdge);
+	VectorEdge GetPrevTest(DualVectorInt& conformityGroupVectorPrevious, const DualVectorInt& conformityGroupVector, const VectorEdge& conformityGroupEdge);
+	DualVectorInt GetNextUnicTest(const DualVectorInt& groupOutputEdge, const DualVectorInt& conformityGroupVector);
+
 	VectorEdge GettingUniqueMealy(const VectorEdge& groupOutputEdge, const int size);
 	VectorInt GettingUniqueMoore(const VectorInt& groupOutputEdge);
+
+	VectorEdge GeConfGrouptTest(const DualVectorInt& groupOutputEdge, const DualVectorInt& uniqueEdge, DualVectorInt& conformityGroupVector);
 
 	VectorEdge GettingGroupOutputEdgeMealy(const VectorEdge& inputEdge);
 	VectorEdge GettingGroupOutputEdgeMoore(const VectorInt& outputCharacter, const VectorInt& uniqueItem, DualVectorInt& conformityGroupVector);
@@ -37,7 +47,12 @@ private:
 	DualVectorInt m_conformityGroupVectorPrevious;
 	DualVectorInt m_conformityGroupVector;
 
+	DualVectorInt m_confTest;
+	DualVectorInt m_prevTest;
+
 	VectorEdge m_inputEdge;
+	std::vector<VectorEdge> m_inputMatrix;
+
 	VectorEdge m_outputState;
 	Automat m_automat;
 

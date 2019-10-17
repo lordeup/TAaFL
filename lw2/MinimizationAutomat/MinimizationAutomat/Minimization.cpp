@@ -17,9 +17,40 @@ Minimization::Minimization(const int inputSize, const int stateCount, const Vect
 {
 }
 
+DualVectorInt Minimization::GetTest(const VectorEdge& inputEdge)
+{
+	DualVectorInt outputOnly(m_stateCount);
+	for (int i = 0; i < m_stateCount; ++i)
+	{
+		outputOnly[i].resize(m_inputSize);
+		std::vector<int> temp;
+		int a = i;
+		for (int j = 0; j < m_inputSize; ++j)
+		{
+			temp.push_back(inputEdge[a].second);
+			a += m_stateCount;
+		}
+		outputOnly[i] = temp;
+	}
+
+	return outputOnly;
+}
+
 VectorEdge Minimization::GettingGroupOutputEdgeMealy(const VectorEdge& inputEdge)
 {
 	VectorEdge groupOutputEdge(m_stateCount);
+	m_inputMatrix.resize(m_inputSize);
+
+	//int index = 0;
+	//for (int i = 0; i < m_inputSize; ++i)
+	//{
+	//	m_inputMatrix[i].resize(m_stateCount);
+	//	for (int j = 0; j < m_stateCount; ++j)
+	//	{
+	//		m_inputMatrix[i][j] = inputEdge[index];
+	//		++index;
+	//	}
+	//}
 
 	for (size_t i = 0; i < groupOutputEdge.size(); ++i)
 	{
@@ -54,9 +85,25 @@ int Minimization::GetOutputStateSize() const
 	return (int)m_conformityGroupVectorPrevious.size();
 }
 
+int Minimization::GetOutputStateSizeTest() const
+{
+	return (int)m_prevTest.size();
+}
+
 VectorInt Minimization::GetOutputCharacterMoore() const
 {
 	return m_outputCharacterMoore;
+}
+
+DualVectorInt Minimization::GetUniqueTest(const DualVectorInt& groupOutputEdge)
+{
+	DualVectorInt uniqueEdge(groupOutputEdge.size());
+
+	std::copy(groupOutputEdge.begin(), groupOutputEdge.end(), uniqueEdge.begin());
+	std::sort(uniqueEdge.begin(), uniqueEdge.end());
+	uniqueEdge.erase(std::unique(uniqueEdge.begin(), uniqueEdge.end()), uniqueEdge.end());
+
+	return uniqueEdge;
 }
 
 VectorEdge Minimization::GettingUniqueMealy(const VectorEdge& groupOutputEdge, const int size)
@@ -107,6 +154,49 @@ VectorEdge Minimization::GettingUniqueEdgeNext(const VectorEdge& groupOutputEdge
 	return uniqueEdge;
 }
 
+DualVectorInt Minimization::GetNextUnicTest(const DualVectorInt& groupOutputEdge, const DualVectorInt& conformityGroupVector)
+{
+	DualVectorInt uniqueEdge;
+
+	for (auto it = conformityGroupVector.begin(); it != conformityGroupVector.end(); ++it)
+	{
+		std::set<VectorInt> setUnique;
+
+		for (auto it2 = (*it).begin(); it2 != (*it).end(); ++it2)
+		{
+			/*Edge currentEdge = groupOutputEdge[*it2];*/
+			//Edge currentEdge = std::make_pair(0, 1);
+			VectorInt current = groupOutputEdge[*it2];
+			setUnique.insert(current);
+		}
+
+		uniqueEdge.reserve(uniqueEdge.size() + setUnique.size());
+		uniqueEdge.insert(uniqueEdge.end(), setUnique.begin(), setUnique.end());
+	}
+
+	return uniqueEdge;
+}
+
+VectorEdge Minimization::GetConfTest(const DualVectorInt& groupOutputEdge, const DualVectorInt& uniqueEdge)
+{
+	VectorEdge conformityGroupEdge(m_stateCount);
+	m_confTest.resize(uniqueEdge.size());
+
+	for (int i = 0; i < uniqueEdge.size(); ++i)
+	{
+		for (int j = 0; j < groupOutputEdge.size(); ++j)
+		{
+			if (uniqueEdge[i] == groupOutputEdge[j])
+			{
+				conformityGroupEdge[j] = std::make_pair(i, j);
+				m_confTest[i].push_back(j);
+			}
+		}
+	}
+
+	return conformityGroupEdge;
+}
+
 VectorEdge Minimization::GettingConformityGroupEdge(const VectorEdge& groupOutputEdge, const VectorEdge& uniqueEdge, DualVectorInt& conformityGroupVector)
 {
 	VectorEdge conformityGroupEdge(m_stateCount);
@@ -123,6 +213,41 @@ VectorEdge Minimization::GettingConformityGroupEdge(const VectorEdge& groupOutpu
 			}
 		}
 	}
+
+	return conformityGroupEdge;
+}
+
+VectorEdge Minimization::GeConfGrouptTest(const DualVectorInt& groupOutputEdge, const DualVectorInt& uniqueEdge, DualVectorInt& conformityGroupVector)
+{
+	VectorEdge conformityGroupEdge(m_stateCount);
+	conformityGroupVector.resize(uniqueEdge.size());
+
+	for (int i = 0, index = 0, sum = 0; i < uniqueEdge.size(); ++i, ++index)
+	{
+		for (int j = 0; j < m_prevTest.size(); ++j)
+		{
+			int size = (int)m_prevTest[index].size();
+			for (int k = 0; k < size; ++k)
+			{
+				int unit = m_prevTest[index][k];
+
+				if (uniqueEdge[i] == groupOutputEdge[unit])
+				{
+					conformityGroupEdge[unit] = std::make_pair(i, unit);
+					conformityGroupVector[i].push_back(unit);
+				}
+			}
+
+			sum += (int)conformityGroupVector[i].size();
+			sum == size ? sum = 0 : --index;
+
+			break;
+		}
+	}
+
+	std::sort(conformityGroupVector.begin(), conformityGroupVector.end(), [](const auto& a, const auto& b) {
+		return *(a.begin()) < *(b.begin());
+	});
 
 	return conformityGroupEdge;
 }
@@ -160,6 +285,60 @@ VectorEdge Minimization::GettingConformityGroupEdgeNext(const VectorEdge& groupO
 	});
 
 	return conformityGroupEdge;
+}
+
+VectorEdge Minimization::GetPrevTest(DualVectorInt& conformityGroupVectorPrevious, const DualVectorInt& conformityGroupVector, const VectorEdge& conformityGroupEdge)
+{
+	VectorEdge conformityPreviousGroupEdge;
+	int size = m_stateCount * m_inputSize;
+	VectorEdge outputState(size);
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		VectorEdge conformityGroupEdgeNext, conformityGroupAll;
+		DualVectorInt conformityGroupVectorNext;
+
+		if (i != 0)
+		{
+			DualVectorInt groupOutputEdgeNext = GetTest(outputState);
+			DualVectorInt uniqueEdgeNext = GetNextUnicTest(groupOutputEdgeNext, conformityGroupVectorPrevious);
+			conformityGroupEdgeNext = GeConfGrouptTest(groupOutputEdgeNext, uniqueEdgeNext, conformityGroupVectorNext);
+		}
+
+		conformityGroupAll = i == 0 ? conformityGroupEdge : conformityGroupEdgeNext;
+
+		for (int j = 0; j < m_stateCount; ++j)
+		{
+			int indexEdge = j;
+			int unit = m_inputEdge[indexEdge].first;
+
+			for (int k = 0; k < m_inputSize; ++k)
+			{
+				auto it = std::find_if(conformityGroupAll.begin(), conformityGroupAll.end(), [&unit](const Edge& edge) { return edge.second == unit; });
+
+				if (it != conformityGroupAll.end())
+				{
+					outputState[indexEdge] = std::make_pair(11, (*it).first);
+				}
+
+				if (k < m_inputSize - 1)
+				{
+					indexEdge += m_stateCount;
+					unit = m_inputEdge[indexEdge].first;
+				}
+			}
+		}
+
+		if (conformityPreviousGroupEdge == conformityGroupAll)
+		{
+			break;
+		}
+
+		conformityPreviousGroupEdge = conformityGroupAll;
+		conformityGroupVectorPrevious = i == 0 ? conformityGroupVector : conformityGroupVectorNext;
+	}
+
+	return conformityPreviousGroupEdge;
 }
 
 VectorEdge Minimization::GetConformityPreviousGroupEdge(DualVectorInt& conformityGroupVectorPrevious, const DualVectorInt& conformityGroupVector, const VectorEdge& conformityGroupEdge)
@@ -246,7 +425,7 @@ VectorEdge Minimization::GetConformityPreviousGroupEdge(DualVectorInt& conformit
 
 void Minimization::FillOutput(const DualVectorInt& conformityGroupVectorPrevious, const VectorEdge& conformityPreviousGroupEdge)
 {
-	int size = GetOutputStateSize();
+	int size = GetOutputStateSizeTest();
 	int sizeOutput = size * m_inputSize;
 	m_outputState.resize(sizeOutput);
 
@@ -310,15 +489,23 @@ void Minimization::FillOutputMoore(const DualVectorInt& conformityGroupVectorPre
 
 VectorEdge Minimization::MinimizationMealy()
 {
-	VectorEdge groupOutputEdge = GettingGroupOutputEdgeMealy(m_inputEdge);
+	//VectorEdge groupOutputEdge = GettingGroupOutputEdgeMealy(m_inputEdge);
 
-	VectorEdge uniqueEdge = GettingUniqueMealy(groupOutputEdge, m_stateCount);
+	//VectorEdge uniqueEdge = GettingUniqueMealy(groupOutputEdge, m_stateCount);
 
-	VectorEdge conformityGroupEdge = GettingConformityGroupEdge(groupOutputEdge, uniqueEdge, m_conformityGroupVector);
+	//VectorEdge conformityGroupEdge = GettingConformityGroupEdge(groupOutputEdge, uniqueEdge, m_conformityGroupVector);
 
-	VectorEdge conformityPreviousGroupEdge = GetConformityPreviousGroupEdge(m_conformityGroupVectorPrevious, m_conformityGroupVector, conformityGroupEdge);
+	DualVectorInt group = GetTest(m_inputEdge);
 
-	FillOutput(m_conformityGroupVectorPrevious, conformityPreviousGroupEdge);
+	DualVectorInt unic = GetUniqueTest(group);
+
+	VectorEdge conf = GetConfTest(group, unic);
+
+	//VectorEdge conformityPreviousGroupEdge = GetConformityPreviousGroupEdge(m_conformityGroupVectorPrevious, m_conformityGroupVector, conformityGroupEdge);
+
+	VectorEdge prev = GetPrevTest(m_prevTest, m_confTest, conf);
+
+	FillOutput(m_prevTest, prev);
 
 	return m_outputState;
 }

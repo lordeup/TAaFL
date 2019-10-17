@@ -19,7 +19,7 @@ void CAutomatMealy::MinimizationAutomat()
 {
 	Minimization minimization(m_inputSize, m_stateCount, m_inputEdge, Automat::MEALY);
 	m_outputState = minimization.MinimizationMealy();
-	m_outputStateSize = minimization.GetOutputStateSize();
+	m_outputStateSize = minimization.GetOutputStateSizeTest();
 }
 
 void CAutomatMealy::PrintInfo() const

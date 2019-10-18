@@ -27,7 +27,7 @@ void CAutomatController::ProcessingCommand()
 	if (m_automat == Automat::MOORE)
 	{
 		VectorSize_t outputCharacter;
-		std::vector<VectorSize_t> state;
+		DualVectorSize_t state;
 
 		try
 		{
@@ -112,9 +112,9 @@ VectorSize_t CAutomatController::FillOutputState(const size_t stateCount)
 	return outputCharacter;
 }
 
-std::vector<VectorSize_t> CAutomatController::FillingDataMoore(const size_t inputSize, const size_t stateCount)
+DualVectorSize_t CAutomatController::FillingDataMoore(const size_t inputSize, const size_t stateCount)
 {
-	std::vector<VectorSize_t> state(inputSize);
+	DualVectorSize_t state(inputSize);
 	size_t number;
 	std::string str;
 

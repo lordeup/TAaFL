@@ -13,15 +13,11 @@ public:
 	void PrintInfo() const override;
 
 private:
-	size_t m_stateCount;
-	size_t m_inputSize;
-	size_t m_outputStateSize;
+	size_t m_stateCount, m_inputSize, m_outputStateSize;
 
-	std::ostream& m_output;
+	VectorSize_t m_outputCharacter, m_outputCharacterMoore, m_outputStateMoore;
 
 	DualVectorSize_t m_state;
-	VectorSize_t m_outputCharacter;
 
-	VectorSize_t m_outputCharacterMoore;
-	VectorSize_t m_outputStateMoore;
+	std::ostream& m_output;
 };

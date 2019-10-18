@@ -6,6 +6,7 @@ CAutomatMoore::CAutomatMoore(std::ostream& output, const size_t inputSize, const
 	, m_stateCount(stateCount)
 	, m_outputCharacter(outputCharacter)
 	, m_state(state)
+	, m_outputStateSize(0)
 {
 }
 
@@ -17,7 +18,7 @@ void CAutomatMoore::GraphView() const
 
 void CAutomatMoore::MinimizationAutomat()
 {
-	Minimization minimization(m_inputSize, m_stateCount, m_outputCharacter, m_state);
+	Minimization minimization(m_inputSize, m_stateCount, m_outputCharacter, m_state, Automat::MOORE);
 	m_outputStateMoore = minimization.MinimizationMoore();
 	m_outputCharacterMoore = minimization.GetOutputCharacterMoore();
 	m_outputStateSize = minimization.GetOutputStateSize();

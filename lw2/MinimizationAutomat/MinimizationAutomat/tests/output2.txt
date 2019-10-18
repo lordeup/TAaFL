@@ -1,0 +1,3 @@
+s3y0 s0y1 s2y1 s0y0 
+s1y1 s0y0 s0y0 s2y1 
+s0y0 s3y1 s3y1 s3y1 

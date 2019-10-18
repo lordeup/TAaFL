@@ -13,12 +13,9 @@ public:
 	void PrintInfo() const override;
 
 private:
-	size_t m_inputSize;
-	size_t m_stateCount;
-	size_t m_outputStateSize;
+	size_t m_inputSize, m_stateCount, m_outputStateSize;
+
+	VectorEdge m_inputEdge, m_outputState;
 
 	std::ostream& m_output;
-
-	VectorEdge m_inputEdge;
-	VectorEdge m_outputState;
 };

@@ -19,8 +19,8 @@ public:
 	void GraphView() const;
 
 private:
-	VectorSize_t m_outputMoore;
-	VectorEdge m_outputMealy;
 	size_t m_size;
 	Automat m_automat;
+	VectorSize_t m_outputMoore;
+	VectorEdge m_outputMealy;
 };

@@ -5,6 +5,7 @@ CAutomatMealy::CAutomatMealy(std::ostream& output, const size_t inputSize, const
 	, m_inputSize(inputSize)
 	, m_stateCount(stateCount)
 	, m_inputEdge(inputEdge)
+	, m_outputStateSize(0)
 {
 }
 
@@ -16,7 +17,7 @@ void CAutomatMealy::GraphView() const
 
 void CAutomatMealy::MinimizationAutomat()
 {
-	Minimization minimization(m_inputSize, m_stateCount, m_inputEdge);
+	Minimization minimization(m_inputSize, m_stateCount, m_inputEdge, Automat::MEALY);
 	m_outputState = minimization.MinimizationMealy();
 	m_outputStateSize = minimization.GetOutputStateSize();
 }

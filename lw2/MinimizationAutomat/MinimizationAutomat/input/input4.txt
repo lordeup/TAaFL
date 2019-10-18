@@ -1,6 +1,0 @@
-2
-2
-4
-mealy
-s2y0 s3y0 s2y0 s3y0
-s0y0 s1y0 s2y1 s3y1

@@ -16,11 +16,12 @@ Visualization::Visualization(const VectorEdge& outputMealy, const size_t size, A
 
 void Visualization::GraphView() const
 {
-	VectorString weights(m_automat == Automat::MEALY ? m_outputMealy.size() : m_outputMoore.size());
-	VectorEdge edge(m_automat == Automat::MEALY ? m_outputMealy.size() : m_outputMoore.size());
-	std::ofstream ofs(OUTPUT_GRAPH_NAME);
+	size_t size = m_automat == Automat::MEALY ? m_outputMealy.size() : m_outputMoore.size();
+	VectorString weights(size);
+	VectorEdge edge(size);
+	std::ofstream ofs("outputGraph.dot");
 
-	for (size_t i = 0, x = 0, index = 0; i < (m_automat == Automat::MEALY ? m_outputMealy.size() : m_outputMoore.size()); ++i, ++index)
+	for (size_t i = 0, x = 0, index = 0; i < size; ++i, ++index)
 	{
 		if (i % m_size == 0 && i != 0)
 		{

@@ -6,7 +6,6 @@
 
 const std::string NUMBER_REGULAR_EXPRESSION = "\\d+";
 
-const std::string OUTPUT_GRAPH_NAME = "outputGraph.dot";
 const std::string AUTOMAT_MOORE = "moore";
 const std::string AUTOMAT_MEALY = "mealy";
 

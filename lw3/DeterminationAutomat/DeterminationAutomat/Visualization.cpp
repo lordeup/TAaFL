@@ -1,18 +1,19 @@
 #include "Visualization.h"
 
-Visualization::Visualization(const VectorSize_t& outputMoore, const size_t size)
-	: m_outputMoore(outputMoore)
+Visualization::Visualization(const VectorSize_t& output, const size_t size)
+	: m_output(output)
 	, m_size(size)
 {
 }
 
 void Visualization::GraphView() const
 {
-	VectorString weights(m_outputMoore.size());
-	VectorEdge edge(m_outputMoore.size());
+	size_t size = m_output.size();
+	VectorString weights(size);
+	VectorEdge edge(size);
 	std::ofstream ofs("outputGraph.dot");
 
-	for (size_t i = 0, x = 0, index = 0; i < (m_outputMoore.size()); ++i, ++index)
+	for (size_t i = 0, x = 0, index = 0; i < size; ++i, ++index)
 	{
 		if (i % m_size == 0 && i != 0)
 		{
@@ -21,7 +22,7 @@ void Visualization::GraphView() const
 		}
 
 		weights[i] = SYMBOL_X + std::to_string(x);
-		edge[i] = { index, m_outputMoore[i] };
+		edge[i] = { index, m_output[i] };
 	}
 
 	Graph graph(edge.begin(), edge.end(), weights.begin(), m_size);

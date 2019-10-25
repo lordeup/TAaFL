@@ -11,12 +11,12 @@ using Graph = adjacency_list<vecS, vecS, directedS, property<vertex_color_t, def
 class Visualization
 {
 public:
-	Visualization(const VectorSize_t& outputMoore, const size_t size);
+	Visualization(const VectorSize_t& output, const size_t size);
 	~Visualization() = default;
 
 	void GraphView() const;
 
 private:
 	size_t m_size;
-	VectorSize_t m_outputMoore;
+	VectorSize_t m_output;
 };

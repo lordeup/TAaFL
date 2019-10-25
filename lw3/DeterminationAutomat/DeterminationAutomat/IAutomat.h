@@ -8,5 +8,5 @@ public:
 
 	virtual void GraphView() const = 0;
 	virtual void Determination() = 0;
-	virtual void PrintInfo() const = 0;
+	virtual void PrintInfo() = 0;
 };

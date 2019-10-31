@@ -14,6 +14,14 @@ void Automat::Determination()
 	CheckDetermination();
 }
 
+void Automat::FindUniqueCell(const VectorSize_t& cell)
+{
+	if (cell.size() > 1 && std::find(m_determinationState.begin(), m_determinationState.end(), cell) == m_determinationState.end())
+	{
+		m_determinationState.push_back(cell);
+	}
+}
+
 void Automat::FillingColumns()
 {
 	m_outputState.resize(m_stateCount);
@@ -28,11 +36,7 @@ void Automat::FillingColumns()
 		{
 			VectorSize_t numbersVector = m_inputState[index];
 			temporary.push_back(numbersVector);
-
-			if (numbersVector.size() > 1)
-			{
-				m_determinationState.push_back(numbersVector);
-			}
+			FindUniqueCell(numbersVector);
 
 			index += m_stateCount;
 		}
@@ -69,67 +73,48 @@ void Automat::UniqueVector(DualVectorSize_t& columnVector)
 	{
 		std::sort(column.begin(), column.end());
 		column.erase(std::unique(column.begin(), column.end()), column.end());
-	}
-
-	for (const auto& column : columnVector)
-	{
-		if (column.size() > 1 && std::find(m_determinationState.begin(), m_determinationState.end(), column) == m_determinationState.end())
-		{
-			m_determinationState.push_back(column);
-		}
+		FindUniqueCell(column);
 	}
 }
 
 void Automat::GraphView() const
 {
-	Visualization visualization(m_outputTest, m_outputState.size());
-	visualization.GraphView();
-}
-
-size_t count_numbers(size_t num)
-{
-	size_t count = 0;
-
-	while (num != 0)
+	VectorString vertexString;
+	for (size_t i = 0; i < m_stateCount; ++i)
 	{
-		count++;
-		num /= 10;
+		vertexString.push_back(std::to_string(i));
 	}
 
-	return count;
-}
-
-size_t combine(size_t a, size_t b)
-{
-	size_t times = 1;
-
-	while (times <= b)
+	for (const auto& column : m_determinationState)
 	{
-		times *= 10;
+		std::string str;
+		for (const auto& cell : column)
+		{
+			str += std::to_string(cell);
+		}
+		vertexString.push_back(str);
 	}
 
-	return a * times + b;
-}
+	std::ofstream outputGraph("outputGraph.dot");
 
-void Automat::Test(std::string str)
-{
-	size_t number, numberWithZero;
+	outputGraph << "digraph G {" << std::endl;
 
-	try
+	for (const auto& vertex : vertexString)
 	{
-		number = std::stoi(str);
-	}
-	catch (const std::exception&)
-	{
-		throw std::invalid_argument(ERROR_WRONG_DATA);
+		outputGraph << vertex << ";" << std::endl;
 	}
 
-	//if (str.length() != count_numbers(number))
-	//{
-	//	numberWithZero = combine(number, 0);
-	//}
+	for (size_t i = 0; i < m_outputState.size(); ++i)
+	{
+		size_t index = i;
+		for (size_t j = 0; j < m_inputSize; ++j)
+		{
+			outputGraph << vertexString[i] << "->" << m_stateString[index] << "  [label=x" << j << "];" << std::endl;
+			index += m_outputState.size();
+		}
+	}
 
-	m_outputTest.push_back(number);
+	outputGraph << "}" << std::endl;
 }
 
 void Automat::PrintInfo()
@@ -141,17 +126,17 @@ void Automat::PrintInfo()
 			std::string str;
 			for (const auto& cell : column[i])
 			{
-				m_output << SYMBOL_Q << cell;
+				m_output << "q" << cell;
 				str += std::to_string(cell);
 			}
 
 			if (column[i].empty())
 			{
-				m_output << SKIP;
+				m_output << "-";
 			}
 
-			m_output << SPASE;
-			Test(str);
+			m_output << " ";
+			m_stateString.push_back(str);
 		}
 
 		m_output << std::endl;

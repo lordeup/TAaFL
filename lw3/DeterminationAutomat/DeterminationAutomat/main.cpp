@@ -1,6 +1,5 @@
 ﻿#include "CAutomatController.h"
 #include "Header.h"
-#include <fstream>
 #include <iostream>
 
 int main(int argc, char* argv[])
@@ -20,6 +19,6 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	CAutomatController automatController(fileInput, std::cout);
+	CAutomatController automatController(fileInput, fileOutput);
 	automatController.ProcessingCommand();
 }

@@ -1,0 +1,6 @@
+4
+3
+q1 q2 q2
+q0q1 q2 q1q2
+q1q2 q1 q0q1q2
+q0q2 q0q1q2 q0q2

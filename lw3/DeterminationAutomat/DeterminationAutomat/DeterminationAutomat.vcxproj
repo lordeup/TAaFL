@@ -166,14 +166,12 @@
     <ClCompile Include="Automat.cpp" />
     <ClCompile Include="CAutomatController.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Visualization.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Automat.h" />
     <ClInclude Include="CAutomatController.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="IAutomat.h" />
-    <ClInclude Include="Visualization.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

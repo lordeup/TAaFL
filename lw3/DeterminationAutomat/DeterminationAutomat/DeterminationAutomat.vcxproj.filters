@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Исходные файлы\Visualization">
-      <UniqueIdentifier>{7b074481-d0c8-4684-af82-cab7c52e49bd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Исходные файлы\CAutomatController">
       <UniqueIdentifier>{c11a3412-cad2-4dfb-99b2-7bbce372d5d7}</UniqueIdentifier>
     </Filter>
@@ -30,9 +27,6 @@
     <ClCompile Include="CAutomatController.cpp">
       <Filter>Исходные файлы\CAutomatController</Filter>
     </ClCompile>
-    <ClCompile Include="Visualization.cpp">
-      <Filter>Исходные файлы\Visualization</Filter>
-    </ClCompile>
     <ClCompile Include="Automat.cpp">
       <Filter>Исходные файлы\Automat</Filter>
     </ClCompile>
@@ -40,9 +34,6 @@
   <ItemGroup>
     <ClInclude Include="CAutomatController.h">
       <Filter>Исходные файлы\CAutomatController</Filter>
-    </ClInclude>
-    <ClInclude Include="Visualization.h">
-      <Filter>Исходные файлы\Visualization</Filter>
     </ClInclude>
     <ClInclude Include="Header.h">
       <Filter>Файлы заголовков</Filter>

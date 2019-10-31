@@ -1,7 +1,6 @@
 #pragma once
 #include "Header.h"
 #include "IAutomat.h"
-#include "Visualization.h"
 
 class Automat : public IAutomat
 {
@@ -19,11 +18,12 @@ private:
 	DualVectorSize_t m_inputState, m_determinationState;
 	TripleVectorSize_t m_outputState;
 	VectorSize_t m_outputTest;
+	VectorString m_stateString;
 
 	std::ostream& m_output;
 
 	void FillingColumns();
 	void CheckDetermination();
 	void UniqueVector(DualVectorSize_t& columnVector);
-	void Test(std::string str);
+	void FindUniqueCell(const VectorSize_t& cell);
 };

@@ -109,7 +109,11 @@ void Automat::GraphView() const
 		size_t index = i;
 		for (size_t j = 0; j < m_inputSize; ++j)
 		{
-			outputGraph << vertexString[i] << "->" << m_stateString[index] << "  [label=x" << j << "];" << std::endl;
+			if (m_stateString[index].length())
+			{
+				outputGraph << vertexString[i] << "->" << m_stateString[index] << "  [label=x" << j << "];" << std::endl;
+			}
+
 			index += m_outputState.size();
 		}
 	}

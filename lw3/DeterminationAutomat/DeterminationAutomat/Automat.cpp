@@ -77,13 +77,42 @@ void Automat::UniqueVector(DualVectorSize_t& columnVector)
 	}
 }
 
-void Automat::GraphView() const
+VectorString Automat::ConvertStateString()
+{
+	VectorString stateString;
+	for (size_t i = 0; i < m_inputSize; ++i)
+	{
+		for (const auto& column : m_outputState)
+		{
+			std::string str;
+			for (const auto& cell : column[i])
+			{
+				str += std::to_string(cell);
+			}
+			stateString.push_back(str);
+		}
+	}
+	return stateString;
+}
+
+void Automat::GraphView()
 {
 	VectorString vertexString;
 	for (size_t i = 0; i < m_stateCount; ++i)
 	{
-		vertexString.push_back(std::to_string(i));
+		size_t index = i;
+		for (size_t j = 0; j < m_inputSize; ++j)
+		{
+			if (m_inputState[index].size())
+			{
+				vertexString.push_back(std::to_string(i));
+				break;
+			}
+			index += m_stateCount;
+		}
 	}
+
+	VectorString stateString = ConvertStateString();
 
 	for (const auto& column : m_determinationState)
 	{
@@ -104,14 +133,21 @@ void Automat::GraphView() const
 		outputGraph << vertex << ";" << std::endl;
 	}
 
-	for (size_t i = 0; i < m_outputState.size(); ++i)
+	for (size_t i = 0, indexVertex = 0; i < m_outputState.size(); ++i)
 	{
 		size_t index = i;
-		for (size_t j = 0; j < m_inputSize; ++j)
+		bool isConclusion = false;
+		for (size_t x = 0; x < m_inputSize; ++x)
 		{
-			if (m_stateString[index].length())
+			if (stateString[index].length())
 			{
-				outputGraph << vertexString[i] << "->" << m_stateString[index] << "  [label=x" << j << "];" << std::endl;
+				outputGraph << vertexString[indexVertex] << "->" << stateString[index] << "  [label=x" << x << "];" << std::endl;
+				isConclusion = true;
+			}
+
+			if (x == m_inputSize - 1 && isConclusion)
+			{
+				++indexVertex;
 			}
 
 			index += m_outputState.size();
@@ -121,17 +157,15 @@ void Automat::GraphView() const
 	outputGraph << "}" << std::endl;
 }
 
-void Automat::PrintInfo()
+void Automat::PrintInfo() const
 {
 	for (size_t i = 0; i < m_inputSize; ++i)
 	{
 		for (const auto& column : m_outputState)
 		{
-			std::string str;
 			for (const auto& cell : column[i])
 			{
 				m_output << "q" << cell;
-				str += std::to_string(cell);
 			}
 
 			if (column[i].empty())
@@ -140,7 +174,6 @@ void Automat::PrintInfo()
 			}
 
 			m_output << " ";
-			m_stateString.push_back(str);
 		}
 
 		m_output << std::endl;

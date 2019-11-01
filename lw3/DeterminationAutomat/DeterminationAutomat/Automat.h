@@ -8,17 +8,15 @@ public:
 	Automat(std::ostream& output, const size_t inputSize, const size_t stateCount, const DualVectorSize_t& inputState);
 	~Automat() = default;
 
-	void GraphView() const override;
+	void GraphView() override;
 	void Determination() override;
-	void PrintInfo() override;
+	void PrintInfo() const override;
 
 private:
 	size_t m_inputSize, m_stateCount;
 
 	DualVectorSize_t m_inputState, m_determinationState;
 	TripleVectorSize_t m_outputState;
-	VectorSize_t m_outputTest;
-	VectorString m_stateString;
 
 	std::ostream& m_output;
 
@@ -26,4 +24,5 @@ private:
 	void CheckDetermination();
 	void UniqueVector(DualVectorSize_t& columnVector);
 	void FindUniqueCell(const VectorSize_t& cell);
+	VectorString ConvertStateString();
 };

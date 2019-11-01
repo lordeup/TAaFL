@@ -6,7 +6,7 @@ public:
 	IAutomat() = default;
 	virtual ~IAutomat() = default;
 
-	virtual void GraphView() const = 0;
+	virtual void GraphView() = 0;
 	virtual void Determination() = 0;
-	virtual void PrintInfo() = 0;
+	virtual void PrintInfo() const = 0;
 };

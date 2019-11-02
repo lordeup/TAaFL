@@ -10,50 +10,33 @@ Automat::Automat(std::ostream& output, const size_t inputSize, const size_t stat
 
 void Automat::Determination()
 {
-	FillingColumns();
-	CheckDetermination();
-}
-
-void Automat::FindUniqueCell(const VectorSize_t& cell)
-{
-	if (cell.size() > 1 && std::find(m_determinationState.begin(), m_determinationState.end(), cell) == m_determinationState.end())
+	bool isCheckSkipState = false;
+	for (size_t i = 0; i < m_stateCount; ++i)
 	{
-		m_determinationState.push_back(cell);
-	}
-}
-
-void Automat::FillingColumns()
-{
-	m_outputState.resize(m_stateCount);
-
-	for (size_t i = 0; i < m_outputState.size(); ++i)
-	{
-		m_outputState[i].resize(m_inputSize);
 		DualVectorSize_t temporary;
 		size_t index = i;
 
-		for (const auto& column : m_outputState[i])
+		for (size_t j = 0; j < m_inputSize; ++j)
 		{
-			VectorSize_t numbersVector = m_inputState[index];
-			temporary.push_back(numbersVector);
-			FindUniqueCell(numbersVector);
-
+			temporary.push_back(m_inputState[index]);
+			if (!m_inputState[index].empty() && !isCheckSkipState)
+			{
+				m_determinationState.push_back({ i });
+				isCheckSkipState = true;
+			}
 			index += m_stateCount;
 		}
 
-		m_outputState[i] = temporary;
+		m_inputStateColumn.push_back(temporary);
 	}
-}
 
-void Automat::CheckDetermination()
-{
 	for (size_t i = 0; i < m_determinationState.size(); ++i)
 	{
 		DualVectorSize_t temporary(m_inputSize);
 
 		for (const auto& column : m_determinationState[i])
 		{
-			DualVectorSize_t output = m_outputState[column];
+			DualVectorSize_t output = m_inputStateColumn[column];
 
 			for (size_t j = 0; j < output.size(); ++j)
 			{
@@ -61,9 +44,11 @@ void Automat::CheckDetermination()
 			}
 		}
 
-		UniqueVector(temporary);
-
-		m_outputState.push_back(temporary);
+		if (!m_determinationState[i].empty())
+		{
+			UniqueVector(temporary);
+			m_outputState.push_back(temporary);
+		}
 	}
 }
 
@@ -73,7 +58,11 @@ void Automat::UniqueVector(DualVectorSize_t& columnVector)
 	{
 		std::sort(column.begin(), column.end());
 		column.erase(std::unique(column.begin(), column.end()), column.end());
-		FindUniqueCell(column);
+
+		if (!column.empty() && std::find(m_determinationState.begin(), m_determinationState.end(), column) == m_determinationState.end())
+		{
+			m_determinationState.push_back(column);
+		}
 	}
 }
 
@@ -95,34 +84,29 @@ VectorString Automat::ConvertStateString()
 	return stateString;
 }
 
-void Automat::GraphView()
+VectorString Automat::ConvertVertexString()
 {
 	VectorString vertexString;
-	for (size_t i = 0; i < m_stateCount; ++i)
-	{
-		size_t index = i;
-		for (size_t j = 0; j < m_inputSize; ++j)
-		{
-			if (m_inputState[index].size())
-			{
-				vertexString.push_back(std::to_string(i));
-				break;
-			}
-			index += m_stateCount;
-		}
-	}
-
-	VectorString stateString = ConvertStateString();
-
 	for (const auto& column : m_determinationState)
 	{
-		std::string str;
-		for (const auto& cell : column)
+		if (!column.empty())
 		{
-			str += std::to_string(cell);
+			std::string str;
+			for (const auto& cell : column)
+			{
+				str += std::to_string(cell);
+			}
+			vertexString.push_back(str);
 		}
-		vertexString.push_back(str);
 	}
+	return vertexString;
+}
+
+void Automat::GraphView()
+{
+	VectorString stateString = ConvertStateString();
+
+	VectorString vertexString = ConvertVertexString();
 
 	std::ofstream outputGraph("outputGraph.dot");
 
@@ -133,21 +117,14 @@ void Automat::GraphView()
 		outputGraph << vertex << ";" << std::endl;
 	}
 
-	for (size_t i = 0, indexVertex = 0; i < m_outputState.size(); ++i)
+	for (size_t i = 0; i < m_outputState.size(); ++i)
 	{
 		size_t index = i;
-		bool isConclusion = false;
 		for (size_t x = 0; x < m_inputSize; ++x)
 		{
-			if (stateString[index].length())
+			if (!stateString[index].empty())
 			{
-				outputGraph << vertexString[indexVertex] << "->" << stateString[index] << "  [label=x" << x << "];" << std::endl;
-				isConclusion = true;
-			}
-
-			if (x == m_inputSize - 1 && isConclusion)
-			{
-				++indexVertex;
+				outputGraph << vertexString[i] << "->" << stateString[index] << "  [label=x" << x << "];" << std::endl;
 			}
 
 			index += m_outputState.size();

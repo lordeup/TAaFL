@@ -171,7 +171,6 @@
     <ClInclude Include="Automat.h" />
     <ClInclude Include="CAutomatController.h" />
     <ClInclude Include="Header.h" />
-    <ClInclude Include="IAutomat.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

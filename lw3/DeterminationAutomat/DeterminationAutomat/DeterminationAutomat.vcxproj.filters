@@ -38,9 +38,6 @@
     <ClInclude Include="Header.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="IAutomat.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="Automat.h">
       <Filter>Исходные файлы\Automat</Filter>
     </ClInclude>

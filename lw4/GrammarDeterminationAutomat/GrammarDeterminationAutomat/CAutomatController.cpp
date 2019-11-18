@@ -4,20 +4,20 @@ CAutomatController::CAutomatController(std::istream& input, std::ostream& output
 	: m_input(input)
 	, m_output(output)
 {
+	m_grammar = Grammar::UNKNOWN;
 }
 
 void CAutomatController::ProcessingCommand()
 {
-	size_t inputSize, stateCount, rulesCount;
+	size_t inputSize, stateCount;
 
-	m_input >> inputSize >> stateCount >> rulesCount;
+	m_input >> inputSize >> stateCount;
 
 	try
 	{
-		FillingData(inputSize, stateCount, rulesCount);
-		DefinitionGrammar();
+		FillingData(inputSize, stateCount);
 
-		Automat automat(m_output, inputSize, stateCount, rulesCount, m_stateMap, m_grammar);
+		Automat automat(m_output, inputSize, stateCount, m_stateMap, m_grammar);
 		automat.Determination();
 		automat.PrintInfo();
 		automat.GraphView();
@@ -28,48 +28,70 @@ void CAutomatController::ProcessingCommand()
 	}
 }
 
-void CAutomatController::DefinitionGrammar()
+PairString CAutomatController::ParseState(const std::string str) const
 {
-	if (!m_stateMap.empty())
+	std::smatch match;
+	PairString pairStr;
+
+	if (m_grammar == Grammar::RIGHT)
 	{
-		VectorPairString vec = (*m_stateMap.begin()).second;
-		if (!vec.empty())
+		if (std::regex_search(str, match, PARSE_NO_TERMINAL_REGEX))
 		{
-			std::string str = vec[0].first;
-			m_grammar = str[0] >= 65 && str[0] <= 90 ? Grammar::LEFT : Grammar::RIGHT;
+			pairStr = std::make_pair(match[0], match.suffix());
+		}
+		else if (std::regex_search(str, match, PARSE_END_STATE_REGEX))
+		{
+			pairStr = std::make_pair(match[0], "");
 		}
 	}
+	else if (m_grammar == Grammar::LEFT)
+	{
+		if (std::regex_search(str, match, PARSE_TERMINAL_REGEX))
+		{
+			pairStr = std::make_pair(match[0], match.suffix());
+		}
+		else if (std::regex_search(str, match, PARSE_NO_TERMINAL_REGEX))
+		{
+			pairStr = std::make_pair("", match[0]);
+		}
+	}
+
+	return pairStr;
 }
 
-std::string CAutomatController::GetConvertToString(const char ch) const
+void CAutomatController::DefinitionGrammar(const std::string str)
 {
-	std::string str;
-	str = (const char)ch;
-	return str;
+	m_grammar = str[0] >= 65 && str[0] <= 90 ? Grammar::LEFT : Grammar::RIGHT;
 }
 
-void CAutomatController::FillingData(const size_t inputSize, const size_t stateCount, const size_t rulesCount)
+void CAutomatController::FillingData(const size_t inputSize, const size_t stateCount)
 {
-	char ch, ch1, ch2;
+	std::string str, str1;
 
 	for (size_t i = 0; i < stateCount; ++i)
 	{
-		bool isNext = true;
-		m_input >> ch;
+		bool isNext = true, isCheckGrammar = false;
+		m_input >> str;
 
 		VectorPairString temporary;
 
 		while (isNext)
 		{
-			ch1 = ch2 = '\0';
-			m_input >> ch1 >> ch2;
-			temporary.push_back(std::make_pair(GetConvertToString(ch1), GetConvertToString(ch2)));
+			m_input >> str1;
+			if (i == 0 && !isCheckGrammar)
+			{
+				DefinitionGrammar(str1);
+				isCheckGrammar = true;
+			}
+
+			temporary.push_back(ParseState(str1));
+
 			if (m_input.get() == '\n' || m_input.eof())
 			{
 				isNext = false;
 			}
 		}
 
-		m_stateMap.emplace(std::make_pair(i, GetConvertToString(ch)), temporary);
+		m_stateMap.emplace(std::make_pair(i, str), temporary);
 	}
 }

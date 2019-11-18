@@ -1,128 +1,176 @@
 #include "Automat.h"
 
-Automat::Automat(std::ostream& output, const size_t inputSize, const size_t stateCount, const size_t rulesCount, const MapEdge& stateMap, const Grammar grammar)
+Automat::Automat(std::ostream& output, const size_t inputSize, const size_t stateCount, const MapEdge& stateMap, const Grammar grammar)
 	: m_output(output)
 	, m_inputSize(inputSize)
 	, m_stateCount(stateCount)
-	, m_rulesCount(rulesCount)
 	, m_stateMap(stateMap)
 	, m_grammar(grammar)
 {
 }
 
-void Automat::AddDetermination()
+bool Automat::isUniqueVector(DualVectorString& columnVector, DualVectorString& vectorPush)
 {
-	for (auto it = m_stateMap.begin(); it != m_stateMap.end(); ++it)
-	{
-		VectorPairString vec = (*it).second;
-		VectorString temporaryNoTerm;
-
-		DualVectorPairString temporary(m_inputSize);
-		m_term.push_back((*it).first.second);
-
-		for (size_t j = 0; j < vec.size(); ++j)
-		{
-			temporaryNoTerm.push_back(vec[j].first);
-			temporary[j].push_back(vec[j]);
-		}
-		UniqueNoTerm(temporaryNoTerm);
-		m_inputStateChar.push_back(temporary);
-	}
-}
-
-void Automat::UniqueNoTerm(VectorString& columnVector)
-{
-	for (auto& column : columnVector)
-	{
-		std::sort(column.begin(), column.end());
-		column.erase(std::unique(column.begin(), column.end()), column.end());
-
-		if (std::find(m_noTerm.begin(), m_noTerm.end(), column) == m_noTerm.end())
-		{
-			m_noTerm.push_back(column);
-		}
-	}
-}
-
-void Automat::UniqueVector(DualVectorString& columnVector)
-{
+	bool isPush = false;
 	for (auto& column : columnVector)
 	{
 		if (!column.empty())
 		{
+			isPush = true;
 			std::sort(column.begin(), column.end());
 			column.erase(std::unique(column.begin(), column.end()), column.end());
 
-			if (std::find(m_determinationStateString.begin(), m_determinationStateString.end(), column) == m_determinationStateString.end())
+			if (std::find(vectorPush.begin(), vectorPush.end(), column) == vectorPush.end())
 			{
-				m_determinationStateString.push_back(column);
+				vectorPush.push_back(column);
 			}
 		}
 	}
-}
-
-void Automat::DeterminationRightGrammar()
-{
-	m_determinationStateString.push_back({ m_term[0] });
-
-	for (size_t i = 0; i < m_determinationStateString.size(); ++i)
-	{
-		DualVectorString temporary(m_inputSize);
-
-		for (const auto& column : m_determinationStateString[i])
-		{
-			auto it = std::find(m_term.begin(), m_term.end(), column);
-
-			if (it != m_term.end())
-			{
-				size_t indexFind = std::distance(m_term.begin(), it);
-
-				DualVectorPairString output = m_inputStateChar[indexFind];
-
-				for (auto itt = output.begin(); itt != output.end(); ++itt)
-				{
-					if (!(*itt).empty())
-					{
-						auto element = (*itt)[0];
-						auto itFind = std::find(m_noTerm.begin(), m_noTerm.end(), element.first);
-
-						if (itFind != m_noTerm.end())
-						{
-							size_t indexFindNoTerm = std::distance(m_noTerm.begin(), itFind);
-							std::string str = element.second[0] ? element.second : "F";
-							temporary[indexFindNoTerm].push_back(str);
-						}
-					}
-				}
-			}
-		}
-
-		UniqueVector(temporary);
-		m_outputStateString.push_back(temporary);
-	}
-}
-
-void Automat::DeterminationLeftGrammar()
-{
+	return isPush;
 }
 
 void Automat::Determination()
 {
 	if (m_grammar == Grammar::RIGHT)
 	{
-		AddDetermination();
+		AddDeterminationRight();
 		DeterminationRightGrammar();
 	}
-	else
+	else if (m_grammar == Grammar::LEFT)
 	{
+		AddDeterminationLeft();
 		DeterminationLeftGrammar();
+	}
+}
+
+void Automat::AddDeterminationRight()
+{
+	for (auto it = m_stateMap.begin(); it != m_stateMap.end(); ++it)
+	{
+		VectorPairString temporary;
+		m_noTermimalKeyString.emplace((*it).first.second, m_noTermimalKeyString.size());
+		m_noTermimalKeySize_t.emplace(m_noTermimalKeySize_t.size(), (*it).first.second);
+
+		for (const auto& column : (*it).second)
+		{
+			std::string str = column.second[0] ? column.second : SYMBOL_F;
+			temporary.push_back(std::make_pair(column.first, str));
+			m_termimalKeyString.emplace(column.first, m_termimalKeyString.size());
+		}
+
+		m_inputState.push_back(temporary);
+	}
+
+	m_noTermimalKeyString.emplace(SYMBOL_F, m_noTermimalKeyString.size());
+
+	for (auto it = m_termimalKeyString.begin(); it != m_termimalKeyString.end(); ++it)
+	{
+		m_termimalKeySize_t.emplace((*it).second, (*it).first);
+	}
+}
+
+void Automat::DeterminationRightGrammar()
+{
+	m_determinationState.push_back({ m_noTermimalKeySize_t[0] });
+
+	for (size_t i = 0; i < m_determinationState.size(); ++i)
+	{
+		if (m_determinationState[i][0] == SYMBOL_F)
+		{
+			continue;
+		}
+
+		DualVectorString temporary(m_inputSize);
+
+		for (const auto& column : m_determinationState[i])
+		{
+			for (const auto& cell : m_inputState[m_noTermimalKeyString[column]])
+			{
+				auto index = m_termimalKeyString[cell.first];
+				std::string str = cell.second[0] ? cell.second : SYMBOL_F;
+				temporary[index].push_back(str);
+			}
+		}
+
+		if (!m_determinationState[i].empty() && isUniqueVector(temporary, m_determinationState))
+		{
+			m_outputState.push_back(temporary);
+		}
+	}
+}
+
+void Automat::AddDeterminationLeft()
+{
+	m_noTermimalKeyString.emplace(SYMBOL_I, m_noTermimalKeyString.size());
+	for (auto it = m_stateMap.rbegin(); it != m_stateMap.rend(); ++it)
+	{
+		VectorPairString temporary;
+		m_noTermimalKeyString.emplace((*it).first.second, m_noTermimalKeyString.size());
+		m_noTermimalKeySize_t.emplace(m_noTermimalKeySize_t.size(), (*it).first.second);
+
+		for (const auto& column : (*it).second)
+		{
+			std::string str = column.first[0] ? column.first : SYMBOL_I;
+			temporary.push_back(std::make_pair(str, column.second));
+			m_termimalKeyString.emplace(column.second, m_termimalKeyString.size());
+		}
+
+		m_inputState.push_back(temporary);
+	}
+
+	for (auto it = m_termimalKeyString.begin(); it != m_termimalKeyString.end(); ++it)
+	{
+		m_termimalKeySize_t.emplace((*it).second, (*it).first);
+	}
+}
+
+void Automat::DeterminationLeftGrammar()
+{
+	TripleVectorString outputStateTemporary(m_stateMap.size() + 1);
+
+	for (auto& column : outputStateTemporary)
+	{
+		column.resize(m_inputSize);
+	}
+
+	for (size_t i = 0; i < m_inputState.size(); ++i)
+	{
+		for (const auto& column : m_inputState[i])
+		{
+			auto index = m_noTermimalKeyString[column.first];
+			auto index2 = m_termimalKeyString[column.second];
+
+			outputStateTemporary[index][index2].push_back(m_noTermimalKeySize_t[i]);
+		}
+	}
+
+	m_determinationState.push_back({ SYMBOL_I });
+
+	for (size_t i = 0; i < m_determinationState.size(); ++i)
+	{
+		DualVectorString temporary(m_inputSize);
+
+		for (const auto& column : m_determinationState[i])
+		{
+			auto element = outputStateTemporary[m_noTermimalKeyString[column]];
+
+			for (size_t j = 0; j < element.size(); ++j)
+			{
+				temporary[j].insert(temporary[j].end(), element[j].begin(), element[j].end());
+			}
+		}
+
+		if (!m_determinationState[i].empty() && isUniqueVector(temporary, m_determinationState))
+		{
+			m_outputState.push_back(temporary);
+		}
 	}
 }
 
 VectorString Automat::ConvertVertexString()
 {
 	VectorString vertexString;
-	for (const auto& column : m_determinationStateString)
+	for (const auto& column : m_determinationState)
 	{
 		std::string str;
 		for (const auto& cell : column)
@@ -139,13 +187,13 @@ VectorPairString Automat::ConvertStateString()
 	VectorPairString stateString;
 	for (size_t i = 0; i < m_inputSize; ++i)
 	{
-		for (const auto& column : m_outputStateString)
+		for (const auto& column : m_outputState)
 		{
 			std::string str1, str2;
 			for (const auto& cell : column[i])
 			{
 				str1 += cell;
-				str2 = m_noTerm[i] == "#" ? "End" : m_noTerm[i];
+				str2 = m_termimalKeySize_t[i] == END ? "End" : m_termimalKeySize_t[i];
 			}
 			stateString.push_back(std::make_pair(str1, str2));
 		}
@@ -168,7 +216,7 @@ void Automat::GraphView()
 		outputGraph << vertex << ";" << std::endl;
 	}
 
-	for (size_t i = 0; i < m_outputStateString.size(); ++i)
+	for (size_t i = 0; i < m_outputState.size(); ++i)
 	{
 		size_t index = i;
 		for (size_t j = 0; j < m_inputSize; ++j)
@@ -178,7 +226,7 @@ void Automat::GraphView()
 				outputGraph << vertexString[i] << "->" << stateString[index].first << " [label=" << stateString[index].second << "];" << std::endl;
 			}
 
-			index += m_outputStateString.size();
+			index += m_outputState.size();
 		}
 	}
 
@@ -189,7 +237,7 @@ void Automat::PrintInfo() const
 {
 	for (size_t i = 0; i < m_inputSize; ++i)
 	{
-		for (const auto& column : m_outputStateString)
+		for (const auto& column : m_outputState)
 		{
 			for (const auto& cell : column[i])
 			{

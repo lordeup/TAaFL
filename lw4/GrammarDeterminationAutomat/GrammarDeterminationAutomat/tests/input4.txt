@@ -1,0 +1,6 @@
+3
+4
+S C#
+C Ab Ba
+A a Ca
+B b Cb

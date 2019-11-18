@@ -1,6 +1,5 @@
 3
 4
-4
 S aB
 B aC aD dB
 C aB

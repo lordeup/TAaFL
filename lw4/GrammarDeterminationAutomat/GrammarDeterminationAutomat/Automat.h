@@ -3,6 +3,7 @@
 
 enum class Grammar
 {
+	UNKNOWN,
 	LEFT,
 	RIGHT
 };
@@ -10,7 +11,7 @@ enum class Grammar
 class Automat
 {
 public:
-	Automat(std::ostream& output, const size_t inputSize, const size_t stateCount, const size_t rulesCount, const MapEdge& stateMap, const Grammar grammar);
+	Automat(std::ostream& output, const size_t inputSize, const size_t stateCount, const MapEdge& stateMap, const Grammar grammar);
 	~Automat() = default;
 
 	void GraphView();
@@ -18,23 +19,28 @@ public:
 	void PrintInfo() const;
 
 private:
-	size_t m_inputSize, m_stateCount, m_rulesCount;
+	size_t m_inputSize, m_stateCount;
 
 	Grammar m_grammar;
 	MapEdge m_stateMap;
-	VectorString m_term, m_noTerm;
 
-	DualVectorString m_determinationStateString;
-	TripleVectorPairString m_inputStateChar;
-	TripleVectorString m_outputStateString;
+	DualVectorString m_determinationState;
+	DualVectorPairString m_inputState;
+	TripleVectorString m_outputState;
+
+	MapKeyString m_noTermimalKeyString, m_termimalKeyString;
+	MapKeySize_t m_noTermimalKeySize_t, m_termimalKeySize_t;
 
 	std::ostream& m_output;
 
-	void UniqueVector(DualVectorString& columnVector);
+	bool isUniqueVector(DualVectorString& columnVector, DualVectorString& vectorPush);
+
+	void AddDeterminationRight();
+	void AddDeterminationLeft();
+
 	void DeterminationRightGrammar();
 	void DeterminationLeftGrammar();
-	void AddDetermination();
-	void UniqueNoTerm(VectorString& columnVector);
+
 	VectorString ConvertVertexString();
 	VectorPairString ConvertStateString();
 };

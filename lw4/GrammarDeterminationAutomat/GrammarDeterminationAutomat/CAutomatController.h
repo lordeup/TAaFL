@@ -2,6 +2,10 @@
 #include "Automat.h"
 #include <sstream>
 
+const std::regex PARSE_TERMINAL_REGEX("[A-Z]+");
+const std::regex PARSE_NO_TERMINAL_REGEX("(\\d+)|([a-z]+)");
+const std::regex PARSE_END_STATE_REGEX("[#]+");
+
 class CAutomatController
 {
 public:
@@ -16,7 +20,7 @@ private:
 	MapEdge m_stateMap;
 	Grammar m_grammar;
 
-	void FillingData(const size_t inputSize, const size_t stateCount, const size_t rulesCount);
-	void DefinitionGrammar();
-	std::string GetConvertToString(const char ch) const;
+	void FillingData(const size_t inputSize, const size_t stateCount);
+	PairString ParseState(const std::string str) const;
+	void DefinitionGrammar(const std::string str);
 };

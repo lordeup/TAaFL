@@ -19,6 +19,6 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	CAutomatController automatController(fileInput, std::cout);
+	CAutomatController automatController(fileInput, fileOutput);
 	automatController.ProcessingCommand();
 }

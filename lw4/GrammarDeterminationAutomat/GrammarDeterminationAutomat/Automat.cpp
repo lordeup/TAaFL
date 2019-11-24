@@ -22,6 +22,10 @@ bool Automat::isUniqueVector(DualVectorString& columnVector, DualVectorString& v
 
 			if (std::find(vectorPush.begin(), vectorPush.end(), column) == vectorPush.end())
 			{
+				if (m_grammar == Grammar::RIGHT && column[0] == SYMBOL_F)
+				{
+					continue;
+				}
 				vectorPush.push_back(column);
 			}
 		}
@@ -61,6 +65,8 @@ void Automat::AddDeterminationRight()
 		m_inputState.push_back(temporary);
 	}
 
+	m_inputState.push_back({});
+
 	m_noTermimalKeyString.emplace(SYMBOL_F, m_noTermimalKeyString.size());
 
 	for (auto it = m_termimalKeyString.begin(); it != m_termimalKeyString.end(); ++it)
@@ -75,11 +81,6 @@ void Automat::DeterminationRightGrammar()
 
 	for (size_t i = 0; i < m_determinationState.size(); ++i)
 	{
-		if (m_determinationState[i][0] == SYMBOL_F)
-		{
-			continue;
-		}
-
 		DualVectorString temporary(m_inputSize);
 
 		for (const auto& column : m_determinationState[i])

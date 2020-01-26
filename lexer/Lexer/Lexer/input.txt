@@ -1,0 +1,29 @@
+int main(int[] args)
+{
+	int loripsumdolorsitametconsecteturadipiscinglitsed346346LoripsumdolorsitametconsecteturadipiscinglitsedLoripsumdolorsitametconsecteturadipiscinglitsed = 7;
+	float Loripsumdolorsitametconsecteturadipiscinglitsed346346LoripsumdolorsitametconsecteturadipiscinglitsedLoripsumdolorsitametconsecte = 5.1;
+	int 1457error = 56;
+	int te_st = 0; // ytewpotwetwet
+/* * /
+{
+	int i = 0;
+}
+
+* /
+*/
+	inta binary = 0b1101001 | 3 && 4 != 2;
+	int octal = 0o2472;
+	int hexadecimal = 0xA15F;
+
+	float pi = -3.14159265359;
+	float a = 0.2E+12 * 5.0E-6;
+
+	char ch = '"';
+	char ch1 = '\'';
+
+	string s = "testStr\"ing@3326";
+
+	read();
+	write(s);
+	return 42;
+}

@@ -1,9 +1,0 @@
-<E> - <T> <G> # / ( minus id
-<G> - + <T> <G> / +
-<G> - e / # )
-<T> - <F> <U> / ( minus id
-<U> - * <F> <U> / *
-<U> - e / + # )
-<F> - id / id
-<F> - minus <F> / minus
-<F> - ( <E> ) / (

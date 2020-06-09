@@ -10,22 +10,25 @@ bool IsNonterminal(const std::string str)
 	return str.front() == '<' && str.back() == '>';
 }
 
-std::string GetRandomNonterminal(const VectorString& vec)
+size_t GetRandomNumber(const size_t min, const size_t max)
 {
-	std::string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	for (auto& str : vec)
+	return (std::rand() % max) + min;
+}
+
+std::string GetRandomString()
+{
+	const std::string characters = "abcdefghijklmnaoqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	const size_t length = GetRandomNumber(1, 8);
+
+	std::string str;
+
+	for (size_t i = 0; i < length; ++i)
 	{
-		std::string substr = str.substr(1, str.length() - 2);
-		size_t pos = characters.find(substr);
-		if (pos != std::string::npos)
-		{
-			characters.erase(pos, substr.length());
-		}
+		size_t random = std::rand() % characters.size();
+		str += characters[random];
 	}
 
-	int random = std::rand() % characters.size();
-
-	return std::string(1, characters[random]);
+	return str;
 }
 
 void FillingData(std::istream& fileInput, VectorInputData& inputDatas, VectorString& nonterminals, VectorString& terminals)
@@ -138,7 +141,17 @@ void ActionsRightSide(const VectorInputData& inputDatas, VectorOutputData& outpu
 		}
 	}
 
-	std::string randomNonterminal = "<" + GetRandomNonterminal(nonterminals) + ">";
+	std::string randomNonterminal;
+
+	while (true)
+	{
+		randomNonterminal = "<" + GetRandomString() + ">";
+
+		if (IsCheckUniqueness(nonterminals, randomNonterminal))
+		{
+			break;
+		}
+	}
 
 	if (isLeftRecursion || isFactorization)
 	{

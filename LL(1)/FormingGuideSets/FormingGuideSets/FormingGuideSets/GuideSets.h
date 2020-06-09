@@ -3,7 +3,9 @@
 
 bool IsCheckUniqueness(const VectorString& vec, const std::string str);
 bool IsNonterminal(const std::string str);
-std::string GetRandomNonterminal(const VectorString& vec);
+
+std::string GetRandomString();
+size_t GetRandomNumber(const size_t min, const size_t max);
 
 void FillingData(std::istream& fileInput, VectorInputData& inputDatas, VectorString& nonterminals, VectorString& terminals);
 void Forming(const VectorInputData& inputDatas, VectorOutputData& outputDatas, VectorString& nonterminals, VectorString& terminals);

@@ -1,0 +1,6 @@
+<S> - real <list>
+<list> - <list> , <id>
+<list> - <id>
+<id> - a
+<id> - b
+<id> - c

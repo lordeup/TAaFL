@@ -136,7 +136,7 @@ void PrintInfoVector(std::ostream& fileOutput, const std::vector<std::string>& v
 {
 	if (!vec.empty())
 	{
-		std::copy(vec.begin(), vec.end() - 1, std::ostream_iterator<std::string>(fileOutput, ", "));
+		std::copy(vec.begin(), vec.end() - 1, std::ostream_iterator<std::string>(fileOutput, " "));
 		fileOutput << vec.back();
 	}
 }

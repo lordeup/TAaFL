@@ -20,5 +20,12 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
+	std::vector<InputTableData> inputTable;
+	std::vector<OutputTableData> outputTable;
+	std::string sentence;
+
+	InitInputTable(fileTableInput, inputTable);
+	InitSentence(fileSentenceInput, sentence);
+
 	return 0;
 }

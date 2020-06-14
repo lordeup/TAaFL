@@ -1,8 +1,9 @@
 #pragma once
 #include <fstream>
-#include <vector>
-#include <string>
 #include <sstream>
+#include <string>
+#include <vector>
+#include <stack>
 
 struct InputTableData
 {
@@ -15,6 +16,18 @@ struct InputTableData
 	bool isEnd = false;
 };
 
+enum Action
+{
+	Add,
+	Delete
+};
+
 struct OutputTableData
 {
+	size_t number;
+	Action action;
+	size_t stack;
+	std::string currentSymbol;
 };
+
+

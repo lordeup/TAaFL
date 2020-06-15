@@ -4,9 +4,11 @@
 #include <string>
 #include <vector>
 #include <stack>
+#include <iostream>
 
 struct InputTableData
 {
+	size_t number;
 	std::string symbol;
 	std::vector<std::string> guideCharacters;
 	bool isShift = false;
@@ -26,7 +28,7 @@ struct OutputTableData
 {
 	size_t number;
 	Action action;
-	size_t stack;
+	size_t stackItem;
 	std::string currentSymbol;
 };
 

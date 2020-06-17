@@ -32,4 +32,4 @@ struct OutputTableData
 	std::string currentSymbol;
 };
 
-
+const std::string TAB = "\t";

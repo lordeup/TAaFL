@@ -4,3 +4,4 @@
 void InitInputTable(std::ifstream& fileTableInput, std::vector<InputTableData>& inputTable);
 void InitSentence(std::ifstream& fileSentenceInput, std::string& sentence);
 void MakeProcess(std::vector<InputTableData>& inputTable, std::vector<OutputTableData>& outputTable, std::string& sentence);
+void PrintResult(std::ofstream& fileOutput, const std::vector<OutputTableData>& outputTable);

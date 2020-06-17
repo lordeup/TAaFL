@@ -29,6 +29,7 @@ int main(int argc, char* argv[])
 		InitInputTable(fileTableInput, inputTable);
 		InitSentence(fileSentenceInput, sentence);
 		MakeProcess(inputTable, outputTable, sentence);
+		PrintResult(fileOutput, outputTable);
 	}
 	catch (const std::exception& e)
 	{

@@ -1,1 +1,1 @@
-type a = int ; b = record a : record c : int end ; c : int #
+type a = i ; b = r a : r c : i end ; c : i #

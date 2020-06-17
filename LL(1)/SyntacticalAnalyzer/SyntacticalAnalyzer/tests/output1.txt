@@ -16,12 +16,12 @@ Number	Action	Stack	CurrentSymbol
 33	Delete	28	:
 29	Add	30	i
 20	Delete	30	end
-14757395258967641292	Delete	23	end
+36	Delete	23	end
 23	Delete	30	;
 27	Add	28	c
 33	Delete	28	:
 29	Add	30	i
 20	Delete	30	#
 36	Delete	23	#
-14757395258967641292	Delete	19	#
+23	Delete	19	#
 26	Delete	15	#

@@ -1,23 +1,5 @@
 #include "SyntacticalAnalyzer.h"
 
-InputTableData GetInputDataBySymbol(std::vector<InputTableData>& inputTable, std::string symbol)
-{
-	for (size_t i = 0; i < inputTable.size(); i++)
-	{
-		if (inputTable[i].symbol == symbol)
-			return inputTable[i];
-	}
-}
-
-InputTableData GetInputDataByNumber(std::vector<InputTableData>& inputTable, size_t number)
-{
-	for (size_t i = 0; i < inputTable.size(); i++)
-	{
-		if (inputTable[i].number == number)
-			return inputTable[i];
-	}
-}
-
 std::string GetString(std::istringstream& iss)
 {
 	std::string str;
@@ -93,6 +75,29 @@ void InitInputTable(std::ifstream& fileTableInput, std::vector<InputTableData>& 
 	}
 }
 
+void InitSentence(std::ifstream& fileSentenceInput, std::string& sentence)
+{
+	std::getline(fileSentenceInput, sentence);
+}
+
+InputTableData GetInputDataBySymbol(std::vector<InputTableData>& inputTable, std::string symbol)
+{
+	for (size_t i = 0; i < inputTable.size(); i++)
+	{
+		if (inputTable[i].symbol == symbol)
+			return inputTable[i];
+	}
+}
+
+InputTableData GetInputDataByNumber(std::vector<InputTableData>& inputTable, size_t number)
+{
+	for (size_t i = 0; i < inputTable.size(); i++)
+	{
+		if (inputTable[i].number == number)
+			return inputTable[i];
+	}
+}
+
 bool HaveSymbolInGuide(std::vector<std::string> guideCharacters, std::string symbol)
 {
 	auto result = std::find(guideCharacters.begin(), guideCharacters.end(), symbol);
@@ -105,9 +110,16 @@ InputTableData GetInputDataBySymbolAndCurrentSymbol(std::vector<InputTableData>&
 
 	for (size_t i = 0; i < inputTable.size(); i++)
 	{
-		if ((inputTable[i].symbol == symbol) && (inputTable[i].guideCharacters.size() == 1) && HaveSymbolInGuide(inputTable[i].guideCharacters, currentSymbol))
+		if ((inputTable[i].symbol == symbol) && (inputTable[i].guideCharacters.size() == 1))
 		{
-			result = inputTable[i];
+			if (HaveSymbolInGuide(inputTable[i].guideCharacters, currentSymbol))
+			{
+				result = inputTable[i];
+			}
+			else if (HaveSymbolInGuide(inputTable[i].guideCharacters, "#"))
+			{
+				result = inputTable[i];
+			}
 		}
 	}
 
@@ -118,17 +130,12 @@ InputTableData GetNewInputData(std::vector<InputTableData>& inputTable, std::str
 {
 	InputTableData result = GetInputDataByNumber(inputTable, pointer);
 
-	if (!HaveSymbolInGuide(result.guideCharacters, currentSymbol))
+	if (!HaveSymbolInGuide(result.guideCharacters, currentSymbol) && result.pointer != 0)
 	{
 		result = GetInputDataBySymbolAndCurrentSymbol(inputTable, result.symbol, currentSymbol);
 	}
 
 	return result;
-}
-
-void InitSentence(std::ifstream& fileSentenceInput, std::string& sentence)
-{
-	std::getline(fileSentenceInput, sentence);
 }
 
 void RecursiveMethod(
@@ -139,17 +146,6 @@ void RecursiveMethod(
 	const InputTableData inputData,
 	std::string currentSymbol)
 {
-
-	if (currentSymbol == "#")
-	{
-		std::cout << currentSymbol << std::endl;
-	}
-
-	if (inputData.number == 15)
-	{
-		std::cout << currentSymbol << std::endl;
-	}
-
 	if (inputData.isEnd)
 		return;
 
@@ -174,7 +170,6 @@ void RecursiveMethod(
 		stack.push(stackItem);
 
 		InputTableData newInputData = GetNewInputData(inputTable, currentSymbol, inputData.pointer);
-		//InputTableData newInputData = GetInputDataByNumber(inputTable, inputData.pointer);
 		RecursiveMethod(iss, inputTable, outputTable, stack, newInputData, currentSymbol);
 	}
 	else
@@ -194,13 +189,11 @@ void RecursiveMethod(
 			outputTable.push_back(outputData);
 
 			InputTableData newInputData = GetNewInputData(inputTable, currentSymbol, pointer);
-			//InputTableData newInputData = GetInputDataByNumber(inputTable, pointer);
 			RecursiveMethod(iss, inputTable, outputTable, stack, newInputData, currentSymbol);
 		}
 		else
 		{
 			InputTableData newInputData = GetNewInputData(inputTable, currentSymbol, inputData.pointer);
-			//	InputTableData newInputData = GetInputDataByNumber(inputTable, inputData.pointer);
 			RecursiveMethod(iss, inputTable, outputTable, stack, newInputData, currentSymbol);
 		}
 	}
@@ -217,14 +210,21 @@ void MakeProcess(std::vector<InputTableData>& inputTable, std::vector<OutputTabl
 
 	RecursiveMethod(iss, inputTable, outputTable, stack, inputData, currentSymbol);
 
-	stack.empty();
+	if (stack.empty())
+	{
+		std::cout << "Stack is empty. Good" << std::endl;
+	}
+	else
+	{
+		std::cout << "Stack is NOT empty. Bad" << std::endl;
+	}
 }
 
 std::string ConvertActionToString(Action action)
 {
 	switch (action)
 	{
-	case Action::Add: 
+	case Action::Add:
 		return "Add";
 	case Action::Delete:
 		return "Delete";
@@ -233,7 +233,7 @@ std::string ConvertActionToString(Action action)
 	}
 }
 
-void PrintResult(std::ofstream& fileOutput, const std::vector<OutputTableData>& outputTable)
+void PrintResult(std::ofstream & fileOutput, const std::vector<OutputTableData>& outputTable)
 {
 	fileOutput << "Number" << TAB << "Action" << TAB << "Stack" << TAB << "CurrentSymbol" << std::endl;
 

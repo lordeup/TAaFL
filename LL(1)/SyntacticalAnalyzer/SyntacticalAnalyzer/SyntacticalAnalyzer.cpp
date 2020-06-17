@@ -15,11 +15,17 @@ void InitSymbol(std::istringstream& iss, std::string& symbol)
 void ConvertStringToBool(std::string boolInStr, bool& boolVariable)
 {
 	if (boolInStr == "0")
+	{
 		boolVariable = false;
+	}
 	else if (boolInStr == "1")
+	{
 		boolVariable = true;
+	}
 	else
+	{
 		throw std::exception("Incorrect input\nShift, Error, Stack, End must be 0 or 1");
+	}
 }
 
 void InitGuideCharactersAndShift(std::istringstream& iss, std::vector<std::string>& guideCharacters, bool& shift)
@@ -33,7 +39,9 @@ void InitGuideCharactersAndShift(std::istringstream& iss, std::vector<std::strin
 			break;
 		}
 		else
+		{
 			guideCharacters.push_back(str);
+		}
 	}
 }
 
@@ -85,7 +93,9 @@ InputTableData GetInputDataBySymbol(std::vector<InputTableData>& inputTable, std
 	for (size_t i = 0; i < inputTable.size(); i++)
 	{
 		if (inputTable[i].symbol == symbol)
+		{
 			return inputTable[i];
+		}
 	}
 }
 
@@ -94,7 +104,9 @@ InputTableData GetInputDataByNumber(std::vector<InputTableData>& inputTable, siz
 	for (size_t i = 0; i < inputTable.size(); i++)
 	{
 		if (inputTable[i].number == number)
+		{
 			return inputTable[i];
+		}
 	}
 }
 
@@ -109,9 +121,7 @@ InputTableData GetInputDataBySymbolAndCurrentSymbol(std::vector<InputTableData>&
 
 	for (size_t i = 0; i < inputTable.size(); i++)
 	{
-		if ((inputTable[i].symbol == symbol)&&
-			(inputTable[i].guideCharacters.size() == 1) && 
-			(HaveSymbolInGuide(inputTable[i].guideCharacters, currentSymbol) | HaveSymbolInGuide(inputTable[i].guideCharacters, "#")))
+		if ((inputTable[i].symbol == symbol) && (inputTable[i].guideCharacters.size() == 1) && (HaveSymbolInGuide(inputTable[i].guideCharacters, currentSymbol) | HaveSymbolInGuide(inputTable[i].guideCharacters, "#")))
 		{
 			result = inputTable[i];
 		}
@@ -141,7 +151,9 @@ void RecursiveMethod(
 	std::string currentSymbol)
 {
 	if (inputData.isEnd)
+	{
 		return;
+	}
 
 	if (inputData.isShift)
 	{
@@ -227,7 +239,7 @@ std::string ConvertActionToString(Action action)
 	}
 }
 
-void PrintResult(std::ofstream & fileOutput, const std::vector<OutputTableData>& outputTable)
+void PrintResult(std::ofstream& fileOutput, const std::vector<OutputTableData>& outputTable)
 {
 	fileOutput << "Number" << TAB << "Action" << TAB << "Stack" << TAB << "CurrentSymbol" << std::endl;
 

@@ -100,8 +100,7 @@ InputTableData GetInputDataByNumber(std::vector<InputTableData>& inputTable, siz
 
 bool HaveSymbolInGuide(std::vector<std::string> guideCharacters, std::string symbol)
 {
-	auto result = std::find(guideCharacters.begin(), guideCharacters.end(), symbol);
-	return result != guideCharacters.end();
+	return std::find(guideCharacters.begin(), guideCharacters.end(), symbol) != guideCharacters.end();
 }
 
 InputTableData GetInputDataBySymbolAndCurrentSymbol(std::vector<InputTableData>& inputTable, std::string symbol, std::string currentSymbol)
@@ -110,16 +109,11 @@ InputTableData GetInputDataBySymbolAndCurrentSymbol(std::vector<InputTableData>&
 
 	for (size_t i = 0; i < inputTable.size(); i++)
 	{
-		if ((inputTable[i].symbol == symbol) && (inputTable[i].guideCharacters.size() == 1))
+		if ((inputTable[i].symbol == symbol)&&
+			(inputTable[i].guideCharacters.size() == 1) && 
+			(HaveSymbolInGuide(inputTable[i].guideCharacters, currentSymbol) | HaveSymbolInGuide(inputTable[i].guideCharacters, "#")))
 		{
-			if (HaveSymbolInGuide(inputTable[i].guideCharacters, currentSymbol))
-			{
-				result = inputTable[i];
-			}
-			else if (HaveSymbolInGuide(inputTable[i].guideCharacters, "#"))
-			{
-				result = inputTable[i];
-			}
+			result = inputTable[i];
 		}
 	}
 

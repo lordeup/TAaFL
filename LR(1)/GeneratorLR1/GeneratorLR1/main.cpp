@@ -19,15 +19,12 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	VectorString nonterminals;
-	VectorString terminals;
-
 	VectorString characters;
 
 	std::vector<InputData> inputDatas;
 	std::vector<VectorString> outputDatas;
 
-	FillingData(fileInput, inputDatas, nonterminals, terminals);
-	Generate(inputDatas, outputDatas, nonterminals, terminals, characters);
+	FillingData(fileInput, inputDatas, characters);
+	Generate(inputDatas, characters, outputDatas);
 	PrintResult(fileOutput, outputDatas, characters);
 }

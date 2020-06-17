@@ -3,8 +3,8 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <queue>
 #include <sstream>
+#include <stack>
 #include <string>
 #include <vector>
 
@@ -19,9 +19,10 @@ using VectorString = std::vector<std::string>;
 
 struct TableData
 {
-	size_t count;
-	size_t position;
+	std::string nonterminal;
 	std::string character;
+	size_t row = 0;
+	size_t position = 0;
 };
 
 struct InputData

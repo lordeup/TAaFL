@@ -1,14 +1,14 @@
 #pragma once
 #include <fstream>
+#include <iostream>
 #include <sstream>
+#include <stack>
 #include <string>
 #include <vector>
-#include <stack>
-#include <iostream>
 
 struct InputTableData
 {
-	size_t number;
+	size_t number = 0;
 	std::string symbol;
 	std::vector<std::string> guideCharacters;
 	bool isShift = false;
@@ -18,7 +18,7 @@ struct InputTableData
 	bool isEnd = false;
 };
 
-enum Action
+enum class Action
 {
 	Add,
 	Delete

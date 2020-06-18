@@ -7,61 +7,54 @@ std::string GetString(std::istringstream& iss)
 	return str;
 }
 
-void InitSymbol(std::istringstream& iss, std::string& symbol)
+int ParseNumber(const std::string str)
 {
-	symbol = GetString(iss);
+	try
+	{
+		return std::stoi(str);
+	}
+	catch (const std::exception&)
+	{
+		throw std::invalid_argument("Invalid argument: " + str);
+	}
 }
 
-void ConvertStringToBool(std::string boolInStr, bool& boolVariable)
+bool GetBoolToInt(const int number)
 {
-	if (boolInStr == "0")
+	if (number == 0)
 	{
-		boolVariable = false;
+		return false;
 	}
-	else if (boolInStr == "1")
+	else if (number == 1)
 	{
-		boolVariable = true;
+		return true;
 	}
 	else
 	{
-		throw std::exception("Incorrect input\nShift, Error, Stack, End must be 0 or 1");
+		throw std::exception("Incorrect input. Must be 0 or 1");
 	}
 }
 
-void InitGuideCharactersAndShift(std::istringstream& iss, std::vector<std::string>& guideCharacters, bool& shift)
+std::vector<std::string> GetFillVector(std::istringstream& iss)
 {
 	std::string str;
+	std::vector<std::string> vec;
 	while (iss >> str)
 	{
-		if (std::atoi(str.c_str()) || str == "0")
-		{
-			ConvertStringToBool(str, shift);
-			break;
-		}
-		else
-		{
-			guideCharacters.push_back(str);
-		}
+		vec.push_back(str);
 	}
+	return vec;
 }
 
-void InitBoolVariable(std::istringstream& iss, bool& boolVariable)
+bool InitBoolVariable(std::istringstream& iss)
 {
-	std::string boolInStr = GetString(iss);
-	ConvertStringToBool(boolInStr, boolVariable);
-}
-
-void InitNumberVariable(std::istringstream& iss, size_t& numVariable)
-{
-	std::string pointerInStr = GetString(iss);
-	numVariable = std::atoi(pointerInStr.c_str()) || pointerInStr == "0" ? std::atoi(pointerInStr.c_str()) : throw std::exception("");
+	int number = ParseNumber(GetString(iss));
+	return GetBoolToInt(number);
 }
 
 void InitInputTable(std::ifstream& fileTableInput, std::vector<InputTableData>& inputTable)
 {
 	std::string line;
-
-	// read header
 	std::getline(fileTableInput, line);
 
 	while (std::getline(fileTableInput, line))
@@ -71,13 +64,14 @@ void InitInputTable(std::ifstream& fileTableInput, std::vector<InputTableData>& 
 
 		InputTableData inputData;
 
-		InitNumberVariable(iss, inputData.number);
-		InitSymbol(iss, inputData.symbol);
-		InitGuideCharactersAndShift(iss, inputData.guideCharacters, inputData.isShift);
-		InitBoolVariable(iss, inputData.isError);
-		InitNumberVariable(iss, inputData.pointer);
-		InitBoolVariable(iss, inputData.isStack);
-		InitBoolVariable(iss, inputData.isEnd);
+		inputData.number = ParseNumber(GetString(iss));
+		inputData.symbol = GetString(iss);
+		inputData.isShift = InitBoolVariable(iss);
+		inputData.isError = InitBoolVariable(iss);
+		inputData.pointer = ParseNumber(GetString(iss));
+		inputData.isStack = InitBoolVariable(iss);
+		inputData.isEnd = InitBoolVariable(iss);
+		inputData.guideCharacters = GetFillVector(iss);
 
 		inputTable.push_back(inputData);
 	}
@@ -88,43 +82,33 @@ void InitSentence(std::ifstream& fileSentenceInput, std::string& sentence)
 	std::getline(fileSentenceInput, sentence);
 }
 
-InputTableData GetInputDataBySymbol(std::vector<InputTableData>& inputTable, std::string symbol)
-{
-	for (size_t i = 0; i < inputTable.size(); i++)
-	{
-		if (inputTable[i].symbol == symbol)
-		{
-			return inputTable[i];
-		}
-	}
-}
-
-InputTableData GetInputDataByNumber(std::vector<InputTableData>& inputTable, size_t number)
-{
-	for (size_t i = 0; i < inputTable.size(); i++)
-	{
-		if (inputTable[i].number == number)
-		{
-			return inputTable[i];
-		}
-	}
-}
-
-bool HaveSymbolInGuide(std::vector<std::string> guideCharacters, std::string symbol)
+bool HaveSymbolInGuide(const std::vector<std::string>& guideCharacters, const std::string symbol)
 {
 	return std::find(guideCharacters.begin(), guideCharacters.end(), symbol) != guideCharacters.end();
 }
 
-InputTableData GetInputDataBySymbolAndCurrentSymbol(std::vector<InputTableData>& inputTable, std::string symbol, std::string currentSymbol)
+InputTableData GetInputDataBySymbolAndCurrentSymbol(std::vector<InputTableData>& inputTable, const std::string symbol, const std::string currentSymbol)
 {
 	InputTableData result;
 
-	for (size_t i = 0; i < inputTable.size(); i++)
+	for (auto it = inputTable.begin(); it != inputTable.end(); ++it)
 	{
-		if ((inputTable[i].symbol == symbol) && (inputTable[i].guideCharacters.size() == 1) && (HaveSymbolInGuide(inputTable[i].guideCharacters, currentSymbol) | HaveSymbolInGuide(inputTable[i].guideCharacters, "#")))
+		it = std::find_if(it, inputTable.end(), [&](const InputTableData& data) { return data.symbol == symbol && data.guideCharacters.size() == 1; });
+
+		if (it == inputTable.end())
 		{
-			result = inputTable[i];
+			break;
 		}
+
+		if (HaveSymbolInGuide((*it).guideCharacters, currentSymbol) || HaveSymbolInGuide((*it).guideCharacters, "#"))
+		{
+			result = *it;
+		}
+	}
+
+	if (result.number == 0)
+	{
+		throw std::invalid_argument("Error. Wrong character: " + currentSymbol);
 	}
 
 	return result;
@@ -132,7 +116,14 @@ InputTableData GetInputDataBySymbolAndCurrentSymbol(std::vector<InputTableData>&
 
 InputTableData GetNewInputData(std::vector<InputTableData>& inputTable, std::string currentSymbol, size_t pointer)
 {
-	InputTableData result = GetInputDataByNumber(inputTable, pointer);
+	auto it = std::find_if(inputTable.begin(), inputTable.end(), [&](const InputTableData& data) { return data.number == pointer; });
+
+	if (it == inputTable.end())
+	{
+		throw std::exception("Error. Not find in input table number");
+	}
+
+	InputTableData result = *it;
 
 	if (!HaveSymbolInGuide(result.guideCharacters, currentSymbol) && result.pointer != 0)
 	{
@@ -146,7 +137,7 @@ void RecursiveMethod(
 	std::istringstream& iss,
 	std::vector<InputTableData>& inputTable,
 	std::vector<OutputTableData>& outputTable,
-	std::stack<int>& stack,
+	std::stack<size_t>& stack,
 	const InputTableData inputData,
 	std::string currentSymbol)
 {
@@ -164,14 +155,7 @@ void RecursiveMethod(
 	{
 		size_t stackItem = inputData.number + 1;
 
-		OutputTableData outputData = {
-			inputData.number,
-			Action::Add,
-			stackItem,
-			currentSymbol,
-		};
-
-		outputTable.push_back(outputData);
+		outputTable.push_back({ inputData.number, Action::Add, stackItem, currentSymbol });
 
 		stack.push(stackItem);
 
@@ -185,14 +169,7 @@ void RecursiveMethod(
 			size_t pointer = stack.top();
 			stack.pop();
 
-			OutputTableData outputData = {
-				inputData.number,
-				Action::Delete,
-				pointer,
-				currentSymbol,
-			};
-
-			outputTable.push_back(outputData);
+			outputTable.push_back({ inputData.number, Action::Delete, pointer, currentSymbol });
 
 			InputTableData newInputData = GetNewInputData(inputTable, currentSymbol, pointer);
 			RecursiveMethod(iss, inputTable, outputTable, stack, newInputData, currentSymbol);
@@ -209,21 +186,20 @@ void MakeProcess(std::vector<InputTableData>& inputTable, std::vector<OutputTabl
 {
 	std::string currentSymbol;
 	std::istringstream iss(sentence);
-	std::stack<int> stack;
+	std::stack<size_t> stack;
 
-	iss >> currentSymbol;
-	InputTableData inputData = GetInputDataBySymbol(inputTable, currentSymbol);
+	currentSymbol = GetString(iss);
 
-	RecursiveMethod(iss, inputTable, outputTable, stack, inputData, currentSymbol);
+	auto it = std::find_if(inputTable.begin(), inputTable.end(), [&](const InputTableData& data) { return data.symbol == currentSymbol; });
 
-	if (stack.empty())
+	if (it == inputTable.end())
 	{
-		std::cout << "Stack is empty. Good" << std::endl;
+		throw std::exception("Error. Not find in input table symbol");
 	}
-	else
-	{
-		std::cout << "Stack is NOT empty. Bad" << std::endl;
-	}
+
+	RecursiveMethod(iss, inputTable, outputTable, stack, *it, currentSymbol);
+
+	std::cout << (stack.empty() ? "Stack is empty. Good" : "Stack is NOT empty. Bad") << std::endl;
 }
 
 std::string ConvertActionToString(Action action)
@@ -243,7 +219,7 @@ void PrintResult(std::ofstream& fileOutput, const std::vector<OutputTableData>& 
 {
 	fileOutput << "Number" << TAB << "Action" << TAB << "Stack" << TAB << "CurrentSymbol" << std::endl;
 
-	for (size_t i = 0; i < outputTable.size(); i++)
+	for (size_t i = 0; i < outputTable.size(); ++i)
 	{
 		OutputTableData outputData = outputTable[i];
 		fileOutput << outputData.number << TAB << ConvertActionToString(outputData.action) << TAB << outputData.stackItem << TAB << outputData.currentSymbol << std::endl;

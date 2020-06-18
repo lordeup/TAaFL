@@ -1,0 +1,7 @@
+Number	Action	Stack	CurrentSymbol
+14	Add	15	a
+18	Add	19	a
+31	Delete	19	;
+18	Add	19	a
+31	Delete	19	+
+24	Delete	15	+

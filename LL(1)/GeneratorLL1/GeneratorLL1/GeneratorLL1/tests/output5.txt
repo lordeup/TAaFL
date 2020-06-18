@@ -1,13 +1,13 @@
-¹	Symbol	Characters	Shift	Error	Pointer	Stack	End
-1	S	a c		0	1	5	0	0
-2	A	a		0	0	8	0	0
-3	A	c		0	1	9	0	0
-4	B	b		0	1	11	0	0
-5	A	a c		0	1	2	1	0
-6	B	b		0	1	4	1	0
-7	#	#		1	1	0	0	1
-8	a	a		1	1	0	0	0
-9	c	c		1	1	10	0	0
-10	A	a c		0	1	2	0	0
-11	b	b		1	1	12	0	0
-12	A	a c		0	1	2	0	0
+Number	Symbol	Shift	Error	Pointer	Stack	End	Characters
+1	S	0	1	5	0	0	a c
+2	A	0	0	8	0	0	a
+3	A	0	1	9	0	0	c
+4	B	0	1	11	0	0	b
+5	A	0	1	2	1	0	a c
+6	B	0	1	4	1	0	b
+7	#	1	1	0	0	1	#
+8	a	1	1	0	0	0	a
+9	c	1	1	10	0	0	c
+10	A	0	1	2	0	0	a c
+11	b	1	1	12	0	0	b
+12	A	0	1	2	0	0	a c

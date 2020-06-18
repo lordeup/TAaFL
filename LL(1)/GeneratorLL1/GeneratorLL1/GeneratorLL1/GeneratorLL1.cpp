@@ -143,7 +143,7 @@ void PrintInfoVector(std::ostream& fileOutput, const std::vector<std::string>& v
 
 void PrintResult(std::ostream& fileOutput, const std::vector<OutputData>& outputDatas)
 {
-	fileOutput << "¹" << TAB << "Symbol" << TAB << "Characters" << TAB << "Shift" << TAB << "Error" << TAB << "Pointer" << TAB << "Stack" << TAB << "End" << std::endl;
+	fileOutput << "Number" << TAB << "Symbol" << TAB << "Shift" << TAB << "Error" << TAB << "Pointer" << TAB << "Stack" << TAB << "End" << TAB << "Characters" << std::endl;
 
 	for (size_t i = 0; i < outputDatas.size(); ++i)
 	{
@@ -152,8 +152,8 @@ void PrintResult(std::ostream& fileOutput, const std::vector<OutputData>& output
 
 		std::string symbol = IsNonterminal(outputData.symbol) ? SubstrNonterminal(outputData.symbol) : outputData.symbol;
 
-		fileOutput << counter << TAB << symbol << TAB;
+		fileOutput << counter << TAB << symbol << TAB << outputData.isShift << TAB << outputData.isError << TAB << outputData.pointer << TAB << outputData.isStack << TAB << outputData.isEnd << TAB;
 		PrintInfoVector(fileOutput, outputData.guideCharacters);
-		fileOutput << TAB << TAB << outputData.isShift << TAB << outputData.isError << TAB << outputData.pointer << TAB << outputData.isStack << TAB << outputData.isEnd << std::endl;
+		fileOutput << std::endl;
 	}
 }

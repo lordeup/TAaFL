@@ -3,5 +3,7 @@ Number	Action	Stack	CurrentSymbol
 18	Add	19	a
 31	Delete	19	;
 18	Add	19	a
-31	Delete	19	+
-24	Delete	15	+
+31	Delete	19	;
+18	Add	19	a
+31	Delete	19	#
+24	Delete	15	#

@@ -89,29 +89,16 @@ bool HaveSymbolInGuide(const std::vector<std::string>& guideCharacters, const st
 
 InputTableData GetInputDataBySymbolAndCurrentSymbol(std::vector<InputTableData>& inputTable, const std::string symbol, const std::string currentSymbol)
 {
-	InputTableData result;
+	auto it = std::find_if(inputTable.begin(), inputTable.end(), [&](const InputTableData& data) {
+		return data.symbol == symbol && data.guideCharacters.size() == 1 && (HaveSymbolInGuide(data.guideCharacters, currentSymbol) || HaveSymbolInGuide(data.guideCharacters, "#"));
+	});
 
-	for (auto it = inputTable.begin(); it != inputTable.end(); ++it)
-	{
-		it = std::find_if(it, inputTable.end(), [&](const InputTableData& data) { return data.symbol == symbol && data.guideCharacters.size() == 1; });
-
-		if (it == inputTable.end())
-		{
-			break;
-		}
-
-		if (HaveSymbolInGuide((*it).guideCharacters, currentSymbol) || HaveSymbolInGuide((*it).guideCharacters, "#"))
-		{
-			result = *it;
-		}
-	}
-
-	if (result.number == 0)
+	if (it == inputTable.end())
 	{
 		throw std::invalid_argument("Error. Wrong character: " + currentSymbol);
 	}
 
-	return result;
+	return *it;
 }
 
 InputTableData GetNewInputData(std::vector<InputTableData>& inputTable, std::string currentSymbol, size_t pointer)

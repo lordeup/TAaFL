@@ -1,9 +1,9 @@
-<E> - <T> <G> # / <T> <F> ( minus id
-<G> - + <T> <G> / +
-<G> - e / # )
-<T> - <F> <U> / <F> ( minus id
-<U> - * <F> <U> / *
-<U> - e / <G> + # )
-<F> - ( <E> ) / (
-<F> - minus <F> / minus
-<F> - id / id
+<E> - <T> <G>
+<G> - + <T> <G>
+<G> - e
+<T> - <F> <U>
+<U> - * <F> <U>
+<U> - e
+<F> - ( <E> )
+<F> - minus <F>
+<F> - id

@@ -1,4 +1,4 @@
-<X> - <E> # / <E> <T> <F> m ( id num
+<OfyAE> - <E> # / <E> <T> <F> m ( id num
 <E> - <E> + <T> / <E>
 <E> - <T> / <T> <F> m ( id num
 <T> - <T> * <F> / <T>

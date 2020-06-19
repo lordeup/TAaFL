@@ -1,7 +1,6 @@
-<R> - <S> # / <S> a c
-<S> - a <A> b / a
-<S> - c / c
-<A> - b <S> / b
-<A> - <B> b / <B> a c
-<B> - a <A> / a
-<B> - c / c
+<S> - a <A> b
+<S> - c
+<A> - b <S>
+<A> - <B> b
+<B> - a <A>
+<B> - c

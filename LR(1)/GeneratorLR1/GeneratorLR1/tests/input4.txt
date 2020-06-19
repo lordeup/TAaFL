@@ -1,5 +1,4 @@
-<r> - <S> # / <S> a b
-<S> - a <A> / a
-<S> - b / b
-<A> - c <A> <S> / c
-<A> - e / <S> a b #
+<S> - a <A>
+<S> - b
+<A> - c <A> <S>
+<A> - e

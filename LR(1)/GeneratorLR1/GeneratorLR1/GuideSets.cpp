@@ -1,37 +1,18 @@
 #include "GuideSets.h"
 
-bool IsCheckUniqueness(const VectorString& vec, const std::string str)
+std::vector<OutputDataGuideSets> GetFormingGuideSets(std::istream& fileInput, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals)
 {
-	return std::find(vec.begin(), vec.end(), str) == vec.end();
+	std::vector<InputData> inputDatas;
+	std::vector<OutputDataGuideSets> outputDatas;
+
+	FillingData(fileInput, inputDatas, nonterminals, terminals);
+	Forming(inputDatas, outputDatas, nonterminals, terminals);
+	AddingGuideCharacters(outputDatas, nonterminals, terminals);
+
+	return outputDatas;
 }
 
-bool IsNonterminal(const std::string str)
-{
-	return !str.empty() && str.front() == '<' && str.back() == '>';
-}
-
-size_t GetRandomNumber(const size_t min, const size_t max)
-{
-	return (std::rand() % max) + min;
-}
-
-std::string GetRandomString()
-{
-	const std::string characters = "abcdefghijklmnaoqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	const size_t length = GetRandomNumber(1, 8);
-
-	std::string str;
-
-	for (size_t i = 0; i < length; ++i)
-	{
-		size_t random = std::rand() % characters.size();
-		str += characters[random];
-	}
-
-	return str;
-}
-
-void FillingData(std::istream& fileInput, VectorInputData& inputDatas, VectorString& nonterminals, VectorString& terminals)
+void FillingData(std::istream& fileInput, std::vector<InputData>& inputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals)
 {
 	std::string line;
 	while (std::getline(fileInput, line))
@@ -72,11 +53,11 @@ void FillingData(std::istream& fileInput, VectorInputData& inputDatas, VectorStr
 	}
 }
 
-void Forming(const VectorInputData& inputDatas, VectorOutputData& outputDatas, VectorString& nonterminals, VectorString& terminals)
+void Forming(const std::vector<InputData>& inputDatas, std::vector<OutputDataGuideSets>& outputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals)
 {
 	for (auto& nonterminal : nonterminals)
 	{
-		VectorInputData temporaryVector;
+		std::vector<InputData> temporaryVector;
 
 		for (auto it = inputDatas.begin(); it != inputDatas.end(); ++it)
 		{
@@ -92,7 +73,7 @@ void Forming(const VectorInputData& inputDatas, VectorOutputData& outputDatas, V
 		std::for_each(temporaryVector.begin(), temporaryVector.end(), [&](const InputData& data) { outputDatas.push_back({ data.nonterminal, data.terminals }); });
 	}
 
-	size_t count = std::count_if(outputDatas.begin(), outputDatas.end(), [&](const OutputData& data) { return data.nonterminal == outputDatas.front().nonterminal; });
+	size_t count = std::count_if(outputDatas.begin(), outputDatas.end(), [&](const OutputDataGuideSets& data) { return data.nonterminal == outputDatas.front().nonterminal; });
 
 	if (count > 1)
 	{
@@ -110,7 +91,7 @@ void Forming(const VectorInputData& inputDatas, VectorOutputData& outputDatas, V
 
 		nonterminals.insert(nonterminals.begin(), randomNonterminal);
 
-		outputDatas.insert(outputDatas.begin(), { randomNonterminal, VectorString{ outputDatas.front().nonterminal } });
+		outputDatas.insert(outputDatas.begin(), { randomNonterminal, std::vector<std::string>{ outputDatas.front().nonterminal } });
 	}
 
 	if (outputDatas.front().terminals.back() != TERMINAL_END_SEQUENCE)
@@ -124,7 +105,7 @@ void Forming(const VectorInputData& inputDatas, VectorOutputData& outputDatas, V
 	}
 }
 
-void AddingGuideCharacters(VectorOutputData& outputDatas, const VectorString& nonterminals, const VectorString& terminals)
+void AddingGuideCharacters(std::vector<OutputDataGuideSets>& outputDatas, const std::vector<std::string>& nonterminals, const std::vector<std::string>& terminals)
 {
 	std::vector<PairStringVectorPair> transitions;
 	std::vector<PairStringBool> characters;
@@ -143,7 +124,7 @@ void AddingGuideCharacters(VectorOutputData& outputDatas, const VectorString& no
 
 		if (row < transitions.size())
 		{
-			VectorString guideCharacters;
+			std::vector<std::string> guideCharacters;
 			std::string firstTerminal = outputData.terminals.front();
 
 			for (auto& transitionSecond : transitions[row].second)
@@ -169,7 +150,7 @@ void AddingGuideCharacters(VectorOutputData& outputDatas, const VectorString& no
 	}
 }
 
-void BuildingFirstRelationship(VectorOutputData& outputDatas, std::vector<PairStringVectorPair>& transitions, std::vector<PairStringBool>& characters)
+void BuildingFirstRelationship(std::vector<OutputDataGuideSets>& outputDatas, std::vector<PairStringVectorPair>& transitions, std::vector<PairStringBool>& characters)
 {
 	for (auto& outputData : outputDatas)
 	{
@@ -190,7 +171,7 @@ void BuildingFirstRelationship(VectorOutputData& outputDatas, std::vector<PairSt
 	}
 }
 
-void SearchStartingTerminalsEmptyRules(VectorOutputData& outputDatas, const std::string parentNonterminal, const std::string nonterminal,
+void SearchStartingTerminalsEmptyRules(std::vector<OutputDataGuideSets>& outputDatas, const std::string parentNonterminal, const std::string nonterminal,
 	std::vector<PairStringVectorPair>& transitions, std::vector<PairStringBool>& characters)
 {
 	for (const auto& outputData : outputDatas)
@@ -249,33 +230,14 @@ void BuildingFirstPlusRelationship(std::vector<PairStringVectorPair>& transition
 	}
 }
 
-void PrintInfoVector(std::ofstream& fileOutput, const VectorString& vec)
-{
-	if (!vec.empty())
-	{
-		std::copy(vec.begin(), vec.end() - 1, std::ostream_iterator<std::string>(fileOutput, " "));
-		fileOutput << vec.back();
-	}
-}
-
-void PrintResult(std::ofstream& fileOutput, const VectorOutputData& outputDatas)
+void PrintResultGuideSets(std::ofstream& fileOutput, const std::vector<OutputDataGuideSets>& outputDatas)
 {
 	for (const auto& outputData : outputDatas)
 	{
 		fileOutput << outputData.nonterminal << SPACE << "-" << SPACE;
-		PrintInfoVector(fileOutput, outputData.terminals);
+		PrintInfoVector(fileOutput, outputData.terminals, SPACE);
 		fileOutput << SPACE << "/" << SPACE;
-		PrintInfoVector(fileOutput, outputData.guideCharacters);
+		PrintInfoVector(fileOutput, outputData.guideCharacters, SPACE);
 		fileOutput << std::endl;
 	}
-}
-
-std::vector<PairStringBool>::iterator GetIteratorFindIfVector(std::vector<PairStringBool>& vec, const std::string str)
-{
-	return std::find_if(vec.begin(), vec.end(), [&](const PairStringBool& data) { return data.first == str; });
-}
-
-std::vector<PairStringVectorPair>::iterator GetIteratorFindIfVector(std::vector<PairStringVectorPair>& vec, const std::string str)
-{
-	return std::find_if(vec.begin(), vec.end(), [&](const PairStringVectorPair& data) { return data.first == str; });
 }

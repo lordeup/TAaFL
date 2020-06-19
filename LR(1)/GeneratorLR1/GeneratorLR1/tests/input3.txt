@@ -1,9 +1,8 @@
-<X> - <E> # / <E> <T> <F> m ( id num
-<E> - <E> + <T> / <E>
-<E> - <T> / <T> <F> m ( id num
-<T> - <T> * <F> / <T>
-<T> - <F> / <F> m ( id num
-<F> - m <F> / m
-<F> - ( <E> ) / (
-<F> - id / id
-<F> - num / num
+<E> - <T>
+<E> - <E> + <T>
+<T> - <T> * <F>
+<T> - <F>
+<F> - m <F>
+<F> - ( <E> )
+<F> - id
+<F> - num

@@ -1,6 +1,6 @@
-<S> - real <list> # / real
-<list> - <list> , <id> / <list>
-<list> - <id> / <id> a b c
-<id> - a / a
-<id> - b / b
-<id> - c / c
+<S> - real <list>
+<list> - <list> , <id>
+<list> - <id>
+<id> - a
+<id> - b
+<id> - c

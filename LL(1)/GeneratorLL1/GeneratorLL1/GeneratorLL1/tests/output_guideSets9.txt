@@ -1,0 +1,9 @@
+<F> - f <I> ( <I> ) <G> # / f
+<G> - <I> := <E> <xTLT> / a
+<xTLT> - ; <G> / ;
+<xTLT> - e / # a
+<E> - <I> <VYn> / a
+<VYn> - * <I> <VYn> / *
+<VYn> - + <I> <VYn> / +
+<VYn> - e / # ;
+<I> - a / a

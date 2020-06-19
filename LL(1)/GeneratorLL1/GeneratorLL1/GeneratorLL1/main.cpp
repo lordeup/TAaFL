@@ -1,4 +1,5 @@
 ﻿#include "GeneratorLL1.h"
+#include "GuideSets.h"
 #include <iostream>
 
 int main(int argc, char* argv[])
@@ -13,17 +14,21 @@ int main(int argc, char* argv[])
 	std::ifstream fileInput(argv[1]);
 	std::ofstream fileOutput(argv[2]);
 
+	std::ofstream fileGuideSets("output_guideSets.txt");
+
 	if (!fileInput.is_open())
 	{
 		std::cerr << "This file does not exist" << std::endl;
 		return 1;
 	}
 
-	std::vector<std::string> nonterminals;
-	std::vector<InputData> inputDatas;
-	std::vector<OutputData> outputDatas;
+	std::srand(unsigned(std::time(0)));
 
-	FillingData(fileInput, inputDatas, nonterminals);
-	Generate(inputDatas, outputDatas, nonterminals);
+	std::vector<std::string> nonterminals;
+
+	std::vector<OutputDataGuideSets> outputDatasSets = GetFormingGuideSets(fileInput, nonterminals);
+	PrintResultGuideSets(fileGuideSets, outputDatasSets);
+
+	std::vector<OutputData> outputDatas = GetGenerateData(outputDatasSets, nonterminals);
 	PrintResult(fileOutput, outputDatas);
 }

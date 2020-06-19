@@ -1,4 +1,9 @@
-<S> - <A> <B> # / a c
-<A> - a / a
-<A> - c <A> / c
-<B> - b <A> / b
+<E> - <T> <G>
+<G> - + <T> <G>
+<G> - e
+<T> - <F> <U>
+<U> - * <F> <U>
+<U> - e
+<F> - ( <E> )
+<F> - minus <F>
+<F> - id

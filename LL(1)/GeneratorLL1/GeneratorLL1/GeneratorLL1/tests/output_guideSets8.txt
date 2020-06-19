@@ -1,0 +1,9 @@
+<E> - <T> <MkLwMv> # / m ( i
+<MkLwMv> - + <T> <MkLwMv> / +
+<MkLwMv> - e / ) #
+<T> - <F> <GazvaJe> / m ( i
+<GazvaJe> - * <F> <GazvaJe> / *
+<GazvaJe> - e / + ) #
+<F> - i / i
+<F> - m <F> / m
+<F> - ( <E> ) / (

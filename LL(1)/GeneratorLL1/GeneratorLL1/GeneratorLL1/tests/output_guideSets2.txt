@@ -1,0 +1,10 @@
+<S> - <A> <B> <C> # / # a b c
+<A> - <z> / # a b c
+<z> - a <z> / a
+<z> - e / # b c
+<B> - <Ly> / # b c
+<Ly> - b <Ly> / b
+<Ly> - e / # c
+<C> - <zP> / # c
+<zP> - c <zP> / c
+<zP> - e / #

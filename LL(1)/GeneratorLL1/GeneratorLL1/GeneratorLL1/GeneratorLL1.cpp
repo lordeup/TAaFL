@@ -1,59 +1,9 @@
 #include "GeneratorLL1.h"
 
-bool IsNonterminal(const std::string str)
+std::vector<OutputData> GetGenerateData(const std::vector<OutputDataGuideSets>& inputDatas, const std::vector<std::string>& nonterminals)
 {
-	return str.front() == '<' && str.back() == '>';
-}
+	std::vector<OutputData> outputDatas;
 
-std::string SubstrNonterminal(const std::string str)
-{
-	return str.substr(1, str.length() - 2);
-}
-
-void FillingData(std::ifstream& fileInput, std::vector<InputData>& inputDatas, std::vector<std::string>& nonterminals)
-{
-	std::string line;
-	while (std::getline(fileInput, line))
-	{
-		std::istringstream iss(line);
-		std::string str;
-
-		InputData inputData;
-		bool isTerminal = false;
-		bool isGuideCharacter = false;
-
-		while (iss >> str)
-		{
-			char firstCh = str.front();
-
-			if (firstCh == '-')
-			{
-				isTerminal = true;
-			}
-			else if (firstCh == '/')
-			{
-				isGuideCharacter = true;
-			}
-			else if (isGuideCharacter)
-			{
-				inputData.guideCharacters.push_back(str);
-			}
-			else if (isTerminal)
-			{
-				inputData.terminals.push_back(str);
-			}
-			else
-			{
-				inputData.nonterminal = str;
-				nonterminals.push_back(str);
-			}
-		}
-		inputDatas.push_back(inputData);
-	}
-}
-
-void Generate(const std::vector<InputData>& inputDatas, std::vector<OutputData>& outputDatas, const std::vector<std::string>& nonterminals)
-{
 	for (size_t i = 0; i < inputDatas.size(); ++i)
 	{
 		OutputData outputData;
@@ -82,14 +32,14 @@ void Generate(const std::vector<InputData>& inputDatas, std::vector<OutputData>&
 				outputData.pointer = 0;
 			}
 
-			if (outputData.symbol == END_SEQUENCE)
+			if (outputData.symbol == TERMINAL_END_SEQUENCE)
 			{
 				outputData.pointer = 0;
 				outputData.isEnd = true;
 			}
-			else if (outputData.symbol == "e")
+			else if (outputData.symbol == NONTERMINAL_END_SEQUENCE)
 			{
-				outputData.guideCharacters = std::vector<std::string>{ END_SEQUENCE };
+				outputData.guideCharacters = inputDatas[i].guideCharacters;
 				outputData.pointer = 0;
 				outputData.isShift = false;
 			}
@@ -130,15 +80,8 @@ void Generate(const std::vector<InputData>& inputDatas, std::vector<OutputData>&
 			outputDatas.push_back(outputData);
 		}
 	}
-}
 
-void PrintInfoVector(std::ostream& fileOutput, const std::vector<std::string>& vec)
-{
-	if (!vec.empty())
-	{
-		std::copy(vec.begin(), vec.end() - 1, std::ostream_iterator<std::string>(fileOutput, " "));
-		fileOutput << vec.back();
-	}
+	return outputDatas;
 }
 
 void PrintResult(std::ostream& fileOutput, const std::vector<OutputData>& outputDatas)
@@ -153,7 +96,7 @@ void PrintResult(std::ostream& fileOutput, const std::vector<OutputData>& output
 		std::string symbol = IsNonterminal(outputData.symbol) ? SubstrNonterminal(outputData.symbol) : outputData.symbol;
 
 		fileOutput << counter << TAB << symbol << TAB << outputData.isShift << TAB << outputData.isError << TAB << outputData.pointer << TAB << outputData.isStack << TAB << outputData.isEnd << TAB;
-		PrintInfoVector(fileOutput, outputData.guideCharacters);
+		PrintInfoVector(fileOutput, outputData.guideCharacters, SPACE);
 		fileOutput << std::endl;
 	}
 }

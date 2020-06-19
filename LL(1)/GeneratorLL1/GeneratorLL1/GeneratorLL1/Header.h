@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <ctime>
 #include <fstream>
 #include <iterator>
 #include <sstream>
@@ -7,6 +8,12 @@
 #include <vector>
 
 struct InputData
+{
+	std::string nonterminal;
+	std::vector<std::string> terminals;
+};
+
+struct OutputDataGuideSets
 {
 	std::string nonterminal;
 	std::vector<std::string> terminals;
@@ -25,4 +32,6 @@ struct OutputData
 };
 
 const std::string TAB = "\t";
-const std::string END_SEQUENCE = "#";
+const std::string SPACE = " ";
+const std::string NONTERMINAL_END_SEQUENCE = "e";
+const std::string TERMINAL_END_SEQUENCE = "#";

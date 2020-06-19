@@ -1,0 +1,6 @@
+<S> - 5 <XIkZ> # / 5
+<XIkZ> - + <A> <XIkZ> / +
+<XIkZ> - * <A> <XIkZ> / *
+<XIkZ> - e / #
+<A> - i / i
+<A> - ( <A> ) / (

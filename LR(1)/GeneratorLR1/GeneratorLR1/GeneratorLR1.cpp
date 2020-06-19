@@ -126,18 +126,16 @@ void RecordingNonterminalGuideSets(const std::string str, const std::string nont
 			break;
 		}
 
-		if ((*it).character == NONTERMINAL_END_SEQUENCE)
+		if ((*it).character != NONTERMINAL_END_SEQUENCE)
 		{
-			//
-		}
+			if (IsNonterminal((*it).character))
+			{
+				newStr = (*it).character;
+			}
 
-		if (IsNonterminal((*it).character))
-		{
-			newStr = (*it).character;
+			tableDataGuideCharacters.push_back(TableData{ nonterminal, (*it).character, (*it).row });
+			copyGuideCharacters.erase(std::remove(copyGuideCharacters.begin(), copyGuideCharacters.end(), (*it).character), copyGuideCharacters.end());
 		}
-
-		tableDataGuideCharacters.push_back(TableData{ nonterminal, (*it).character, (*it).row });
-		copyGuideCharacters.erase(std::remove(copyGuideCharacters.begin(), copyGuideCharacters.end(), (*it).character), copyGuideCharacters.end());
 	}
 
 	RecordingNonterminalGuideSets(newStr, nonterminal, rightSides, tableDataGuideCharacters, copyGuideCharacters);

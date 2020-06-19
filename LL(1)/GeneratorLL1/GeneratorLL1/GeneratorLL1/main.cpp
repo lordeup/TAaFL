@@ -24,11 +24,9 @@ int main(int argc, char* argv[])
 
 	std::srand(unsigned(std::time(0)));
 
-	std::vector<std::string> nonterminals;
-
-	std::vector<OutputDataGuideSets> outputDatasSets = GetFormingGuideSets(fileInput, nonterminals);
+	std::vector<OutputDataGuideSets> outputDatasSets = GetFormingGuideSets(fileInput);
 	PrintResultGuideSets(fileGuideSets, outputDatasSets);
 
-	std::vector<OutputData> outputDatas = GetGenerateData(outputDatasSets, nonterminals);
+	std::vector<OutputData> outputDatas = GetGenerateData(outputDatasSets);
 	PrintResult(fileOutput, outputDatas);
 }

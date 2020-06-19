@@ -1,3 +1,3 @@
-<A> - 5 <hshV> # / 5
-<hshV> - + 5 <hshV> / +
-<hshV> - e / #
+<A> - 5 <aaH> # / 5
+<aaH> - + 5 <aaH> / +
+<aaH> - e / #

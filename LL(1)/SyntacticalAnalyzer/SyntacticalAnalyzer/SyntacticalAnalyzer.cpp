@@ -90,7 +90,7 @@ bool HaveSymbolInGuide(const std::vector<std::string>& guideCharacters, const st
 InputTableData GetInputDataBySymbolAndCurrentSymbol(std::vector<InputTableData>& inputTable, const std::string symbol, const std::string currentSymbol)
 {
 	auto it = std::find_if(inputTable.begin(), inputTable.end(), [&](const InputTableData& data) {
-		return data.symbol == symbol && data.guideCharacters.size() == 1 && (HaveSymbolInGuide(data.guideCharacters, currentSymbol) || HaveSymbolInGuide(data.guideCharacters, "#"));
+		return data.symbol == symbol && (HaveSymbolInGuide(data.guideCharacters, currentSymbol) || HaveSymbolInGuide(data.guideCharacters, "#"));
 	});
 
 	if (it == inputTable.end())
@@ -128,7 +128,7 @@ void RecursiveMethod(
 	const InputTableData inputData,
 	std::string currentSymbol)
 {
-	if (inputData.isEnd)
+	if (inputData.isEnd && stack.empty())
 	{
 		return;
 	}
@@ -153,6 +153,11 @@ void RecursiveMethod(
 	{
 		if (inputData.pointer == 0)
 		{
+			if (stack.empty())
+			{
+				throw std::runtime_error("Error. Empty stack");
+			}
+
 			size_t pointer = stack.top();
 			stack.pop();
 
@@ -177,14 +182,8 @@ void MakeProcess(std::vector<InputTableData>& inputTable, std::vector<OutputTabl
 
 	currentSymbol = GetString(iss);
 
-	auto it = std::find_if(inputTable.begin(), inputTable.end(), [&](const InputTableData& data) { return data.symbol == currentSymbol; });
-
-	if (it == inputTable.end())
-	{
-		throw std::exception("Error. Not find in input table symbol");
-	}
-
-	RecursiveMethod(iss, inputTable, outputTable, stack, *it, currentSymbol);
+	InputTableData resut = GetInputDataBySymbolAndCurrentSymbol(inputTable, inputTable.front().symbol, currentSymbol);
+	RecursiveMethod(iss, inputTable, outputTable, stack, resut, currentSymbol);
 
 	std::cout << (stack.empty() ? "Stack is empty. Good" : "Stack is NOT empty. Bad") << std::endl;
 }

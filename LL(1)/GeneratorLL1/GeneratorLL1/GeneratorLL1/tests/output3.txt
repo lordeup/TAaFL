@@ -1,11 +1,11 @@
 Number	Symbol	Shift	Error	Pointer	Stack	End	Characters
 1	A	0	1	4	0	0	5
-2	hshV	0	1	7	0	0	+
-3	hshV	0	1	10	0	0	#
+2	aaH	0	0	7	0	0	+
+3	aaH	0	1	10	0	0	#
 4	5	1	1	5	0	0	5
-5	hshV	0	1	2	1	0	+
+5	aaH	0	1	2	1	0	+ #
 6	#	1	1	0	0	1	#
 7	+	1	1	8	0	0	+
 8	5	1	1	9	0	0	5
-9	hshV	0	1	2	0	0	+
+9	aaH	0	1	2	0	0	+ #
 10	e	0	1	0	0	0	#

@@ -1,0 +1,5 @@
+Number	Action	Stack	CurrentSymbol
+8	Add	9	c
+11	Add	12	b
+13	Delete	12	b
+6	Delete	9	#

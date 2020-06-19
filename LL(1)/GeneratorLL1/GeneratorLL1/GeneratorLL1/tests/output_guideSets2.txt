@@ -1,10 +1,10 @@
 <S> - <A> <B> <C> # / # a b c
-<A> - <z> / # a b c
-<z> - a <z> / a
-<z> - e / # b c
-<B> - <Ly> / # b c
-<Ly> - b <Ly> / b
-<Ly> - e / # c
-<C> - <zP> / # c
-<zP> - c <zP> / c
-<zP> - e / #
+<A> - <OGazjK> / # a b c
+<OGazjK> - a <OGazjK> / a
+<OGazjK> - e / # b c
+<B> - <MGM> / # b c
+<MGM> - b <MGM> / b
+<MGM> - e / # c
+<C> - <QPvl> / # c
+<QPvl> - c <QPvl> / c
+<QPvl> - e / #

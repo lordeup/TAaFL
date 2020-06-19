@@ -1,6 +1,6 @@
 #include "GeneratorLL1.h"
 
-std::vector<OutputData> GetGenerateData(const std::vector<OutputDataGuideSets>& inputDatas, const std::vector<std::string>& nonterminals)
+std::vector<OutputData> GetGenerateData(const std::vector<OutputDataGuideSets>& inputDatas)
 {
 	std::vector<OutputData> outputDatas;
 
@@ -9,6 +9,12 @@ std::vector<OutputData> GetGenerateData(const std::vector<OutputDataGuideSets>& 
 		OutputData outputData;
 		outputData.symbol = inputDatas[i].nonterminal;
 		outputData.guideCharacters = inputDatas[i].guideCharacters;
+
+		if (inputDatas[i].terminals.front() == NONTERMINAL_END_SEQUENCE && IsCheckUniqueness(outputData.guideCharacters, TERMINAL_END_SEQUENCE))
+		{
+			outputData.guideCharacters.push_back(TERMINAL_END_SEQUENCE);
+		}
+
 		outputData.pointer = i == 0 ? inputDatas.size() + 1 : outputDatas.back().pointer + inputDatas[i - 1].terminals.size();
 
 		outputDatas.push_back(outputData);
@@ -45,28 +51,28 @@ std::vector<OutputData> GetGenerateData(const std::vector<OutputDataGuideSets>& 
 			}
 			else
 			{
-				auto it = std::find(nonterminals.begin(), nonterminals.end(), outputData.symbol);
+				size_t row = std::distance(inputDatas.begin(),
+					std::find_if(inputDatas.begin(), inputDatas.end(), [&](const OutputDataGuideSets& data) { return data.nonterminal == outputData.symbol; }));
 
-				if (it != nonterminals.end())
+				if (row < inputDatas.size())
 				{
 					std::vector<std::string> characters;
-					size_t distance = std::distance(nonterminals.begin(), it);
-					size_t repeatCounter = std::count(nonterminals.begin(), nonterminals.end(), outputData.symbol);
+					size_t repeatCounter = std::count_if(inputDatas.begin(), inputDatas.end(), [&](const OutputDataGuideSets& data) { return data.nonterminal == outputData.symbol; });
 
 					for (size_t k = 0; k < repeatCounter; ++k)
 					{
 						if (k < repeatCounter - 1)
 						{
-							outputDatas[distance + k].isError = false;
+							outputDatas[row + k].isError = false;
 						}
-						for (const auto& character : outputDatas[distance + k].guideCharacters)
+						for (const auto& character : outputDatas[row + k].guideCharacters)
 						{
 							characters.push_back(character);
 						}
 					}
 
 					outputData.isShift = false;
-					outputData.pointer = distance + 1;
+					outputData.pointer = row + 1;
 
 					if (isNext)
 					{

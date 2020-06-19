@@ -1,7 +1,8 @@
 #include "GuideSets.h"
 
-std::vector<OutputDataGuideSets> GetFormingGuideSets(std::istream& fileInput, std::vector<std::string>& nonterminals)
+std::vector<OutputDataGuideSets> GetFormingGuideSets(std::istream& fileInput)
 {
+	std::vector<std::string> nonterminals;
 	std::vector<std::string> terminals;
 
 	std::vector<InputData> inputDatas;

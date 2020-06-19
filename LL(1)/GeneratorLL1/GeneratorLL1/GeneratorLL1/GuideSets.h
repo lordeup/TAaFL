@@ -2,7 +2,7 @@
 #include "Header.h"
 #include "Utils.h"
 
-std::vector<OutputDataGuideSets> GetFormingGuideSets(std::istream& fileInput, std::vector<std::string>& nonterminals);
+std::vector<OutputDataGuideSets> GetFormingGuideSets(std::istream& fileInput);
 
 void FillingData(std::istream& fileInput, std::vector<InputData>& inputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals);
 void Forming(const std::vector<InputData>& inputDatas, std::vector<OutputDataGuideSets>& outputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals);

@@ -1,9 +1,9 @@
 <F> - f <I> ( <I> ) <G> # / f
-<G> - <I> := <E> <xTLT> / a
-<xTLT> - ; <G> / ;
-<xTLT> - e / # a
-<E> - <I> <VYn> / a
-<VYn> - * <I> <VYn> / *
-<VYn> - + <I> <VYn> / +
-<VYn> - e / # ;
+<G> - <I> := <E> <WwcsRaJ> / a
+<WwcsRaJ> - ; <G> / ;
+<WwcsRaJ> - e / # a
+<E> - <I> <HROESAy> / a
+<HROESAy> - * <I> <HROESAy> / *
+<HROESAy> - + <I> <HROESAy> / +
+<HROESAy> - e / # ;
 <I> - a / a

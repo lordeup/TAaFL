@@ -1,11 +1,8 @@
 #pragma once
 #include <algorithm>
-#include <ctime>
 #include <fstream>
-#include <iostream>
 #include <iterator>
 #include <sstream>
-#include <stack>
 #include <string>
 #include <vector>
 
@@ -13,9 +10,14 @@ const std::string TAB = "\t";
 const std::string SPACE = " ";
 const std::string NONTERMINAL_END_SEQUENCE = "e";
 const std::string TERMINAL_END_SEQUENCE = "#";
-const std::string OK = "Ok";
-const std::string SHIFT = "S";
-const std::string ROLL_UP = "R";
+
+enum class State
+{
+	START,
+	EMPTY,
+	SHIFT,
+	ROLL_UP,
+};
 
 struct InputData
 {
@@ -36,4 +38,22 @@ struct TableData
 	std::string character;
 	size_t row = 0;
 	size_t position = 0;
+};
+
+struct OutputData
+{
+	TableData tableData;
+	std::vector<std::string> transitions;
+};
+
+struct Transition
+{
+	std::vector<TableData> tableDatas;
+	State state = State::EMPTY;
+};
+
+struct OutputDataGenerator
+{
+	TableData tableData;
+	std::vector<Transition> transitions;
 };

@@ -147,13 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GeneratorLR1.cpp" />
+    <ClCompile Include="GeneratorLR.cpp" />
     <ClCompile Include="GuideSets.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratorLR1.h" />
+    <ClInclude Include="GeneratorLR.h" />
     <ClInclude Include="GuideSets.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Utils.h" />

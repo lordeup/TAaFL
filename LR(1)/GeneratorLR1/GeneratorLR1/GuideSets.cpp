@@ -1,15 +1,31 @@
 #include "GuideSets.h"
 
-std::vector<OutputDataGuideSets> GetFormingGuideSets(std::istream& fileInput, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals)
+std::vector<OutputDataGuideSets> GetFormingGuideSets(std::istream& fileInput, std::vector<std::string>& characters, std::vector<TableData>& tableDataGuideSets)
 {
 	std::vector<InputData> inputDatas;
 	std::vector<OutputDataGuideSets> outputDatas;
 
+	std::vector<std::string> nonterminals;
+	std::vector<std::string> terminals;
+
 	FillingData(fileInput, inputDatas, nonterminals, terminals);
 	Forming(inputDatas, outputDatas, nonterminals, terminals);
-	AddingGuideCharacters(outputDatas, nonterminals, terminals);
+
+	characters = GetCharacters(nonterminals, terminals);
+
+	AddingGuideCharacters(outputDatas, tableDataGuideSets, characters, nonterminals);
 
 	return outputDatas;
+}
+
+std::vector<std::string> GetCharacters(const std::vector<std::string>& nonterminals, const std::vector<std::string>& terminals)
+{
+	std::vector<std::string> characters;
+
+	characters.insert(characters.end(), nonterminals.begin(), nonterminals.end());
+	characters.insert(characters.end(), terminals.begin(), terminals.end());
+
+	return characters;
 }
 
 void FillingData(std::istream& fileInput, std::vector<InputData>& inputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals)
@@ -105,18 +121,18 @@ void Forming(const std::vector<InputData>& inputDatas, std::vector<OutputDataGui
 	}
 }
 
-void AddingGuideCharacters(std::vector<OutputDataGuideSets>& outputDatas, const std::vector<std::string>& nonterminals, const std::vector<std::string>& terminals)
+void AddingGuideCharacters(std::vector<OutputDataGuideSets>& outputDatas, std::vector<TableData>& tableDataGuideSets, const std::vector<std::string>& characters, const std::vector<std::string>& nonterminals)
 {
 	std::vector<PairStringVectorPair> transitions;
-	std::vector<PairStringBool> characters;
+	std::vector<PairStringBool> charactersValue;
 
-	std::for_each(nonterminals.begin(), nonterminals.end(), [&](const std::string str) { characters.push_back(std::make_pair(str, false)); });
-	std::for_each(terminals.begin(), terminals.end(), [&](const std::string str) { characters.push_back(std::make_pair(str, false)); });
+	std::for_each(characters.begin(), characters.end(), [&](const std::string str) { charactersValue.push_back(std::make_pair(str, false)); });
+	std::for_each(nonterminals.begin(), nonterminals.end(), [&](const std::string str) { transitions.push_back(std::make_pair(str, charactersValue)); });
 
-	std::for_each(nonterminals.begin(), nonterminals.end(), [&](const std::string str) { transitions.push_back(std::make_pair(str, characters)); });
-
-	BuildingFirstRelationship(outputDatas, transitions, characters);
+	BuildingFirstRelationship(outputDatas, transitions, charactersValue, tableDataGuideSets);
 	BuildingFirstPlusRelationship(transitions);
+
+	FormingTableDataGuideSets(tableDataGuideSets);
 
 	for (auto& outputData : outputDatas)
 	{
@@ -150,21 +166,53 @@ void AddingGuideCharacters(std::vector<OutputDataGuideSets>& outputDatas, const 
 	}
 }
 
-void BuildingFirstRelationship(std::vector<OutputDataGuideSets>& outputDatas, std::vector<PairStringVectorPair>& transitions, std::vector<PairStringBool>& characters)
+void FormingTableDataGuideSets(std::vector<TableData>& tableDataGuideSets)
 {
-	for (auto& outputData : outputDatas)
-	{
-		size_t row = std::distance(transitions.begin(), GetIteratorFindIfVector(transitions, outputData.nonterminal));
-		size_t column = std::distance(characters.begin(), GetIteratorFindIfVector(characters, outputData.terminals.front()));
+	std::vector<TableData> copyTables;
+	std::copy(tableDataGuideSets.begin(), tableDataGuideSets.end(), std::back_inserter(copyTables));
 
-		if (row < transitions.size() && column < characters.size())
+	for (auto it = copyTables.rbegin(); it != copyTables.rend(); ++it)
+	{
+		it = std::find_if(it, copyTables.rend(), [&](const TableData& data) { return IsNonterminal(data.character); });
+
+		if (it == copyTables.rend())
 		{
-			if (outputData.terminals.front() == NONTERMINAL_END_SEQUENCE)
+			break;
+		}
+
+		std::vector<TableData> vec;
+		std::copy(tableDataGuideSets.begin(), tableDataGuideSets.end(), std::back_inserter(vec));
+
+		for (auto it2 = vec.begin(); it2 != vec.end(); ++it2)
+		{
+			it2 = std::find_if(it2, vec.end(), [&](const TableData& data) { return data.nonterminal == (*it).character && data.nonterminal != (*it).nonterminal && data.character != (*it).character; });
+
+			if (it2 == vec.end())
 			{
-				SearchStartingTerminalsEmptyRules(outputDatas, outputData.nonterminal, outputData.nonterminal, transitions, characters);
+				break;
+			}
+
+			tableDataGuideSets.push_back({ (*it).nonterminal, (*it2).character, (*it2).row, (*it2).position });
+		}
+	}
+}
+
+void BuildingFirstRelationship(std::vector<OutputDataGuideSets>& outputDatas, std::vector<PairStringVectorPair>& transitions, std::vector<PairStringBool>& charactersValue, std::vector<TableData>& tableDataGuideSets)
+{
+	for (size_t i = 0; i < outputDatas.size(); ++i)
+	{
+		size_t row = std::distance(transitions.begin(), GetIteratorFindIfVector(transitions, outputDatas[i].nonterminal));
+		size_t column = std::distance(charactersValue.begin(), GetIteratorFindIfVector(charactersValue, outputDatas[i].terminals.front()));
+
+		if (row < transitions.size() && column < charactersValue.size())
+		{
+			if (outputDatas[i].terminals.front() == NONTERMINAL_END_SEQUENCE)
+			{
+				SearchStartingTerminalsEmptyRules(outputDatas, outputDatas[i].nonterminal, outputDatas[i].nonterminal, transitions, charactersValue, tableDataGuideSets);
 			}
 			else
 			{
+				tableDataGuideSets.push_back({ outputDatas[i].nonterminal, charactersValue[column].first, i });
 				transitions[row].second[column].second = true;
 			}
 		}
@@ -172,10 +220,11 @@ void BuildingFirstRelationship(std::vector<OutputDataGuideSets>& outputDatas, st
 }
 
 void SearchStartingTerminalsEmptyRules(std::vector<OutputDataGuideSets>& outputDatas, const std::string parentNonterminal, const std::string nonterminal,
-	std::vector<PairStringVectorPair>& transitions, std::vector<PairStringBool>& characters)
+	std::vector<PairStringVectorPair>& transitions, std::vector<PairStringBool>& charactersValue, std::vector<TableData>& tableDataGuideSets)
 {
-	for (const auto& outputData : outputDatas)
+	for (size_t i = 0; i < outputDatas.size(); ++i)
 	{
+		auto outputData = outputDatas[i];
 		auto it1 = std::find_if(outputData.terminals.begin(), outputData.terminals.end(), [&](const std::string& str) { return str == nonterminal; });
 
 		if (it1 != outputData.terminals.end() && outputData.nonterminal != nonterminal)
@@ -185,10 +234,17 @@ void SearchStartingTerminalsEmptyRules(std::vector<OutputDataGuideSets>& outputD
 			std::string terminal = distance <= size ? (distance < size ? outputData.terminals[distance + 1] : outputData.terminals.back()) : NONTERMINAL_END_SEQUENCE;
 
 			size_t row = std::distance(transitions.begin(), GetIteratorFindIfVector(transitions, parentNonterminal));
-			size_t column = std::distance(characters.begin(), GetIteratorFindIfVector(characters, terminal == TERMINAL_END_SEQUENCE ? NONTERMINAL_END_SEQUENCE : terminal));
+			size_t column = std::distance(charactersValue.begin(), GetIteratorFindIfVector(charactersValue, terminal == TERMINAL_END_SEQUENCE ? NONTERMINAL_END_SEQUENCE : terminal));
 
-			if (row < transitions.size() && column < characters.size() && terminal != parentNonterminal)
+			if (row < transitions.size() && column < charactersValue.size() && terminal != parentNonterminal)
 			{
+				TableData tableData{ parentNonterminal, transitions[row].second[column].first, i, GetDistanceVector(outputData.terminals, terminal) };
+
+				if (IsCheckTableDataUniqueness(tableDataGuideSets, tableData))
+				{
+					tableDataGuideSets.push_back(tableData);
+				}
+
 				transitions[row].second[column].second = true;
 			}
 
@@ -200,7 +256,7 @@ void SearchStartingTerminalsEmptyRules(std::vector<OutputDataGuideSets>& outputD
 
 					if (it2 != data.terminals.end())
 					{
-						SearchStartingTerminalsEmptyRules(outputDatas, parentNonterminal, (*it2), transitions, characters);
+						SearchStartingTerminalsEmptyRules(outputDatas, parentNonterminal, (*it2), transitions, charactersValue, tableDataGuideSets);
 					}
 				}
 			}

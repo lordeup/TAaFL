@@ -64,3 +64,14 @@ State ParseState(char fCh)
 		throw std::exception("Error, when trying parse state from char " + fCh);
 	}
 }
+
+template <typename T>
+bool isEmptyStack(std::stack<T> &stack, std::string stackName)
+{
+	if (stack.empty())
+	{
+		throw std::invalid_argument(stackName + " is empty");
+	}
+
+	return false;
+}

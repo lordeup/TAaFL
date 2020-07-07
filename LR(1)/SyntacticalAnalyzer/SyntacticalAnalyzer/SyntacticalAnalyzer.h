@@ -1,9 +1,10 @@
 #pragma once
 #include "LRData.h"
+#include "Helper.h"
 #include <fstream>
-#include <stack>
 #include <list>
 #include <algorithm>
+#include <iostream>
 
 class SyntacticalAnalyzer
 {
@@ -19,7 +20,7 @@ private:
 	std::vector<std::string> m_headerSymbols;
 	std::vector<LRData> m_lrData;
 	std::list<std::string> m_sentence;
-	std::stack<std::string> m_stackCh;
+	std::stack<LRData> m_stackLRData;
 	std::stack<std::string> m_stackSentence;
 	LRData m_currentLRData;
 };

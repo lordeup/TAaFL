@@ -9,28 +9,28 @@ SyntacticalAnalyzer::SyntacticalAnalyzer(std::vector<std::string> headerSymbols,
 
 void SyntacticalAnalyzer::Run()
 {
-	std::string startCh = m_lrData.front().ch;
-	m_stackCh.push(startCh);
-	m_currentLRData = GetLRDataByCh(startCh);
+	m_currentLRData = m_lrData.front();
+	std::stack<LRData> m_stackLRData;
+	m_stackLRData.push(m_currentLRData);
 
 	bool isCurrentStateConvolution = false;
 
 	while (!m_sentence.empty())
 	{
 		std::string currentHeaderSymbol = m_sentence.front();
-		
+
 		if (!isCurrentStateConvolution)
 		{
 			m_stackSentence.push(currentHeaderSymbol);
 			m_sentence.pop_front();
 		}
-		
+
 		Symbol symbol = GetSymbolByChInLRData(currentHeaderSymbol);
 
 		if (symbol.state == State::Shift)
 		{
 			m_currentLRData = m_lrData[symbol.number - 1];
-			m_stackCh.push(m_currentLRData.ch);
+			m_stackLRData.push(m_currentLRData);
 
 			std::string nextHeaderSymbol = m_sentence.front();
 			Symbol nextSymbol = GetSymbolByChInLRData(nextHeaderSymbol);
@@ -41,7 +41,41 @@ void SyntacticalAnalyzer::Run()
 		}
 		else if (symbol.state == State::Convolution)
 		{
+			m_currentLRData = m_lrData[symbol.number - 2];
 
+			for (size_t i = 0; i < m_currentLRData.size; i++)
+			{
+				if (!m_stackLRData.empty())
+				{
+					m_stackLRData.pop();
+				}
+				if (!m_stackSentence.empty())
+				{
+					m_stackSentence.pop();
+				}
+			}
+			m_sentence.push_front(m_currentLRData.rule);
+			isCurrentStateConvolution = false;
+
+			if (!m_stackLRData.empty())
+			{
+				m_currentLRData = m_stackLRData.top();
+			}
+		}
+		else if (symbol.state == State::Ok)
+		{
+			if (m_stackLRData.empty())
+			{
+				std::cout << "m_stackLRData is empty = OK" << std::endl;
+			}
+			if (m_stackSentence.empty())
+			{
+				std::cout << "m_stackSentence is empty = OK" << std::endl;
+			}
+		}
+		else if (symbol.state == State::None)
+		{
+			throw std::exception("state none");
 		}
 	}
 }

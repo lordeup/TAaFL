@@ -1,9 +1,12 @@
 #pragma once
+#include "Lexer.h"
 #include "Utils.h"
 
 std::vector<OutputDataGuideSets> GetFormingGuideSets(std::istream& fileInput, std::vector<std::string>& characters, std::vector<TableData>& tableDataGuideSets);
 
-void FillingData(std::istream& fileInput, std::vector<InputData>& inputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals);
+std::string GetTokenType(std::string terminal, std::vector<PairStringString>& pairsTerminalTokenType, Lexer& lexer);
+
+void FillingData(std::istream& fileInput, std::vector<InputData>& inputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals, Lexer& lexer);
 void Forming(const std::vector<InputData>& inputDatas, std::vector<OutputDataGuideSets>& outputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals);
 
 std::vector<std::string> GetCharacters(const std::vector<std::string>& nonterminals, const std::vector<std::string>& terminals);

@@ -29,24 +29,30 @@ void Lexer::Initialize()
 	m_hexadecimal = initializeToken.GetHexadecimal();
 }
 
-void Lexer::Run()
+std::vector<TokenData> Lexer::GetTokenDatas(std::istream& input)
 {
-	++m_lineNumber;
-
-	std::istringstream iss(m_line);
-	std::string str;
-
-	while (iss >> str)
+	std::vector<TokenData> tokenDatas;
+	while (std::getline(input, m_line))
 	{
-		while (!str.empty())
+		++m_lineNumber;
+
+		std::istringstream iss(m_line);
+		std::string str;
+
+		while (iss >> str)
 		{
-			Token token = GetToken(str);
-			if (token.type != TokenType::COMMENT)
+			while (!str.empty())
 			{
-				m_tokenVector.push_back(token);
+				Token token = GetToken(str);
+				if (token.type != TokenType::COMMENT)
+				{
+					tokenDatas.push_back({ token, GetTokenType(token.type) });
+				}
 			}
 		}
 	}
+
+	return tokenDatas;
 }
 
 Token Lexer::GetToken(std::string& str)

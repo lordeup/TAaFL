@@ -13,7 +13,7 @@ void GeneratorLR::Generate()
 	m_rightSides = GetRightSides();
 
 	std::vector<Transition> transitions(m_characters.size());
-	transitions.front().state = State::START;
+	transitions.front().state = StateGenerator::START;
 
 	std::vector<TableData> tableDatasFindGuideSets = GetTableDatasFindGuideSets(m_tableDataGuideSets, m_inputDatas.front().nonterminal);
 	std::for_each(tableDatasFindGuideSets.begin(), tableDatasFindGuideSets.end(), [&](const TableData& data) { WriteTransitions(data, data.character, transitions); });
@@ -63,14 +63,14 @@ void GeneratorLR::FormingTransitions(const TableData& tableData, std::vector<Tra
 	size_t nextIndex = tableData.position + 1;
 	std::string nextStr = nextIndex < m_inputDatas[tableData.row].terminals.size() ? m_inputDatas[tableData.row].terminals[nextIndex] : "";
 
-	if (!nextStr.empty() && nextStr != TERMINAL_END_SEQUENCE)
+	if (!nextStr.empty() && !IsEndRule(nextStr))
 	{
 		TableData data{ tableData.nonterminal, nextStr, tableData.row, nextIndex };
 		WriteTransitions(data, nextStr, transitions);
 	}
 	else
 	{
-		if (nextStr == TERMINAL_END_SEQUENCE)
+		if (IsEndRule(nextStr))
 		{
 			AddRollUp(tableData, nextStr, transitions);
 		}
@@ -85,7 +85,7 @@ void GeneratorLR::AddingStackItems(std::vector<Transition>& transitions)
 {
 	for (const auto& transition : transitions)
 	{
-		if (transition.state == State::SHIFT)
+		if (transition.state == StateGenerator::SHIFT)
 		{
 			std::vector<TableData> vec;
 			for (const auto& tableData : transition.tableDatas)
@@ -106,16 +106,16 @@ void GeneratorLR::AddingStackItems(std::vector<Transition>& transitions)
 
 void GeneratorLR::AddShift(const TableData& tableData, std::vector<Transition>& transitions)
 {
-	AddEvent(tableData, tableData.character, State::SHIFT, transitions);
+	AddEvent(tableData, tableData.character, StateGenerator::SHIFT, transitions);
 }
 
 void GeneratorLR::AddRollUp(const TableData& tableData, const std::string str, std::vector<Transition>& transitions)
 {
-	std::string newStr = str == TERMINAL_END_SEQUENCE ? NONTERMINAL_END_SEQUENCE : str;
-	AddEvent(tableData, newStr, State::ROLL_UP, transitions);
+	std::string newStr = IsEndRule(str) ? NONTERMINAL_END_SEQUENCE : str;
+	AddEvent(tableData, newStr, StateGenerator::ROLL_UP, transitions);
 }
 
-void GeneratorLR::AddEvent(const TableData& tableData, const std::string str, const State state, std::vector<Transition>& transitions)
+void GeneratorLR::AddEvent(const TableData& tableData, const std::string str, const StateGenerator state, std::vector<Transition>& transitions)
 {
 	size_t row = GetDistanceVector(m_characters, str);
 
@@ -164,11 +164,11 @@ void GeneratorLR::ConvertingTable()
 
 		for (size_t j = 0; j < transitions.size(); ++j)
 		{
-			if (outputGeneratorData.transitions[j].state == State::START)
+			if (outputGeneratorData.transitions[j].state == StateGenerator::START)
 			{
 				transitions[j] = "Ok";
 			}
-			else if (outputGeneratorData.transitions[j].state == State::SHIFT)
+			else if (outputGeneratorData.transitions[j].state == StateGenerator::SHIFT)
 			{
 				for (const auto& tableData : outputGeneratorData.transitions[j].tableDatas)
 				{
@@ -183,7 +183,7 @@ void GeneratorLR::ConvertingTable()
 					}
 				}
 			}
-			else if (outputGeneratorData.transitions[j].state == State::ROLL_UP)
+			else if (outputGeneratorData.transitions[j].state == StateGenerator::ROLL_UP)
 			{
 				transitions[j] = "R" + std::to_string(outputGeneratorData.transitions[j].tableDatas.back().row + 1);
 			}

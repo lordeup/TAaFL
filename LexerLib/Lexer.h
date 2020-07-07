@@ -14,12 +14,18 @@ struct Token
 	size_t lineNumber = 1;
 };
 
+struct TokenData
+{
+	Token token;
+	std::string typeStr;
+};
+
 class Lexer
 {
 public:
 	Lexer();
 
-	void Run();
+	std::vector<TokenData> GetTokenDatas(std::istream& input);
 
 	Token GetToken(std::string& str);
 

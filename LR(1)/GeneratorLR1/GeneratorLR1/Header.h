@@ -8,10 +8,11 @@
 
 const std::string TAB = "\t";
 const std::string SPACE = " ";
+const std::string DELIMITER = "=>";
 const std::string NONTERMINAL_END_SEQUENCE = "e";
 const std::string TERMINAL_END_SEQUENCE = "#";
 
-enum class State
+enum class StateGenerator
 {
 	START,
 	EMPTY,
@@ -49,7 +50,7 @@ struct OutputData
 struct Transition
 {
 	std::vector<TableData> tableDatas;
-	State state = State::EMPTY;
+	StateGenerator state = StateGenerator::EMPTY;
 };
 
 struct OutputDataGenerator

@@ -65,21 +65,16 @@ void InitInputTable(std::ifstream& fileTableInput, std::vector<InputTableData>& 
 		InputTableData inputData;
 
 		inputData.number = ParseNumber(GetString(iss));
-		inputData.symbol = GetString(iss);
 		inputData.isShift = InitBoolVariable(iss);
 		inputData.isError = InitBoolVariable(iss);
 		inputData.pointer = ParseNumber(GetString(iss));
 		inputData.isStack = InitBoolVariable(iss);
 		inputData.isEnd = InitBoolVariable(iss);
+		inputData.symbol = GetString(iss);
 		inputData.guideCharacters = GetFillVector(iss);
 
 		inputTable.push_back(inputData);
 	}
-}
-
-void InitSentence(std::ifstream& fileSentenceInput, std::string& sentence)
-{
-	std::getline(fileSentenceInput, sentence);
 }
 
 bool HaveSymbolInGuide(const std::vector<std::string>& guideCharacters, const std::string symbol)
@@ -120,23 +115,20 @@ InputTableData GetNewInputData(std::vector<InputTableData>& inputTable, std::str
 	return result;
 }
 
-void RecursiveMethod(
-	std::istringstream& iss,
-	std::vector<InputTableData>& inputTable,
-	std::vector<OutputTableData>& outputTable,
-	std::stack<size_t>& stack,
-	const InputTableData inputData,
-	std::string currentSymbol)
+void RecursiveMethod(std::vector<InputTableData>& inputTable, std::vector<OutputTableData>& outputTable, std::stack<size_t>& stack,
+	const InputTableData& inputData, const std::vector<TokenData>& tokens, size_t& index)
 {
 	if (inputData.isEnd && stack.empty())
 	{
 		return;
 	}
 
-	if (inputData.isShift)
+	if (inputData.isShift && index + 1 < tokens.size())
 	{
-		iss >> currentSymbol;
+		++index;
 	}
+
+	std::string currentSymbol = tokens[index].typeStr;
 
 	if (inputData.isStack)
 	{
@@ -147,7 +139,7 @@ void RecursiveMethod(
 		stack.push(stackItem);
 
 		InputTableData newInputData = GetNewInputData(inputTable, currentSymbol, inputData.pointer);
-		RecursiveMethod(iss, inputTable, outputTable, stack, newInputData, currentSymbol);
+		RecursiveMethod(inputTable, outputTable, stack, newInputData, tokens, index);
 	}
 	else
 	{
@@ -164,26 +156,28 @@ void RecursiveMethod(
 			outputTable.push_back({ inputData.number, Action::Delete, pointer, currentSymbol });
 
 			InputTableData newInputData = GetNewInputData(inputTable, currentSymbol, pointer);
-			RecursiveMethod(iss, inputTable, outputTable, stack, newInputData, currentSymbol);
+			RecursiveMethod(inputTable, outputTable, stack, newInputData, tokens, index);
 		}
 		else
 		{
 			InputTableData newInputData = GetNewInputData(inputTable, currentSymbol, inputData.pointer);
-			RecursiveMethod(iss, inputTable, outputTable, stack, newInputData, currentSymbol);
+			RecursiveMethod(inputTable, outputTable, stack, newInputData, tokens, index);
 		}
 	}
 }
 
-void MakeProcess(std::vector<InputTableData>& inputTable, std::vector<OutputTableData>& outputTable, std::string& sentence)
+void MakeProcess(std::vector<InputTableData>& inputTable, std::vector<OutputTableData>& outputTable, const std::vector<TokenData>& tokens)
 {
-	std::string currentSymbol;
-	std::istringstream iss(sentence);
+	if (tokens.empty())
+	{
+		throw std::exception("Empty vector tokens");
+	}
+
 	std::stack<size_t> stack;
+	size_t index = 0;
 
-	currentSymbol = GetString(iss);
-
-	InputTableData resut = GetInputDataBySymbolAndCurrentSymbol(inputTable, inputTable.front().symbol, currentSymbol);
-	RecursiveMethod(iss, inputTable, outputTable, stack, resut, currentSymbol);
+	InputTableData resut = GetInputDataBySymbolAndCurrentSymbol(inputTable, inputTable.front().symbol, tokens.front().typeStr);
+	RecursiveMethod(inputTable, outputTable, stack, resut, tokens, index);
 
 	std::cout << (stack.empty() ? "Stack is empty. Good" : "Stack is NOT empty. Bad") << std::endl;
 }

@@ -10,6 +10,16 @@ bool IsNonterminal(const std::string str)
 	return !str.empty() && str.front() == '<' && str.back() == '>';
 }
 
+bool IsEmptyRule(const std::string str)
+{
+	return str == NONTERMINAL_END_SEQUENCE;
+}
+
+bool IsEndRule(const std::string str)
+{
+	return str == TERMINAL_END_SEQUENCE;
+}
+
 size_t GetRandomNumber(const size_t min, const size_t max)
 {
 	return (std::rand() % max) + min;

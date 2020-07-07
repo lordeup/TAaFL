@@ -29,7 +29,7 @@ private:
 
 	void AddShift(const TableData& tableData, std::vector<Transition>& transitions);
 	void AddRollUp(const TableData& tableData, const std::string str, std::vector<Transition>& transitions);
-	void AddEvent(const TableData& tableData, const std::string str, const State state, std::vector<Transition>& transitions);
+	void AddEvent(const TableData& tableData, const std::string str, const StateGenerator state, std::vector<Transition>& transitions);
 
 	void FindRollUp(const TableData& tableData, const std::string parentNonterminal, const std::string nonterminal, std::vector<Transition>& transitions);
 

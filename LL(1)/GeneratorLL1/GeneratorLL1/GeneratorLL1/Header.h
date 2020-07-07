@@ -33,5 +33,6 @@ struct OutputData
 
 const std::string TAB = "\t";
 const std::string SPACE = " ";
+const std::string DELIMITER = "=>";
 const std::string NONTERMINAL_END_SEQUENCE = "e";
 const std::string TERMINAL_END_SEQUENCE = "#";

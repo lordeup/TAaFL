@@ -1,5 +1,6 @@
 #pragma once
 #include "LRData.h"
+#include "Lexer.h"
 #include "Helper.h"
 #include <sstream>
 #include <fstream>

@@ -21,17 +21,17 @@ int ParseNumber(const std::string str)
 
 Symbol ParseSymbol(std::string str)
 {
-	State state;
+	StateSymbol state;
 	size_t number;
 
 	if (str == "-")
 	{
-		state = State::None;
+		state = StateSymbol::None;
 		number = 0;
 	}
 	else if (str == "Ok")
 	{
-		state = State::Ok;
+		state = StateSymbol::Ok;
 		number = 0;
 	}
 	else
@@ -49,15 +49,15 @@ Symbol ParseSymbol(std::string str)
 	return symbol;
 }
 
-State ParseState(char fCh)
+StateSymbol ParseState(char fCh)
 {
 	if (fCh == 'S')
 	{
-		return State::Shift;
+		return StateSymbol::Shift;
 	}
 	else if (fCh == 'R')
 	{
-		return State::Convolution;
+		return StateSymbol::Convolution;
 	}
 	else
 	{

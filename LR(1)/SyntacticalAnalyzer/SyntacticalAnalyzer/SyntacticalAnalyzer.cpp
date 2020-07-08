@@ -18,20 +18,20 @@ void SyntacticalAnalyzer::Run()
 		std::string currentSentenceChar = m_sentence.empty() ? m_stackSentence.top() : m_sentence.front();
 		Symbol symbol = GetSymbolByChInLRData(currentSentenceChar);
 
-		if (symbol.state == State::Shift || (currentSentenceChar == "e" && symbol.number - 1 == 0 && m_sentence.size() == 1))
+		if (symbol.state == StateSymbol::Shift || (currentSentenceChar == "e" && symbol.number - 1 == 0 && m_sentence.size() == 1))
 		{
 			m_sentence.pop_front();
 			m_stackSentence.push(currentSentenceChar);
 			m_logger.Log(currentSentenceChar + "\tadd to INPUT CHARACTERS stack");
 		}
 
-		if (symbol.state == State::Shift)
+		if (symbol.state == StateSymbol::Shift)
 		{
 			m_currentLRData = m_lrData[symbol.number - 1];
 			m_stackLRData.push(m_currentLRData);
 			m_logger.Log(std::to_string(m_currentLRData.number) + "\tadd to STATE stack");
 		}
-		else if (symbol.state == State::Convolution)
+		else if (symbol.state == StateSymbol::Convolution)
 		{
 			GuideSetsData guideSetsData = m_guideSets[symbol.number - 1];
 			if (guideSetsData.terminals.size() == 1 && guideSetsData.terminals[0] == "e")
@@ -63,14 +63,14 @@ void SyntacticalAnalyzer::Run()
 				m_currentLRData = m_stackLRData.top();
 			}
 		}
-		else if (symbol.state == State::Ok)
+		else if (symbol.state == StateSymbol::Ok)
 		{
 			PrintSentence();
 			PrintStackLRData();
 			PrintStackSentence();
 			break;
 		}
-		else if (symbol.state == State::None)
+		else if (symbol.state == StateSymbol::None)
 		{
 			m_logger.Log("State none for header character '" + currentSentenceChar + "' in row number " + std::to_string(m_currentLRData.number));
 			m_logger.Print();

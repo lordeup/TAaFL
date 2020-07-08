@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-enum class State
+enum class StateSymbol
 {
 	Shift,
 	Convolution,
@@ -12,7 +12,7 @@ enum class State
 
 struct Symbol
 {
-	State state;
+	StateSymbol state;
 	size_t number;
 };
 

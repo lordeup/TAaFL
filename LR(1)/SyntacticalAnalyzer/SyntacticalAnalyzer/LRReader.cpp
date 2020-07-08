@@ -40,6 +40,9 @@ void LRReader::ReadGuideSets(std::ifstream& fileGuideSetsInput)
 
 void LRReader::ReadSentence(std::ifstream& fileSentenceInput)
 {
+	Lexer lexer;
+	std::vector<TokenData> vTokenData = lexer.GetTokenDatas(fileSentenceInput);
+
 	std::string line, str;
 	std::getline(fileSentenceInput, line);
 	std::istringstream iss(line);

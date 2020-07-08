@@ -1,7 +1,0 @@
-<eaaT> - <S> # / <S> a c
-<S> - a <A> b / a
-<S> - c / c
-<A> - b <S> / b
-<A> - <B> b / <B> a c
-<B> - a <A> / a
-<B> - c / c

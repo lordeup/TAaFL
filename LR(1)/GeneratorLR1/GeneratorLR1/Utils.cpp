@@ -10,6 +10,16 @@ bool IsNonterminal(const std::string str)
 	return !str.empty() && str.front() == '<' && str.back() == '>';
 }
 
+bool IsEmptyRule(const std::string str)
+{
+	return str == NONTERMINAL_END_SEQUENCE;
+}
+
+bool IsEndRule(const std::string str)
+{
+	return str == TERMINAL_END_SEQUENCE;
+}
+
 size_t GetRandomNumber(const size_t min, const size_t max)
 {
 	return (std::rand() % max) + min;
@@ -23,7 +33,7 @@ std::string SubstrNonterminal(const std::string str)
 std::string GetRandomString()
 {
 	const std::string characters = "abcdefghijklmnaoqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	const size_t length = GetRandomNumber(1, 7);
+	const size_t length = GetRandomNumber(1, 5);
 
 	std::string str;
 

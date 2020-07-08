@@ -10,7 +10,7 @@ std::vector<OutputData> GetGenerateData(const std::vector<OutputDataGuideSets>& 
 		outputData.symbol = inputDatas[i].nonterminal;
 		outputData.guideCharacters = inputDatas[i].guideCharacters;
 
-		if (inputDatas[i].terminals.front() == NONTERMINAL_END_SEQUENCE && IsCheckUniqueness(outputData.guideCharacters, TERMINAL_END_SEQUENCE))
+		if (IsEmptyRule(inputDatas[i].terminals.front()) && IsCheckUniqueness(outputData.guideCharacters, TERMINAL_END_SEQUENCE))
 		{
 			outputData.guideCharacters.push_back(TERMINAL_END_SEQUENCE);
 		}
@@ -38,12 +38,12 @@ std::vector<OutputData> GetGenerateData(const std::vector<OutputDataGuideSets>& 
 				outputData.pointer = 0;
 			}
 
-			if (outputData.symbol == TERMINAL_END_SEQUENCE)
+			if (IsEndRule(outputData.symbol))
 			{
 				outputData.pointer = 0;
 				outputData.isEnd = true;
 			}
-			else if (outputData.symbol == NONTERMINAL_END_SEQUENCE)
+			else if (IsEmptyRule(outputData.symbol))
 			{
 				outputData.guideCharacters = inputDatas[i].guideCharacters;
 				outputData.pointer = 0;
@@ -67,7 +67,10 @@ std::vector<OutputData> GetGenerateData(const std::vector<OutputDataGuideSets>& 
 						}
 						for (const auto& character : outputDatas[row + k].guideCharacters)
 						{
-							characters.push_back(character);
+							if (IsCheckUniqueness(characters, character))
+							{
+								characters.push_back(character);
+							}
 						}
 					}
 
@@ -92,7 +95,7 @@ std::vector<OutputData> GetGenerateData(const std::vector<OutputDataGuideSets>& 
 
 void PrintResult(std::ostream& fileOutput, const std::vector<OutputData>& outputDatas)
 {
-	fileOutput << "Number" << TAB << "Symbol" << TAB << "Shift" << TAB << "Error" << TAB << "Pointer" << TAB << "Stack" << TAB << "End" << TAB << "Characters" << std::endl;
+	fileOutput << "Number" << TAB << "Shift" << TAB << "Error" << TAB << "Pointer" << TAB << "Stack" << TAB << "End" << TAB << "Symbol" << TAB << TAB << "Characters" << std::endl;
 
 	for (size_t i = 0; i < outputDatas.size(); ++i)
 	{
@@ -101,7 +104,7 @@ void PrintResult(std::ostream& fileOutput, const std::vector<OutputData>& output
 
 		std::string symbol = IsNonterminal(outputData.symbol) ? SubstrNonterminal(outputData.symbol) : outputData.symbol;
 
-		fileOutput << counter << TAB << symbol << TAB << outputData.isShift << TAB << outputData.isError << TAB << outputData.pointer << TAB << outputData.isStack << TAB << outputData.isEnd << TAB;
+		fileOutput << counter << TAB << outputData.isShift << TAB << outputData.isError << TAB << outputData.pointer << TAB << outputData.isStack << TAB << outputData.isEnd << TAB << symbol << TAB << TAB;
 		PrintInfoVector(fileOutput, outputData.guideCharacters, SPACE);
 		fileOutput << std::endl;
 	}

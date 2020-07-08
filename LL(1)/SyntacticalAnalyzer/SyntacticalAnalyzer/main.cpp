@@ -23,11 +23,11 @@ int main(int argc, char* argv[])
 	{
 		std::vector<InputTableData> inputTable;
 		std::vector<OutputTableData> outputTable;
-		std::string sentence;
+		Lexer lexer;
 
 		InitInputTable(fileTableInput, inputTable);
-		InitSentence(fileSentenceInput, sentence);
-		MakeProcess(inputTable, outputTable, sentence);
+		std::vector<TokenData> tokens = lexer.GetTokenDatas(fileSentenceInput);
+		MakeProcess(inputTable, outputTable, tokens);
 		PrintResult(fileOutput, outputTable);
 	}
 	catch (const std::exception& e)

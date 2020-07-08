@@ -32,4 +32,6 @@ struct OutputTableData
 	std::string currentSymbol;
 };
 
+using PairStringString = std::pair<std::string, std::string>;
+
 const std::string TAB = "\t";

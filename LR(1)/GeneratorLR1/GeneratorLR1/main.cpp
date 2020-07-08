@@ -1,5 +1,6 @@
-#include "GeneratorLR1.h"
+#include "GeneratorLR.h"
 #include "GuideSets.h"
+#include <ctime>
 #include <iostream>
 
 int main(int argc, char* argv[])
@@ -24,13 +25,13 @@ int main(int argc, char* argv[])
 
 	std::srand(unsigned(std::time(0)));
 
-	std::vector<std::string> nonterminals;
-	std::vector<std::string> terminals;
+	std::vector<TableData> tableDataGuideSets;
+	std::vector<std::string> characters;
 
-	std::vector<OutputDataGuideSets> outputDatasSets = GetFormingGuideSets(fileInput, nonterminals, terminals);
+	std::vector<OutputDataGuideSets> outputDatasSets = GetFormingGuideSets(fileInput, characters, tableDataGuideSets);
 	PrintResultGuideSets(fileGuideSets, outputDatasSets);
 
-	std::vector<std::string> characters = GetCharacters(nonterminals, terminals);
-	std::vector<std::vector<std::string>> outputDatas = GetGenerateData(outputDatasSets, characters);
-	PrintResult(fileOutput, outputDatas, characters);
+	GeneratorLR generatorLR(fileOutput, outputDatasSets, characters, tableDataGuideSets);
+	generatorLR.Generate();
+	generatorLR.PrintResult();
 }

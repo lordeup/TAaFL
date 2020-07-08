@@ -19,8 +19,12 @@ struct Symbol
 struct LRData
 {
 	size_t number;
-	std::string rule;
 	std::string ch;
-	size_t size;
 	std::vector<Symbol> symbols;
+};
+
+struct GuideSetsData
+{
+	std::string nonterminal;
+	std::vector<std::string> terminals;
 };

@@ -4,6 +4,40 @@ LRReader::LRReader()
 {
 }
 
+void LRReader::ReadGuideSets(std::ifstream& fileGuideSetsInput)
+{
+	std::string line;
+	while (std::getline(fileGuideSetsInput, line))
+	{
+		std::istringstream iss(line);
+		std::string str;
+
+		GuideSetsData guideSetsData;
+		bool isTerminal = false;
+
+		while (iss >> str)
+		{
+			if (str == "/")
+			{
+				break;
+			}
+			if (str == "=>")
+			{
+				isTerminal = true;
+			}
+			else if (isTerminal)
+			{
+				guideSetsData.terminals.push_back(str);
+			}
+			else
+			{
+				guideSetsData.nonterminal = str;
+			}
+		}
+		m_guideSets.push_back(guideSetsData);
+	}
+}
+
 void LRReader::ReadSentence(std::ifstream& fileSentenceInput)
 {
 	std::string line, str;
@@ -29,13 +63,16 @@ void LRReader::ReadTable(std::ifstream& fileTableInput)
 		LRData lrData;
 
 		lrData.number = ParseNumber(GetString(iss));
-		lrData.rule = GetString(iss);
 		lrData.ch = GetString(iss);
-		lrData.size = ParseNumber(GetString(iss));
 		lrData.symbols = GetSymbols(iss);
 
 		m_lrData.push_back(lrData);
 	}
+}
+
+std::vector<GuideSetsData> LRReader::GetGuideSets()
+{
+	return m_guideSets;
 }
 
 std::vector<std::string> LRReader::GetHeaderSymbols()
@@ -57,7 +94,7 @@ void LRReader::InitHeaderSymbols(std::string line)
 {
 	std::istringstream iss(line);
 	std::string str;
-	for (size_t i = 0; i <= 3; i++)
+	for (size_t i = 0; i <= 1; i++)
 	{
 		iss >> str;
 	}

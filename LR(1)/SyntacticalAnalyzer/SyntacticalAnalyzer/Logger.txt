@@ -1,0 +1,135 @@
+real	add to INPUT CHARACTERS stack
+2	add to STATE stack
+STATE stack items: 2 1 
+INPUT CHARACTERS stack items: real 
+SENTENCE items: a , b , c e 
+--------------------------------------------------------------------------------------
+a	add to INPUT CHARACTERS stack
+5	add to STATE stack
+STATE stack items: 5 2 1 
+INPUT CHARACTERS stack items: a real 
+SENTENCE items: , b , c e 
+--------------------------------------------------------------------------------------
+a	deleted from INPUT CHARACTERS stack
+5	deleted from STATE stack
+<id>	add to start position in SENTENCE
+STATE stack items: 2 1 
+INPUT CHARACTERS stack items: real 
+SENTENCE items: <id> , b , c e 
+--------------------------------------------------------------------------------------
+<id>	add to INPUT CHARACTERS stack
+6	add to STATE stack
+STATE stack items: 6 2 1 
+INPUT CHARACTERS stack items: <id> real 
+SENTENCE items: , b , c e 
+--------------------------------------------------------------------------------------
+<id>	deleted from INPUT CHARACTERS stack
+6	deleted from STATE stack
+<list>	add to start position in SENTENCE
+STATE stack items: 2 1 
+INPUT CHARACTERS stack items: real 
+SENTENCE items: <list> , b , c e 
+--------------------------------------------------------------------------------------
+<list>	add to INPUT CHARACTERS stack
+7	add to STATE stack
+STATE stack items: 7 2 1 
+INPUT CHARACTERS stack items: <list> real 
+SENTENCE items: , b , c e 
+--------------------------------------------------------------------------------------
+,	add to INPUT CHARACTERS stack
+8	add to STATE stack
+STATE stack items: 8 7 2 1 
+INPUT CHARACTERS stack items: , <list> real 
+SENTENCE items: b , c e 
+--------------------------------------------------------------------------------------
+b	add to INPUT CHARACTERS stack
+4	add to STATE stack
+STATE stack items: 4 8 7 2 1 
+INPUT CHARACTERS stack items: b , <list> real 
+SENTENCE items: , c e 
+--------------------------------------------------------------------------------------
+b	deleted from INPUT CHARACTERS stack
+4	deleted from STATE stack
+<id>	add to start position in SENTENCE
+STATE stack items: 8 7 2 1 
+INPUT CHARACTERS stack items: , <list> real 
+SENTENCE items: <id> , c e 
+--------------------------------------------------------------------------------------
+<id>	add to INPUT CHARACTERS stack
+9	add to STATE stack
+STATE stack items: 9 8 7 2 1 
+INPUT CHARACTERS stack items: <id> , <list> real 
+SENTENCE items: , c e 
+--------------------------------------------------------------------------------------
+<id>	deleted from INPUT CHARACTERS stack
+9	deleted from STATE stack
+,	deleted from INPUT CHARACTERS stack
+8	deleted from STATE stack
+<list>	deleted from INPUT CHARACTERS stack
+7	deleted from STATE stack
+<list>	add to start position in SENTENCE
+STATE stack items: 2 1 
+INPUT CHARACTERS stack items: real 
+SENTENCE items: <list> , c e 
+--------------------------------------------------------------------------------------
+<list>	add to INPUT CHARACTERS stack
+7	add to STATE stack
+STATE stack items: 7 2 1 
+INPUT CHARACTERS stack items: <list> real 
+SENTENCE items: , c e 
+--------------------------------------------------------------------------------------
+,	add to INPUT CHARACTERS stack
+8	add to STATE stack
+STATE stack items: 8 7 2 1 
+INPUT CHARACTERS stack items: , <list> real 
+SENTENCE items: c e 
+--------------------------------------------------------------------------------------
+c	add to INPUT CHARACTERS stack
+3	add to STATE stack
+STATE stack items: 3 8 7 2 1 
+INPUT CHARACTERS stack items: c , <list> real 
+SENTENCE items: e 
+--------------------------------------------------------------------------------------
+c	deleted from INPUT CHARACTERS stack
+3	deleted from STATE stack
+<id>	add to start position in SENTENCE
+STATE stack items: 8 7 2 1 
+INPUT CHARACTERS stack items: , <list> real 
+SENTENCE items: <id> e 
+--------------------------------------------------------------------------------------
+<id>	add to INPUT CHARACTERS stack
+9	add to STATE stack
+STATE stack items: 9 8 7 2 1 
+INPUT CHARACTERS stack items: <id> , <list> real 
+SENTENCE items: e 
+--------------------------------------------------------------------------------------
+<id>	deleted from INPUT CHARACTERS stack
+9	deleted from STATE stack
+,	deleted from INPUT CHARACTERS stack
+8	deleted from STATE stack
+<list>	deleted from INPUT CHARACTERS stack
+7	deleted from STATE stack
+<list>	add to start position in SENTENCE
+STATE stack items: 2 1 
+INPUT CHARACTERS stack items: real 
+SENTENCE items: <list> e 
+--------------------------------------------------------------------------------------
+<list>	add to INPUT CHARACTERS stack
+7	add to STATE stack
+STATE stack items: 7 2 1 
+INPUT CHARACTERS stack items: <list> real 
+SENTENCE items: e 
+--------------------------------------------------------------------------------------
+e	add to INPUT CHARACTERS stack
+e	deleted from INPUT CHARACTERS stack
+7	deleted from STATE stack
+<list>	deleted from INPUT CHARACTERS stack
+2	deleted from STATE stack
+real	deleted from INPUT CHARACTERS stack
+1	deleted from STATE stack
+<S>	add to start position in SENTENCE
+STATE stack items: 
+INPUT CHARACTERS stack items: 
+SENTENCE items: <S> 
+--------------------------------------------------------------------------------------
+State none for header character '<S>' in row number 7

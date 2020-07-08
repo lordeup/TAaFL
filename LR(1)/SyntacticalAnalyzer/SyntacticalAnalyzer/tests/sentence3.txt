@@ -1,1 +1,1 @@
-a a b c b b
+- test + - ( test * - 6 )

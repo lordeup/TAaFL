@@ -40,8 +40,8 @@ void LRReader::ReadGuideSets(std::ifstream& fileGuideSetsInput)
 
 void LRReader::ReadSentence(std::ifstream& fileSentenceInput)
 {
-	Lexer lexer;
-	std::vector<TokenData> vTokenData = lexer.GetTokenDatas(fileSentenceInput);
+	//	Lexer lexer;
+	//std::vector<TokenData> vTokenData = lexer.GetTokenDatas(fileSentenceInput);
 
 	std::string line, str;
 	std::getline(fileSentenceInput, line);
@@ -50,7 +50,12 @@ void LRReader::ReadSentence(std::ifstream& fileSentenceInput)
 	{
 		m_sentence.push_back(str);
 	}
-}
+
+	if (m_sentence.back() != "e")
+	{
+		m_sentence.push_back("e");
+	}
+}	
 
 void LRReader::ReadTable(std::ifstream& fileTableInput)
 {

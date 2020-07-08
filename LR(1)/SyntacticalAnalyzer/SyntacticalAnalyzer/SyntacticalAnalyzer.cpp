@@ -34,12 +34,9 @@ void SyntacticalAnalyzer::Run()
 		else if (symbol.state == StateSymbol::Convolution)
 		{
 			GuideSetsData guideSetsData = m_guideSets[symbol.number - 1];
-			if (guideSetsData.terminals.size() == 1 && guideSetsData.terminals[0] == "e")
+			for (size_t i = 0; i < guideSetsData.terminals.size(); i++)
 			{
-			}
-			else
-			{
-				for (size_t i = 0; i < guideSetsData.terminals.size(); i++)
+				if (guideSetsData.terminals[i] != "#")
 				{
 					if (!m_stackSentence.empty())
 					{
@@ -61,6 +58,10 @@ void SyntacticalAnalyzer::Run()
 			if (!m_stackLRData.empty())
 			{
 				m_currentLRData = m_stackLRData.top();
+			}
+			else
+			{
+				m_currentLRData = m_lrData.front();
 			}
 		}
 		else if (symbol.state == StateSymbol::Ok)
@@ -163,7 +164,7 @@ void SyntacticalAnalyzer::LogSentenceInfo()
 
 void SyntacticalAnalyzer::PrintStackLRData()
 {
-	if (m_stackLRData.empty())
+	if (m_stackLRData.empty() || (m_stackLRData.size() == 1 && m_stackLRData.top().ch == m_lrData[0].ch))
 	{
 		std::cout << "The STATE stack is empty = OK" << std::endl;
 	}
@@ -181,7 +182,7 @@ void SyntacticalAnalyzer::PrintStackLRData()
 
 void SyntacticalAnalyzer::PrintStackSentence()
 {
-	if (m_stackSentence.empty())
+	if (m_stackSentence.empty() || m_stackSentence.size() == 1)
 	{
 		std::cout << "INPUT CHARACTERS stack is empty = OK" << std::endl;
 	}
@@ -199,7 +200,7 @@ void SyntacticalAnalyzer::PrintStackSentence()
 
 void SyntacticalAnalyzer::PrintSentence()
 {
-	if (m_sentence.empty())
+	if (m_sentence.empty() || (m_sentence.size() == 1 && m_sentence.front() == m_guideSets[0].nonterminal))
 	{
 		std::cout << "The INPUT SENTENCE is empty = OK" << std::endl;
 	}

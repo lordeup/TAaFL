@@ -35,9 +35,6 @@
     <ClInclude Include="Lexer.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="State.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="TokenType.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

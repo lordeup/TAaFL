@@ -142,7 +142,6 @@
     <ClInclude Include="Header.h" />
     <ClInclude Include="InitializeToken.h" />
     <ClInclude Include="Lexer.h" />
-    <ClInclude Include="State.h" />
     <ClInclude Include="TokenType.h" />
   </ItemGroup>
   <ItemGroup>

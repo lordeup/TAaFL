@@ -5,7 +5,6 @@ Lexer::Lexer()
 	m_positionIndex = 0;
 	m_lineNumber = 0;
 	m_tempLineNumber = m_lineNumber;
-	m_state = State::START;
 	m_commentState = CommentState::NO_COMMENT;
 	m_line = "";
 
@@ -29,9 +28,8 @@ void Lexer::Initialize()
 	m_hexadecimal = initializeToken.GetHexadecimal();
 }
 
-std::vector<TokenData> Lexer::GetTokenDatas(std::istream& input)
+std::vector<Token> Lexer::GetTokenDatas(std::istream& input)
 {
-	std::vector<TokenData> tokenDatas;
 	while (std::getline(input, m_line))
 	{
 		++m_lineNumber;
@@ -46,25 +44,23 @@ std::vector<TokenData> Lexer::GetTokenDatas(std::istream& input)
 				Token token = GetToken(str);
 				if (token.type != TokenType::COMMENT)
 				{
-					tokenDatas.push_back({ token, GetTokenType(token.type) });
+					m_tokens.push_back(token);
 				}
 			}
 		}
 	}
 
-	return tokenDatas;
+	return m_tokens;
 }
 
 Token Lexer::GetToken(std::string& str)
 {
-	Token token;
-	SetState(State::START);
-
-	token = CheckComment(str);
+	Token token = CheckComment(str);
 
 	if (m_commentState == CommentState::NO_COMMENT && token.type != TokenType::COMMENT)
 	{
-		size_t lenght = CheckOperation(str);
+		auto operation = GetFindVectorString(m_operation, str);
+		size_t lenght = operation != m_operation.end() ? (*operation).value.length() : 0;
 		bool isCheckOperation = lenght > 0;
 		size_t lenghtWithBracket = 0;
 		std::string substr;
@@ -76,109 +72,115 @@ Token Lexer::GetToken(std::string& str)
 			if (foundPosition != std::string::npos && foundPosition != 0)
 			{
 				substr = str.substr(0, foundPosition);
-				lenghtWithBracket = CheckOperation(substr);
+				auto it = GetFindVectorString(m_operation, substr);
+				lenghtWithBracket = it != m_operation.end() ? (*it).value.length() : 0;
 			}
 			else if (foundPosition == std::string::npos)
 			{
 				substr = str.substr(0, str.find("["));
-				lenghtWithBracket = CheckOperation(substr);
+				auto it = GetFindVectorString(m_operation, substr);
+				lenghtWithBracket = it != m_operation.end() ? (*it).value.length() : 0;
 			}
 		}
 
 		if (isCheckOperation || lenghtWithBracket > 0)
 		{
-			token = SetToken(TokenType::OPERATOR, isCheckOperation ? str : substr);
+			token = SetToken((*operation).type, isCheckOperation ? str : substr);
 			str.erase(0, isCheckOperation ? lenght : lenghtWithBracket);
-			SetState(State::FINISH);
+			return token;
 		}
 		else
 		{
 			char ch = str[0];
 
-			if (m_state == State::START && IsFindVectorString(m_comparisonsOperator, str))
+			auto comparison = GetFindVectorString(m_comparisonsOperator, str);
+
+			if (comparison != m_comparisonsOperator.end())
 			{
-				token = SetToken(TokenType::COMPARISONS_OPERATOR, str);
+				token = SetToken((*comparison).type, str);
 				str.erase(0, str.length());
-				SetState(State::FINISH);
+				return token;
 			}
 
-			if (m_state == State::START && IsFindVectorString(m_logicalOperator, str))
+			auto logical = GetFindVectorString(m_logicalOperator, str);
+
+			if (logical != m_logicalOperator.end())
 			{
-				token = SetToken(TokenType::LOGICAL_OPERATOR, str);
+				token = SetToken((*logical).type, str);
 				str.erase(0, str.length());
-				SetState(State::FINISH);
+				return token;
 			}
 
-			if (m_state == State::START && IsFindVectorString(m_bitwiseOperator, str))
+			auto bitwise = GetFindVectorString(m_bitwiseOperator, str);
+
+			if (bitwise != m_bitwiseOperator.end())
 			{
-				token = SetToken(TokenType::BITWISE_OPERATOR, str);
+				token = SetToken((*bitwise).type, str);
 				str.erase(0, str.length());
-				SetState(State::FINISH);
+				return token;
 			}
 
-			if (m_state == State::START && ch == APOSTROPHE)
+			if (ch == APOSTROPHE)
 			{
-				token = CheckChar(str);
+				return CheckChar(str);
 			}
 
-			if (m_state == State::START && ConvertCharToString(ch) == QUOTATION)
+			if (ConvertCharToString(ch) == QUOTATION)
 			{
-				token = CheckString(str);
+				return CheckString(str);
 			}
 
-			if (m_state == State::START && ch == '[')
+			if (ch == '[')
 			{
-				token = CheckArray(str);
+				return CheckArray(str);
 			}
 
-			if (m_state == State::START && IsFindVectorChar(m_arithmeticOperator, ch) && !IsDigit(str[1]))
+			auto arithmetic = GetFindVectorChar(m_arithmeticOperator, ch);
+
+			if (arithmetic != m_arithmeticOperator.end() && !IsDigit(str[1]))
 			{
-				token = SetToken(TokenType::ARITHMETIC_OPERATOR, ConvertCharToString(ch));
+				token = SetToken((*arithmetic).type, ConvertCharToString(ch));
 				str.erase(0, 1);
-				SetState(State::FINISH);
+				return token;
 			}
 
-			if (m_state == State::START && IsFindVectorChar(m_bracket, ch))
+			auto bracket = GetFindVectorChar(m_bracket, ch);
+
+			if (bracket != m_bracket.end())
 			{
-				token = SetToken(TokenType::BRACKET, ConvertCharToString(ch));
+				token = SetToken((*bracket).type, ConvertCharToString(ch));
 				str.erase(0, 1);
-				SetState(State::FINISH);
+				return token;
 			}
 
-			if (m_state == State::START && IsSeparator(ch))
+			auto separator = GetFindVectorChar(m_separator, ch);
+
+			if (separator != m_separator.end())
 			{
-				token = SetToken(TokenType::SEPARATOR, ConvertCharToString(ch));
+				token = SetToken((*separator).type, ConvertCharToString(ch));
 				str.erase(0, 1);
-				SetState(State::FINISH);
+				return token;
 			}
 
-			if (m_state == State::START && IsDigit(ch))
+			if (IsDigit(ch))
 			{
-				token = CheckNumber(str);
+				return CheckNumber(str);
 			}
 
-			if (m_state == State::START && IsLetter(ch))
+			if (IsLetter(ch))
 			{
-				token = CheckId(str);
+				return CheckId(str);
 			}
 		}
 	}
 
-	if ((token.type == TokenType::ERROR && m_state == State::START) || token.type == TokenType::COMMENT)
+	if (token.type == TokenType::ERROR || token.type == TokenType::COMMENT)
 	{
 		token.value = str;
 		str.erase(str.begin(), str.end());
 	}
 
-	token.lineNumber = m_lineNumber;
-
 	return token;
-}
-
-size_t Lexer::CheckOperation(const std::string str) const
-{
-	auto it = std::find(m_operation.begin(), m_operation.end(), str);
-	return it != m_operation.end() ? (*it).length() : 0;
 }
 
 Token Lexer::CheckNumber(std::string& str)
@@ -198,12 +200,13 @@ Token Lexer::CheckNumber(std::string& str)
 			{
 				if (!IsFindVectorChar(m_binary, ch))
 				{
-					SetState(State::SKIP);
+					//SetState(State::SKIP);
 				}
 				digits += ch;
 			}
 		}
-		token.type = m_state == State::START ? TokenType::BINARY : TokenType::ERROR;
+		//token.type = m_state == State::START ? TokenType::BINARY : TokenType::ERROR;
+		token.type = TokenType::BINARY;
 	}
 	else if (numberSystem == "0o")
 	{
@@ -214,12 +217,13 @@ Token Lexer::CheckNumber(std::string& str)
 			{
 				if (!IsFindVectorChar(m_octal, ch))
 				{
-					SetState(State::SKIP);
+					//SetState(State::SKIP);
 				}
 				digits += ch;
 			}
 		}
-		token.type = m_state == State::START ? TokenType::OCTAL : TokenType::ERROR;
+		//token.type = m_state == State::START ? TokenType::OCTAL : TokenType::ERROR;
+		token.type = TokenType::OCTAL;
 	}
 	else if (numberSystem == "0x")
 	{
@@ -230,12 +234,12 @@ Token Lexer::CheckNumber(std::string& str)
 			{
 				if (!IsFindVectorChar(m_hexadecimal, ch))
 				{
-					SetState(State::SKIP);
+					//SetState(State::SKIP);
 				}
 				digits += ch;
 			}
 		}
-		token.type = m_state == State::START ? TokenType::HEXADECIMAL : TokenType::ERROR;
+		token.type = TokenType::HEXADECIMAL;
 	}
 	else
 	{
@@ -259,7 +263,7 @@ Token Lexer::CheckNumber(std::string& str)
 
 					if (IsSeparator(str[i + 2]))
 					{
-						SetState(State::SKIP);
+						//SetState(State::SKIP);
 					}
 				}
 
@@ -278,15 +282,14 @@ Token Lexer::CheckNumber(std::string& str)
 
 		if (token.type != TokenType::ERROR)
 		{
-			SetState(State::SKIP);
+			//SetState(State::SKIP);
 		}
 	}
 
 	token = SetToken(token.type, digits);
 
-	if (token.type != TokenType::ERROR || m_state == State::SKIP)
+	if (token.type != TokenType::ERROR)
 	{
-		SetState(State::FINISH);
 		str.erase(0, digits.length());
 	}
 
@@ -305,7 +308,6 @@ Token Lexer::CheckId(std::string& str)
 		}
 	}
 
-	SetState(State::FINISH);
 	token = SetToken(letters.length() <= 128 ? TokenType::ID : TokenType::ERROR, letters);
 	str.erase(0, letters.length());
 
@@ -373,7 +375,6 @@ Token Lexer::CheckArray(std::string& str)
 	}
 	token = SetToken(token.type, strArray);
 	str.erase(0, strArray.length());
-	SetState(State::FINISH);
 
 	return token;
 }
@@ -396,7 +397,6 @@ Token Lexer::CheckChar(std::string& str)
 	}
 	token = SetToken(token.type, strChar);
 	str.erase(0, strChar.length());
-	SetState(State::FINISH);
 
 	return token;
 }
@@ -419,14 +419,13 @@ Token Lexer::CheckString(std::string& str)
 	}
 	token = SetToken(token.type, str1);
 	str.erase(0, str1.length());
-	SetState(State::FINISH);
 
 	return token;
 }
 
 bool Lexer::IsSeparator(const char ch) const
 {
-	return IsFindVectorChar(m_separator, ch);
+	return GetFindVectorChar(m_separator, ch) != m_separator.end();
 }
 
 bool Lexer::IsFindVectorChar(const VectorChar& vec, const char ch) const
@@ -439,6 +438,16 @@ bool Lexer::IsFindVectorString(const VectorString& vec, const std::string str) c
 	return std::find(vec.begin(), vec.end(), str) != vec.end();
 }
 
+std::vector<TokenDataChar>::const_iterator Lexer::GetFindVectorChar(const std::vector<TokenDataChar>& vec, const char ch) const
+{
+	return std::find_if(vec.begin(), vec.end(), [&](const TokenDataChar& data) { return data.value == ch; });
+}
+
+std::vector<TokenDataString>::const_iterator Lexer::GetFindVectorString(const std::vector<TokenDataString>& vec, const std::string str) const
+{
+	return std::find_if(vec.begin(), vec.end(), [&](const TokenDataString& data) { return data.value == str; });
+}
+
 bool Lexer::IsDigit(const char ch) const
 {
 	return isdigit(ch) || ch == '-';
@@ -449,67 +458,17 @@ bool Lexer::IsLetter(const char ch) const
 	return isalpha(ch) || ch == '_';
 }
 
-void Lexer::SetState(const State& state)
-{
-	m_state = state;
-}
-
 void Lexer::SetCommentState(const CommentState& commentState)
 {
 	m_commentState = commentState;
 }
 
-Token Lexer::SetToken(const TokenType& tokenType, const std::string str)
+Token Lexer::SetToken(const std::string& tokenType, const std::string str)
 {
-	return Token{ tokenType, str, m_line.find(str) };
+	return Token{ tokenType, str, m_line.find(str), m_lineNumber };
 }
 
 std::string Lexer::ConvertCharToString(const char ch) const
 {
 	return std::string(1, ch);
-}
-
-std::string Lexer::GetTokenType(TokenType& tokenType) const
-{
-	switch (tokenType)
-	{
-	case TokenType::ERROR:
-		return "ERROR";
-	case TokenType::ID:
-		return "ID";
-	case TokenType::INTEGER:
-		return "INTEGER";
-	case TokenType::FLOAT:
-		return "FLOAT";
-	case TokenType::DOUBLE:
-		return "DOUBLE";
-	case TokenType::CHAR:
-		return "CHAR";
-	case TokenType::STRING:
-		return "STRING";
-	case TokenType::ARRAY:
-		return "ARRAY";
-	case TokenType::BINARY:
-		return "BINARY";
-	case TokenType::OCTAL:
-		return "OCTAL";
-	case TokenType::HEXADECIMAL:
-		return "HEXADECIMAL";
-	case TokenType::OPERATOR:
-		return "OPERATOR";
-	case TokenType::ARITHMETIC_OPERATOR:
-		return "ARITHMETIC_OPERATOR";
-	case TokenType::COMPARISONS_OPERATOR:
-		return "COMPARISONS_OPERATOR";
-	case TokenType::LOGICAL_OPERATOR:
-		return "LOGICAL_OPERATOR";
-	case TokenType::BITWISE_OPERATOR:
-		return "BITWISE_OPERATOR";
-	case TokenType::SEPARATOR:
-		return "SEPARATOR";
-	case TokenType::BRACKET:
-		return "BRACKET";
-	default:
-		return "Unknown state";
-	}
 }

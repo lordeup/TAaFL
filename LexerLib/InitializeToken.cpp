@@ -1,47 +1,103 @@
 #include "InitializeToken.h"
 
-InitializeToken::InitializeToken()
-{
-}
-
 VectorString InitializeToken::GetComment()
 {
 	return VectorString{ "//", "/*", "*/" };
 }
 
-VectorString InitializeToken::GetOperator()
+std::vector<TokenDataString> InitializeToken::GetOperator()
 {
-	return VectorString{ "if", "else", "for", "while", "do", "break", "continue", "return", "read", "write", "main", "void", "int", "float", "double", "char", "string", "bool" };
+	std::vector<TokenDataString> vec;
+	vec.push_back({ TokenType::OPERATOR_IF, "if" });
+	vec.push_back({ TokenType::OPERATOR_ELSE, "else" });
+	vec.push_back({ TokenType::OPERATOR_FOR, "for" });
+	vec.push_back({ TokenType::OPERATOR_WHILE, "while" });
+	vec.push_back({ TokenType::OPERATOR_DO, "do" });
+	vec.push_back({ TokenType::OPERATOR_BREAK, "break" });
+	vec.push_back({ TokenType::OPERATOR_CONTINUE, "continue" });
+	vec.push_back({ TokenType::OPERATOR_RETURN, "return" });
+	vec.push_back({ TokenType::OPERATOR_READ, "read" });
+	vec.push_back({ TokenType::OPERATOR_WRITE, "write" });
+	vec.push_back({ TokenType::OPERATOR_MAIN, "main" });
+	vec.push_back({ TokenType::OPERATOR_VOID, "void" });
+	vec.push_back({ TokenType::OPERATOR_INT, "int" });
+	vec.push_back({ TokenType::OPERATOR_FLOAT, "float" });
+	vec.push_back({ TokenType::OPERATOR_DOUBLE, "double" });
+	vec.push_back({ TokenType::OPERATOR_CHAR, "char" });
+	vec.push_back({ TokenType::OPERATOR_STRING, "string" });
+	vec.push_back({ TokenType::OPERATOR_BOOL, "bool" });
+
+	return vec;
 }
 
-VectorString InitializeToken::GetLogicalOperator()
+std::vector<TokenDataString> InitializeToken::GetLogicalOperator()
 {
-	return VectorString{ "&&", "||", "!" };
+	std::vector<TokenDataString> vec;
+	vec.push_back({ TokenType::LOGICAL_AND, "&&" });
+	vec.push_back({ TokenType::LOGICAL_OR, "||" });
+	vec.push_back({ TokenType::LOGICAL_NOT, "!" });
+
+	return vec;
 }
 
-VectorString InitializeToken::GetBitwiseOperator()
+std::vector<TokenDataString> InitializeToken::GetBitwiseOperator()
 {
-	return VectorString{ "~", "&", "|", "^", "<<", ">>" };
+	std::vector<TokenDataString> vec;
+	vec.push_back({ TokenType::BITWISE_AND, "&" });
+	vec.push_back({ TokenType::BITWISE_OR, "|" });
+	vec.push_back({ TokenType::BITWISE_NOT, "~" });
+	vec.push_back({ TokenType::BITWISE_XOR, "^" });
+	vec.push_back({ TokenType::BITWISE_LEFT_SHIFT, "<<" });
+	vec.push_back({ TokenType::BITWISE_RIGHT_SHIFT, ">>" });
+
+	return vec;
 }
 
-VectorChar InitializeToken::GetArithmeticOperator()
+std::vector<TokenDataChar> InitializeToken::GetArithmeticOperator()
 {
-	return VectorChar{ '+', '-', '*', '/', '=', '%' };
+	std::vector<TokenDataChar> vec;
+	vec.push_back({ TokenType::PLUS, '+' });
+	vec.push_back({ TokenType::MINUS, '-' });
+	vec.push_back({ TokenType::MULTIPLICATION, '*' });
+	vec.push_back({ TokenType::DIVISION, '/' });
+	vec.push_back({ TokenType::ASSIGNMENT, '=' });
+	vec.push_back({ TokenType::MOD, '%' });
+
+	return vec;
 }
 
-VectorString InitializeToken::GetComparisonsOperator()
+std::vector<TokenDataString> InitializeToken::GetComparisonsOperator()
 {
-	return VectorString{ "==", "!=", ">", "<", ">=", "<=", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "<<=", ">>=" };
+	std::vector<TokenDataString> vec;
+	vec.push_back({ TokenType::MORE, ">" });
+	vec.push_back({ TokenType::LESS, "<" });
+	vec.push_back({ TokenType::EQUAL, "==" });
+	vec.push_back({ TokenType::NOT_EQUAL, "!=" });
+	vec.push_back({ TokenType::MORE_OR_EQUAL, ">=" });
+	vec.push_back({ TokenType::LESS_OR_EQUAL, "<=" });
+
+	return vec;
 }
 
-VectorChar InitializeToken::GetBracket()
+std::vector<TokenDataChar> InitializeToken::GetBracket()
 {
-	return VectorChar{ '{', '}', '(', ')' };
+	std::vector<TokenDataChar> vec;
+	vec.push_back({ TokenType::BRACE_OPEN, '{' });
+	vec.push_back({ TokenType::BRACE_CLOSE, '}' });
+	vec.push_back({ TokenType::BRACKET_OPEN, '(' });
+	vec.push_back({ TokenType::BRACKET_CLOSE, ')' });
+
+	return vec;
 }
 
-VectorChar InitializeToken::GetSeparator()
+std::vector<TokenDataChar> InitializeToken::GetSeparator()
 {
-	return VectorChar{ ',', ';', ':' };
+	std::vector<TokenDataChar> vec;
+	vec.push_back({ TokenType::COMMA, ',' });
+	vec.push_back({ TokenType::SEMICOLON, ';' });
+	vec.push_back({ TokenType::COLON, ':' });
+
+	return vec;
 }
 
 VectorChar InitializeToken::GetBinary()

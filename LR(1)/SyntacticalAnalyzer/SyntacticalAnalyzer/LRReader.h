@@ -15,9 +15,9 @@ public:
 	void ReadTable(std::ifstream& fileTableInput);
 	std::vector<GuideSetsData> GetGuideSets();
 	std::vector<LRData> GetLRData();
-	std::list<std::string> GetSentence();
+	std::list<Token> GetSentence();
 	std::vector<std::string> GetHeaderSymbols();
-	
+
 private: 
 	std::vector<Symbol> GetSymbols(std::istringstream& iss);
 	void InitHeaderSymbols(std::string line);
@@ -25,5 +25,5 @@ private:
 	std::vector<GuideSetsData> m_guideSets;
 	std::vector<std::string> m_headerSymbols;
 	std::vector<LRData> m_lrData;
-	std::list<std::string> m_sentence;
+	std::list<Token> m_sentence;
 };

@@ -64,3 +64,8 @@ StateSymbol ParseState(char fCh)
 		throw std::exception("Error, when trying parse state from char " + fCh);
 	}
 }
+
+bool IsNonterminal(const std::string str)
+{
+	return !str.empty() && str.front() == '<' && str.back() == '>';
+}

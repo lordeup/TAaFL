@@ -1,7 +1,9 @@
 #pragma once
 #include "LRData.h"
+#include "Lexer.h"
 #include "Logger.h"
 #include "Helper.h"
+#include <set>
 #include <fstream>
 #include <list>
 #include <algorithm>
@@ -10,7 +12,7 @@
 class SyntacticalAnalyzer
 {
 public:
-	SyntacticalAnalyzer(std::vector<GuideSetsData> guideSets, std::vector<std::string> headerSymbols, std::vector<LRData> lrData, std::list<std::string> sentence);
+	SyntacticalAnalyzer(std::vector<GuideSetsData> guideSets, std::vector<std::string> headerSymbols, std::vector<LRData> lrData, std::list<Token> sentence);
 	void Run();
 
 private:
@@ -29,9 +31,9 @@ private:
 	std::vector<GuideSetsData> m_guideSets;
 	std::vector<std::string> m_headerSymbols;
 	std::vector<LRData> m_lrData;
-	std::list<std::string> m_sentence;
+	std::list<Token> m_sentence;
 	std::stack<LRData> m_stackLRData;
-	std::stack<std::string> m_stackSentence;
+	std::stack<Token> m_stackSentence;
 	LRData m_currentLRData;
 	Logger m_logger;
 };

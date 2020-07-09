@@ -1,268 +1,85 @@
--	add to INPUT CHARACTERS stack
+MINUS	add to INPUT CHARACTERS stack
 7	add to STATE stack
 STATE stack items: 7 1 
-INPUT CHARACTERS stack items: - 
-SENTENCE items: test + - ( test * - 6 ) e 
+INPUT CHARACTERS stack items: MINUS 
+SENTENCE items: ID PLUS MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
-test	add to INPUT CHARACTERS stack
+ID	add to INPUT CHARACTERS stack
 3	add to STATE stack
 STATE stack items: 3 7 1 
-INPUT CHARACTERS stack items: test - 
-SENTENCE items: + - ( test * - 6 ) e 
+INPUT CHARACTERS stack items: ID MINUS 
+SENTENCE items: PLUS MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
-test	deleted from INPUT CHARACTERS stack
+ID	deleted from INPUT CHARACTERS stack
 3	deleted from STATE stack
 <F>	add to start position in SENTENCE
 STATE stack items: 7 1 
-INPUT CHARACTERS stack items: - 
-SENTENCE items: <F> + - ( test * - 6 ) e 
+INPUT CHARACTERS stack items: MINUS 
+SENTENCE items: <F> PLUS MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
 <F>	add to INPUT CHARACTERS stack
 8	add to STATE stack
 STATE stack items: 8 7 1 
-INPUT CHARACTERS stack items: <F> - 
-SENTENCE items: + - ( test * - 6 ) e 
+INPUT CHARACTERS stack items: <F> MINUS 
+SENTENCE items: PLUS MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
 <F>	deleted from INPUT CHARACTERS stack
 8	deleted from STATE stack
--	deleted from INPUT CHARACTERS stack
+MINUS	deleted from INPUT CHARACTERS stack
 7	deleted from STATE stack
 <F>	add to start position in SENTENCE
 STATE stack items: 1 
 INPUT CHARACTERS stack items: 
-SENTENCE items: <F> + - ( test * - 6 ) e 
+SENTENCE items: <F> PLUS MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
 <F>	add to INPUT CHARACTERS stack
 9	add to STATE stack
 STATE stack items: 9 1 
 INPUT CHARACTERS stack items: <F> 
-SENTENCE items: + - ( test * - 6 ) e 
+SENTENCE items: PLUS MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
 <F>	deleted from INPUT CHARACTERS stack
 9	deleted from STATE stack
 <T>	add to start position in SENTENCE
 STATE stack items: 1 
 INPUT CHARACTERS stack items: 
-SENTENCE items: <T> + - ( test * - 6 ) e 
+SENTENCE items: <T> PLUS MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
 <T>	add to INPUT CHARACTERS stack
 10	add to STATE stack
 STATE stack items: 10 1 
 INPUT CHARACTERS stack items: <T> 
-SENTENCE items: + - ( test * - 6 ) e 
+SENTENCE items: PLUS MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
 <T>	deleted from INPUT CHARACTERS stack
 10	deleted from STATE stack
 <E>	add to start position in SENTENCE
 STATE stack items: 1 
 INPUT CHARACTERS stack items: 
-SENTENCE items: <E> + - ( test * - 6 ) e 
+SENTENCE items: <E> PLUS MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
 <E>	add to INPUT CHARACTERS stack
 13	add to STATE stack
 STATE stack items: 13 1 
 INPUT CHARACTERS stack items: <E> 
-SENTENCE items: + - ( test * - 6 ) e 
+SENTENCE items: PLUS MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
-+	add to INPUT CHARACTERS stack
+PLUS	add to INPUT CHARACTERS stack
 14	add to STATE stack
 STATE stack items: 14 13 1 
-INPUT CHARACTERS stack items: + <E> 
-SENTENCE items: - ( test * - 6 ) e 
+INPUT CHARACTERS stack items: PLUS <E> 
+SENTENCE items: MINUS BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
--	add to INPUT CHARACTERS stack
+MINUS	add to INPUT CHARACTERS stack
 7	add to STATE stack
 STATE stack items: 7 14 13 1 
-INPUT CHARACTERS stack items: - + <E> 
-SENTENCE items: ( test * - 6 ) e 
+INPUT CHARACTERS stack items: MINUS PLUS <E> 
+SENTENCE items: BRACKET_OPEN PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
-(	add to INPUT CHARACTERS stack
+BRACKET_OPEN	add to INPUT CHARACTERS stack
 4	add to STATE stack
 STATE stack items: 4 7 14 13 1 
-INPUT CHARACTERS stack items: ( - + <E> 
-SENTENCE items: test * - 6 ) e 
+INPUT CHARACTERS stack items: BRACKET_OPEN MINUS PLUS <E> 
+SENTENCE items: PLUS ID MULTIPLICATION MINUS INTEGER BRACKET_CLOSE # 
 --------------------------------------------------------------------------------------
-test	add to INPUT CHARACTERS stack
-3	add to STATE stack
-STATE stack items: 3 4 7 14 13 1 
-INPUT CHARACTERS stack items: test ( - + <E> 
-SENTENCE items: * - 6 ) e 
---------------------------------------------------------------------------------------
-test	deleted from INPUT CHARACTERS stack
-3	deleted from STATE stack
-<F>	add to start position in SENTENCE
-STATE stack items: 4 7 14 13 1 
-INPUT CHARACTERS stack items: ( - + <E> 
-SENTENCE items: <F> * - 6 ) e 
---------------------------------------------------------------------------------------
-<F>	add to INPUT CHARACTERS stack
-9	add to STATE stack
-STATE stack items: 9 4 7 14 13 1 
-INPUT CHARACTERS stack items: <F> ( - + <E> 
-SENTENCE items: * - 6 ) e 
---------------------------------------------------------------------------------------
-<F>	deleted from INPUT CHARACTERS stack
-9	deleted from STATE stack
-<T>	add to start position in SENTENCE
-STATE stack items: 4 7 14 13 1 
-INPUT CHARACTERS stack items: ( - + <E> 
-SENTENCE items: <T> * - 6 ) e 
---------------------------------------------------------------------------------------
-<T>	add to INPUT CHARACTERS stack
-10	add to STATE stack
-STATE stack items: 10 4 7 14 13 1 
-INPUT CHARACTERS stack items: <T> ( - + <E> 
-SENTENCE items: * - 6 ) e 
---------------------------------------------------------------------------------------
-*	add to INPUT CHARACTERS stack
-11	add to STATE stack
-STATE stack items: 11 10 4 7 14 13 1 
-INPUT CHARACTERS stack items: * <T> ( - + <E> 
-SENTENCE items: - 6 ) e 
---------------------------------------------------------------------------------------
--	add to INPUT CHARACTERS stack
-7	add to STATE stack
-STATE stack items: 7 11 10 4 7 14 13 1 
-INPUT CHARACTERS stack items: - * <T> ( - + <E> 
-SENTENCE items: 6 ) e 
---------------------------------------------------------------------------------------
-6	add to INPUT CHARACTERS stack
-2	add to STATE stack
-STATE stack items: 2 7 11 10 4 7 14 13 1 
-INPUT CHARACTERS stack items: 6 - * <T> ( - + <E> 
-SENTENCE items: ) e 
---------------------------------------------------------------------------------------
-6	deleted from INPUT CHARACTERS stack
-2	deleted from STATE stack
-<F>	add to start position in SENTENCE
-STATE stack items: 7 11 10 4 7 14 13 1 
-INPUT CHARACTERS stack items: - * <T> ( - + <E> 
-SENTENCE items: <F> ) e 
---------------------------------------------------------------------------------------
-<F>	add to INPUT CHARACTERS stack
-8	add to STATE stack
-STATE stack items: 8 7 11 10 4 7 14 13 1 
-INPUT CHARACTERS stack items: <F> - * <T> ( - + <E> 
-SENTENCE items: ) e 
---------------------------------------------------------------------------------------
-<F>	deleted from INPUT CHARACTERS stack
-8	deleted from STATE stack
--	deleted from INPUT CHARACTERS stack
-7	deleted from STATE stack
-<F>	add to start position in SENTENCE
-STATE stack items: 11 10 4 7 14 13 1 
-INPUT CHARACTERS stack items: * <T> ( - + <E> 
-SENTENCE items: <F> ) e 
---------------------------------------------------------------------------------------
-<F>	add to INPUT CHARACTERS stack
-12	add to STATE stack
-STATE stack items: 12 11 10 4 7 14 13 1 
-INPUT CHARACTERS stack items: <F> * <T> ( - + <E> 
-SENTENCE items: ) e 
---------------------------------------------------------------------------------------
-<F>	deleted from INPUT CHARACTERS stack
-12	deleted from STATE stack
-*	deleted from INPUT CHARACTERS stack
-11	deleted from STATE stack
-<T>	deleted from INPUT CHARACTERS stack
-10	deleted from STATE stack
-<T>	add to start position in SENTENCE
-STATE stack items: 4 7 14 13 1 
-INPUT CHARACTERS stack items: ( - + <E> 
-SENTENCE items: <T> ) e 
---------------------------------------------------------------------------------------
-<T>	add to INPUT CHARACTERS stack
-10	add to STATE stack
-STATE stack items: 10 4 7 14 13 1 
-INPUT CHARACTERS stack items: <T> ( - + <E> 
-SENTENCE items: ) e 
---------------------------------------------------------------------------------------
-<T>	deleted from INPUT CHARACTERS stack
-10	deleted from STATE stack
-<E>	add to start position in SENTENCE
-STATE stack items: 4 7 14 13 1 
-INPUT CHARACTERS stack items: ( - + <E> 
-SENTENCE items: <E> ) e 
---------------------------------------------------------------------------------------
-<E>	add to INPUT CHARACTERS stack
-5	add to STATE stack
-STATE stack items: 5 4 7 14 13 1 
-INPUT CHARACTERS stack items: <E> ( - + <E> 
-SENTENCE items: ) e 
---------------------------------------------------------------------------------------
-)	add to INPUT CHARACTERS stack
-6	add to STATE stack
-STATE stack items: 6 5 4 7 14 13 1 
-INPUT CHARACTERS stack items: ) <E> ( - + <E> 
-SENTENCE items: e 
---------------------------------------------------------------------------------------
-)	deleted from INPUT CHARACTERS stack
-6	deleted from STATE stack
-<E>	deleted from INPUT CHARACTERS stack
-5	deleted from STATE stack
-(	deleted from INPUT CHARACTERS stack
-4	deleted from STATE stack
-<F>	add to start position in SENTENCE
-STATE stack items: 7 14 13 1 
-INPUT CHARACTERS stack items: - + <E> 
-SENTENCE items: <F> e 
---------------------------------------------------------------------------------------
-<F>	add to INPUT CHARACTERS stack
-8	add to STATE stack
-STATE stack items: 8 7 14 13 1 
-INPUT CHARACTERS stack items: <F> - + <E> 
-SENTENCE items: e 
---------------------------------------------------------------------------------------
-<F>	deleted from INPUT CHARACTERS stack
-8	deleted from STATE stack
--	deleted from INPUT CHARACTERS stack
-7	deleted from STATE stack
-<F>	add to start position in SENTENCE
-STATE stack items: 14 13 1 
-INPUT CHARACTERS stack items: + <E> 
-SENTENCE items: <F> e 
---------------------------------------------------------------------------------------
-<F>	add to INPUT CHARACTERS stack
-9	add to STATE stack
-STATE stack items: 9 14 13 1 
-INPUT CHARACTERS stack items: <F> + <E> 
-SENTENCE items: e 
---------------------------------------------------------------------------------------
-<F>	deleted from INPUT CHARACTERS stack
-9	deleted from STATE stack
-<T>	add to start position in SENTENCE
-STATE stack items: 14 13 1 
-INPUT CHARACTERS stack items: + <E> 
-SENTENCE items: <T> e 
---------------------------------------------------------------------------------------
-<T>	add to INPUT CHARACTERS stack
-15	add to STATE stack
-STATE stack items: 15 14 13 1 
-INPUT CHARACTERS stack items: <T> + <E> 
-SENTENCE items: e 
---------------------------------------------------------------------------------------
-<T>	deleted from INPUT CHARACTERS stack
-15	deleted from STATE stack
-+	deleted from INPUT CHARACTERS stack
-14	deleted from STATE stack
-<E>	deleted from INPUT CHARACTERS stack
-13	deleted from STATE stack
-<E>	add to start position in SENTENCE
-STATE stack items: 1 
-INPUT CHARACTERS stack items: 
-SENTENCE items: <E> e 
---------------------------------------------------------------------------------------
-<E>	add to INPUT CHARACTERS stack
-13	add to STATE stack
-STATE stack items: 13 1 
-INPUT CHARACTERS stack items: <E> 
-SENTENCE items: e 
---------------------------------------------------------------------------------------
-e	add to INPUT CHARACTERS stack
-e	deleted from INPUT CHARACTERS stack
-13	deleted from STATE stack
-<UDV>	add to start position in SENTENCE
-STATE stack items: 1 
-INPUT CHARACTERS stack items: <E> 
-SENTENCE items: <UDV> 
---------------------------------------------------------------------------------------
+State none for header character 'PLUS' in row number 4

@@ -1,6 +1,6 @@
 #include "SyntacticalAnalyzer.h"
 
-SyntacticalAnalyzer::SyntacticalAnalyzer(std::vector<GuideSetsData> guideSets, std::vector<std::string> headerSymbols, std::vector<LRData> lrData, std::list<std::string> sentence)
+SyntacticalAnalyzer::SyntacticalAnalyzer(std::vector<GuideSetsData> guideSets, std::vector<std::string> headerSymbols, std::vector<LRData> lrData, std::list<Token> sentence)
 	: m_guideSets(guideSets)
 	, m_headerSymbols(headerSymbols)
 	, m_lrData(lrData)
@@ -12,21 +12,27 @@ void SyntacticalAnalyzer::Run()
 {
 	m_currentLRData = m_lrData.front();
 	m_stackLRData.push(m_currentLRData);
+	std::set<std::string> possibleSymbols;
 
 	while (!m_sentence.empty() || !m_stackLRData.empty())
 	{
-		std::string currentSentenceChar = m_sentence.empty() ? m_stackSentence.top() : m_sentence.front();
-		Symbol symbol = GetSymbolByChInLRData(currentSentenceChar);
+		Token currentToken = m_sentence.empty() ? m_stackSentence.top() : m_sentence.front();
+		Symbol symbol = GetSymbolByChInLRData(currentToken.type);
 
-		if (symbol.state == StateSymbol::Shift || (currentSentenceChar == "e" && symbol.number - 1 == 0 && m_sentence.size() == 1))
+		if (symbol.state == StateSymbol::Shift || (currentToken.value == "#" && symbol.number - 1 == 0 && m_sentence.size() == 1))
 		{
 			m_sentence.pop_front();
-			m_stackSentence.push(currentSentenceChar);
-			m_logger.Log(currentSentenceChar + "\tadd to INPUT CHARACTERS stack");
+			m_stackSentence.push(currentToken);
+			m_logger.Log(currentToken.type + "\tadd to INPUT CHARACTERS stack");
 		}
 
 		if (symbol.state == StateSymbol::Shift)
 		{
+			if (!IsNonterminal(currentToken.value))
+			{
+				possibleSymbols.clear();
+			}
+
 			m_currentLRData = m_lrData[symbol.number - 1];
 			m_stackLRData.push(m_currentLRData);
 			m_logger.Log(std::to_string(m_currentLRData.number) + "\tadd to STATE stack");
@@ -36,11 +42,16 @@ void SyntacticalAnalyzer::Run()
 			GuideSetsData guideSetsData = m_guideSets[symbol.number - 1];
 			for (size_t i = 0; i < guideSetsData.terminals.size(); i++)
 			{
-				if (guideSetsData.terminals[i] != "#")
+				if (!IsNonterminal(guideSetsData.terminals[i]))
+				{
+					possibleSymbols.insert(guideSetsData.terminals[i]);
+				}
+
+				if (guideSetsData.terminals[i] != "e")
 				{
 					if (!m_stackSentence.empty())
 					{
-						m_logger.Log(m_stackSentence.top() + "\tdeleted from INPUT CHARACTERS stack");
+						m_logger.Log(m_stackSentence.top().type + "\tdeleted from INPUT CHARACTERS stack");
 						m_stackSentence.pop();
 					}
 					if (!m_stackLRData.empty())
@@ -51,7 +62,8 @@ void SyntacticalAnalyzer::Run()
 				}
 			}
 
-			m_sentence.push_front(guideSetsData.nonterminal);
+			Token token({ guideSetsData.nonterminal, guideSetsData.nonterminal, currentToken.lineNumber, currentToken.positionIndex });
+			m_sentence.push_front(token);
 
 			m_logger.Log(guideSetsData.nonterminal + "\tadd to start position in SENTENCE");
 
@@ -73,9 +85,16 @@ void SyntacticalAnalyzer::Run()
 		}
 		else if (symbol.state == StateSymbol::None)
 		{
-			m_logger.Log("State none for header character '" + currentSentenceChar + "' in row number " + std::to_string(m_currentLRData.number));
+			m_logger.Log("State none for header character '" + currentToken.type + "' in row number " + std::to_string(m_currentLRData.number));
 			m_logger.Print();
-			throw std::invalid_argument("State none for header character '" + currentSentenceChar + "' in row number " + std::to_string(m_currentLRData.number));
+
+			std::string possibles = "";
+			for (auto ch : possibleSymbols)
+			{
+				possibles.append(ch + " ");
+			}
+
+			throw std::invalid_argument("State none for header character: " + currentToken.type + "\ntoken value: " + currentToken.value + "\npossibles: " + possibles + "\nline number: " + std::to_string(currentToken.lineNumber) + "\nposition index: " + std::to_string(currentToken.positionIndex) + "\nin row number: " + std::to_string(m_currentLRData.number));
 		}
 
 		LogStackLRDataInfo();
@@ -141,12 +160,12 @@ void SyntacticalAnalyzer::LogStackLRDataInfo()
 
 void SyntacticalAnalyzer::LogStackSentenceInfo()
 {
-	std::stack<std::string> copySentenceStack(m_stackSentence);
+	std::stack<Token> copySentenceStack(m_stackSentence);
 	std::string str;
 
 	while (!copySentenceStack.empty())
 	{
-		str.append(copySentenceStack.top() + " ");
+		str.append(copySentenceStack.top().type + " ");
 		copySentenceStack.pop();
 	}
 	m_logger.Log("INPUT CHARACTERS stack items: " + str);
@@ -157,7 +176,7 @@ void SyntacticalAnalyzer::LogSentenceInfo()
 	std::string str;
 	for (auto ch : m_sentence)
 	{
-		str.append(ch + " ");
+		str.append(ch.type + " ");
 	}
 	m_logger.Log("SENTENCE items: " + str);
 }
@@ -191,7 +210,7 @@ void SyntacticalAnalyzer::PrintStackSentence()
 		std::cout << "The stack of INPUT CHARACTERS is not empty, it contains: ";
 		while (!m_stackSentence.empty())
 		{
-			std::cout << m_stackSentence.top() << ", ";
+			std::cout << m_stackSentence.top().type << ", ";
 			m_stackSentence.pop();
 		}
 		std::cout << std::endl;
@@ -200,7 +219,7 @@ void SyntacticalAnalyzer::PrintStackSentence()
 
 void SyntacticalAnalyzer::PrintSentence()
 {
-	if (m_sentence.empty() || (m_sentence.size() == 1 && m_sentence.front() == m_guideSets[0].nonterminal))
+	if (m_sentence.empty() || (m_sentence.size() == 1 && m_sentence.front().type == m_guideSets[0].nonterminal))
 	{
 		std::cout << "The INPUT SENTENCE is empty = OK" << std::endl;
 	}
@@ -209,7 +228,7 @@ void SyntacticalAnalyzer::PrintSentence()
 		std::cout << "The INPUT SENTENCE is not empty, it contains: ";
 		for (auto ch : m_sentence)
 		{
-			std::cout << ch << ", ";
+			std::cout << ch.type << ", ";
 		}
 		std::cout << std::endl;
 	}

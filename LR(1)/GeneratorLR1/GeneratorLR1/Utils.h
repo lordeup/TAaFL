@@ -3,7 +3,6 @@
 
 using PairStringBool = std::pair<std::string, bool>;
 using PairStringVectorPair = std::pair<std::string, std::vector<PairStringBool>>;
-using PairStringString = std::pair<std::string, std::string>;
 
 bool IsCheckUniqueness(const std::vector<std::string>& vec, const std::string str);
 bool IsNonterminal(const std::string str);

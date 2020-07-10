@@ -198,14 +198,9 @@ Token Lexer::CheckNumber(std::string& str)
 		{
 			if (!IsSeparator(ch))
 			{
-				if (!IsFindVectorChar(m_binary, ch))
-				{
-					//SetState(State::SKIP);
-				}
 				digits += ch;
 			}
 		}
-		//token.type = m_state == State::START ? TokenType::BINARY : TokenType::ERROR;
 		token.type = TokenType::BINARY;
 	}
 	else if (numberSystem == "0o")
@@ -215,14 +210,9 @@ Token Lexer::CheckNumber(std::string& str)
 		{
 			if (!IsSeparator(ch))
 			{
-				if (!IsFindVectorChar(m_octal, ch))
-				{
-					//SetState(State::SKIP);
-				}
 				digits += ch;
 			}
 		}
-		//token.type = m_state == State::START ? TokenType::OCTAL : TokenType::ERROR;
 		token.type = TokenType::OCTAL;
 	}
 	else if (numberSystem == "0x")
@@ -232,10 +222,6 @@ Token Lexer::CheckNumber(std::string& str)
 		{
 			if (!IsSeparator(ch))
 			{
-				if (!IsFindVectorChar(m_hexadecimal, ch))
-				{
-					//SetState(State::SKIP);
-				}
 				digits += ch;
 			}
 		}
@@ -260,11 +246,6 @@ Token Lexer::CheckNumber(std::string& str)
 				if (IsDigit(ch) && nextCh == POINT)
 				{
 					token.type = isdigit(str[i + 2]) ? TokenType::FLOAT : TokenType::ERROR;
-
-					if (IsSeparator(str[i + 2]))
-					{
-						//SetState(State::SKIP);
-					}
 				}
 
 				if (token.type != TokenType::FLOAT && token.type != TokenType::DOUBLE)
@@ -278,11 +259,6 @@ Token Lexer::CheckNumber(std::string& str)
 				token.type = TokenType::ERROR;
 				break;
 			}
-		}
-
-		if (token.type != TokenType::ERROR)
-		{
-			//SetState(State::SKIP);
 		}
 	}
 

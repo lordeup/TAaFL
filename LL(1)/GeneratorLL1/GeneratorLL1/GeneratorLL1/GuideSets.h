@@ -4,8 +4,6 @@
 
 std::vector<OutputDataGuideSets> GetFormingGuideSets(std::istream& fileInput);
 
-std::string GetTokenType(std::string str, std::vector<PairStringString>& pairsTerminalTokenType, Lexer& lexer);
-
 void FillingData(std::istream& fileInput, std::vector<InputData>& inputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals, Lexer& lexer);
 void Forming(const std::vector<InputData>& inputDatas, std::vector<OutputDataGuideSets>& outputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals);
 void ActionsRightSide(const std::vector<InputData>& inputDatas, std::vector<OutputDataGuideSets>& outputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals,

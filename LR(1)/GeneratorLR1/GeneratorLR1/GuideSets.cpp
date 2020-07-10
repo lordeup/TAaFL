@@ -30,35 +30,9 @@ std::vector<std::string> GetCharacters(const std::vector<std::string>& nontermin
 	return characters;
 }
 
-std::string GetTokenType(std::string terminal, std::vector<PairStringString>& pairsTerminalTokenType, Lexer& lexer)
-{
-	if (IsEmptyRule(terminal) || IsEndRule(terminal))
-	{
-		return terminal;
-	}
-
-	auto it = std::find_if(pairsTerminalTokenType.begin(), pairsTerminalTokenType.end(), [&](const PairStringString& data) { return data.first == terminal; });
-
-	std::string tokenType;
-
-	if (it == pairsTerminalTokenType.end())
-	{
-		Token token = lexer.GetToken(terminal);
-		tokenType = lexer.GetTokenType(token.type);
-		pairsTerminalTokenType.push_back(std::make_pair(terminal, tokenType));
-	}
-	else
-	{
-		tokenType = (*it).second;
-	}
-
-	return tokenType;
-}
-
 void FillingData(std::istream& fileInput, std::vector<InputData>& inputDatas, std::vector<std::string>& nonterminals, std::vector<std::string>& terminals, Lexer& lexer)
 {
 	std::string line;
-	std::vector<PairStringString> pairsTerminalTokenType;
 	while (std::getline(fileInput, line))
 	{
 		std::istringstream iss(line);
@@ -79,11 +53,15 @@ void FillingData(std::istream& fileInput, std::vector<InputData>& inputDatas, st
 
 				if (!IsNonterminal(str))
 				{
-					newStr = GetTokenType(str, pairsTerminalTokenType, lexer);
+					bool isEndSequence = IsEmptyRule(str) || IsEndRule(str);
+
+					if (!isEndSequence)
+					{
+						newStr = lexer.GetToken(str).type;
+					}
 
 					if (IsCheckUniqueness(terminals, newStr))
 					{
-						bool isEndSequence = IsEmptyRule(str) || IsEndRule(str);
 						terminals.push_back(isEndSequence ? NONTERMINAL_END_SEQUENCE : newStr);
 					}
 				}
@@ -266,7 +244,7 @@ void SearchStartingTerminalsEmptyRules(std::vector<OutputDataGuideSets>& outputD
 		auto outputData = outputDatas[i];
 		auto it1 = std::find_if(outputData.terminals.begin(), outputData.terminals.end(), [&](const std::string& str) { return str == nonterminal; });
 
-		if (it1 != outputData.terminals.end() && outputData.nonterminal != nonterminal)
+		if (it1 != outputData.terminals.end())
 		{
 			size_t distance = std::distance(outputData.terminals.begin(), it1);
 			size_t size = outputData.terminals.size() - 1;
@@ -287,7 +265,7 @@ void SearchStartingTerminalsEmptyRules(std::vector<OutputDataGuideSets>& outputD
 				transitions[row].second[column].second = true;
 			}
 
-			if (nonterminal == parentNonterminal)
+			if (nonterminal == parentNonterminal && nonterminal != outputData.nonterminal)
 			{
 				for (auto& data : outputDatas)
 				{

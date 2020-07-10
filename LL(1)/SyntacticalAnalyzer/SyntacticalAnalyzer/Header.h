@@ -35,3 +35,4 @@ struct OutputTableData
 using PairStringString = std::pair<std::string, std::string>;
 
 const std::string TAB = "\t";
+const std::string END_CHAIN = "#";

@@ -76,6 +76,26 @@ void GeneratorLR::FormingTransitions(const TableData& tableData, std::vector<Tra
 		}
 		else
 		{
+			std::string str = m_inputDatas[tableData.row].terminals[tableData.position == 0 ? tableData.position : tableData.position - 1];
+
+			if (IsNonterminal(str))
+			{
+				auto it = std::find_if(m_rightSides.begin(), m_rightSides.end(), [&](const TableData& data) { return data.nonterminal == str && IsEmptyRule(data.character); });
+
+				if (it != m_rightSides.end())
+				{
+					std::vector<TableData> tableDatasFindGuideSets = GetTableDatasFindGuideSets(m_tableDataGuideSets, str);
+
+					for (const auto& data : tableDatasFindGuideSets)
+					{
+						if (data.character != str)
+						{
+							AddRollUp(data, data.character, transitions);
+						}
+					}
+				}
+			}
+
 			FindRollUp(tableData, m_inputDatas[tableData.row].nonterminal, m_inputDatas[tableData.row].nonterminal, transitions);
 		}
 	}
@@ -90,7 +110,7 @@ void GeneratorLR::AddingStackItems(std::vector<Transition>& transitions)
 			std::vector<TableData> vec;
 			for (const auto& tableData : transition.tableDatas)
 			{
-				if (IsCheckTableDataUniqueness(m_states, tableData))
+				if (IsCheckTableDataUniqueness(m_states, tableData) && !IsEmptyRule(tableData.character))
 				{
 					vec.push_back(tableData);
 					m_states.push_back(tableData);
@@ -164,11 +184,12 @@ void GeneratorLR::ConvertingTable()
 
 		for (size_t j = 0; j < transitions.size(); ++j)
 		{
-			if (outputGeneratorData.transitions[j].state == StateGenerator::START)
+			StateGenerator state = outputGeneratorData.transitions[j].state;
+			if (state == StateGenerator::START)
 			{
 				transitions[j] = "Ok";
 			}
-			else if (outputGeneratorData.transitions[j].state == StateGenerator::SHIFT)
+			else if (state == StateGenerator::SHIFT)
 			{
 				for (const auto& tableData : outputGeneratorData.transitions[j].tableDatas)
 				{
@@ -179,11 +200,11 @@ void GeneratorLR::ConvertingTable()
 					if (distance < m_outputGeneratorDatas.size())
 					{
 						transitions[j] = "S" + std::to_string(distance + 1);
-						break;
+						//break;
 					}
 				}
 			}
-			else if (outputGeneratorData.transitions[j].state == StateGenerator::ROLL_UP)
+			else if (state == StateGenerator::ROLL_UP)
 			{
 				transitions[j] = "R" + std::to_string(outputGeneratorData.transitions[j].tableDatas.back().row + 1);
 			}
@@ -199,7 +220,7 @@ std::vector<TableData> GeneratorLR::GetTableDatasFindGuideSets(const std::vector
 
 	for (auto it = vec.begin(); it != vec.end(); ++it)
 	{
-		it = std::find_if(it, vec.end(), [&](const TableData& data) { return data.nonterminal == str && !IsEmptyRule(data.character); });
+		it = std::find_if(it, vec.end(), [&](const TableData& data) { return data.nonterminal == str; });
 		if (it == vec.end())
 		{
 			break;
@@ -228,15 +249,23 @@ std::vector<TableData> GeneratorLR::GetRightSides()
 
 void GeneratorLR::PrintResult()
 {
-	m_output << "Number" << TAB << "Rule" << TAB << "Char" << TAB << "Size" << TAB;
-	PrintInfoVector(m_output, m_characters, TAB);
+	m_output << "Number" << TAB << "Char" << TAB;
+
+	for (auto it = m_characters.begin(); it != m_characters.end(); ++it)
+	{
+		m_output << (IsEmptyRule(*it) ? TERMINAL_END_SEQUENCE : *it);
+
+		if (it != m_characters.end() - 1)
+		{
+			m_output << TAB;
+		}
+	}
 
 	m_output << std::endl;
 
 	for (size_t i = 0; i < m_outputDatas.size(); ++i)
 	{
-		TableData tableData = m_outputDatas[i].tableData;
-		m_output << i + 1 << TAB << m_inputDatas[tableData.row].nonterminal << TAB << tableData.character << TAB << m_inputDatas[tableData.row].terminals.size() << TAB;
+		m_output << i + 1 << TAB << m_outputDatas[i].tableData.character << TAB;
 
 		for (auto it = m_outputDatas[i].transitions.begin(); it != m_outputDatas[i].transitions.end(); ++it)
 		{

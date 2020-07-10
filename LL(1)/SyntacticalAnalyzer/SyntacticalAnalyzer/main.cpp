@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 		Lexer lexer;
 
 		InitInputTable(fileTableInput, inputTable);
-		std::vector<TokenData> tokens = lexer.GetTokenDatas(fileSentenceInput);
+		std::vector<Token> tokens = lexer.GetTokenDatas(fileSentenceInput);
 		MakeProcess(inputTable, outputTable, tokens);
 		PrintResult(fileOutput, outputTable);
 	}

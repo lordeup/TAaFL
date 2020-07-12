@@ -305,7 +305,7 @@ void SearchStartingTerminalsEmptyRules(std::vector<OutputDataGuideSets>& outputD
 	{
 		auto it1 = std::find_if(outputData.terminals.begin(), outputData.terminals.end(), [&](const std::string& str) { return str == nonterminal; });
 
-		if (it1 != outputData.terminals.end() && outputData.nonterminal != nonterminal)
+		if (it1 != outputData.terminals.end())
 		{
 			size_t distance = std::distance(outputData.terminals.begin(), it1);
 			size_t size = outputData.terminals.size() - 1;
@@ -319,7 +319,7 @@ void SearchStartingTerminalsEmptyRules(std::vector<OutputDataGuideSets>& outputD
 				transitions[row].second[column].second = true;
 			}
 
-			if (nonterminal == parentNonterminal)
+			if (nonterminal == parentNonterminal && outputData.nonterminal != nonterminal)
 			{
 				for (auto& data : outputDatas)
 				{

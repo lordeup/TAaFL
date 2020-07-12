@@ -25,13 +25,17 @@ private:
 
 	void FormingTransitions(const TableData& tableData, std::vector<Transition>& transitions);
 
-	void WriteTransitions(const TableData& tableData, const std::string str, std::vector<Transition>& transitions);
+	std::vector<TableData>::iterator FindEmptyRuleInRightSides(const std::string str);
+
+	void WriteTransitions(const TableData& tableData, const std::string str, std::vector<Transition>& transitions, const TableData& firstData);
 
 	void AddShift(const TableData& tableData, std::vector<Transition>& transitions);
 	void AddRollUp(const TableData& tableData, const std::string str, std::vector<Transition>& transitions);
 	void AddEvent(const TableData& tableData, const std::string str, const StateGenerator state, std::vector<Transition>& transitions);
 
-	void FindRollUp(const TableData& tableData, const std::string parentNonterminal, const std::string nonterminal, std::vector<Transition>& transitions);
+	void AddRollUpEmptyRule(const TableData& tableData, const std::string str, std::vector<Transition>& transitions);
+
+	void FindEvent(const TableData& tableData, const std::string parentNonterminal, const std::string nonterminal, const StateGenerator state, std::vector<Transition>& transitions);
 
 	void AddingStackItems(std::vector<Transition>& transitions);
 

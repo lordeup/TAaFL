@@ -69,4 +69,5 @@ namespace TokenType
 	const std::string LESS_OR_EQUAL = "LESS_OR_EQUAL";
 
 	const std::string COMMENT = "COMMENT";
+	const std::string END_OF_INPUT = "#";
 };

@@ -1,0 +1,10 @@
+Number	Char	<S>	<list>	<id>	real	,	a	b	c	e
+1	Start	Ok	-	-	S2	-	-	-	-	-
+2	real	-	S7	S6	-	-	S5	S4	S3	-
+3	c	-	-	-	-	R6	-	-	-	R6
+4	b	-	-	-	-	R5	-	-	-	R5
+5	a	-	-	-	-	R4	-	-	-	R4
+6	<id>	-	-	-	-	R3	-	-	-	R3
+7	<list>	-	-	-	-	S8	-	-	-	R1
+8	,	-	-	S9	-	-	S5	S4	S3	-
+9	<id>	-	-	-	-	R2	-	-	-	R2

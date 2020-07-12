@@ -1,8 +1,8 @@
 #include "Logger.h"
 
-Logger::Logger()
+Logger::Logger(const std::string fileName)
 {
-	m_outputFile = std::ofstream("Logger.txt");
+	m_outputFile = std::ofstream(fileName);
 }
 
 void Logger::Log(std::string str)

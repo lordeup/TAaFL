@@ -1,10 +1,10 @@
 #pragma once
+#include "Helper.h"
 #include "LRData.h"
 #include "Lexer.h"
-#include "Helper.h"
-#include <sstream>
 #include <fstream>
 #include <list>
+#include <sstream>
 
 class LRReader
 {
@@ -18,7 +18,7 @@ public:
 	std::list<Token> GetSentence();
 	std::vector<std::string> GetHeaderSymbols();
 
-private: 
+private:
 	std::vector<Symbol> GetSymbols(std::istringstream& iss);
 	void InitHeaderSymbols(std::string line);
 

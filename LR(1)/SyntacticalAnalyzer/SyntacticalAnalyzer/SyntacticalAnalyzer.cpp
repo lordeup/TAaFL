@@ -1,10 +1,11 @@
 #include "SyntacticalAnalyzer.h"
 
-SyntacticalAnalyzer::SyntacticalAnalyzer(std::vector<GuideSetsData> guideSets, std::vector<std::string> headerSymbols, std::vector<LRData> lrData, std::list<Token> sentence)
+SyntacticalAnalyzer::SyntacticalAnalyzer(std::vector<GuideSetsData> guideSets, std::vector<std::string> headerSymbols, std::vector<LRData> lrData, std::list<Token> sentence, Logger& logger)
 	: m_guideSets(guideSets)
 	, m_headerSymbols(headerSymbols)
 	, m_lrData(lrData)
 	, m_sentence(sentence)
+	, m_logger(logger)
 {
 }
 
@@ -88,13 +89,7 @@ void SyntacticalAnalyzer::Run()
 			m_logger.Log("State none for header character '" + currentToken.type + "' in row number " + std::to_string(m_currentLRData.number));
 			m_logger.Print();
 
-			std::string possibles = "";
-			for (auto ch : possibleSymbols)
-			{
-				possibles.append(ch + " ");
-			}
-
-			throw std::invalid_argument("State none for header character: " + currentToken.type + "\ntoken value: " + currentToken.value + "\npossibles: " + possibles + "\nline number: " + std::to_string(currentToken.lineNumber) + "\nposition index: " + std::to_string(currentToken.positionIndex) + "\nin row number: " + std::to_string(m_currentLRData.number));
+			throw std::invalid_argument("State none for header character: " + currentToken.type + "\ntoken value: " + currentToken.value + "\nline number: " + std::to_string(currentToken.lineNumber) + "\nposition index: " + std::to_string(currentToken.positionIndex) + "\nin row number: " + std::to_string(m_currentLRData.number));
 		}
 
 		LogStackLRDataInfo();

@@ -1,4 +1,0 @@
-Number	Char	<dztFa>	<S>	a	e
-1	Start	Ok	S2	R3	R3
-2	<S>	-	-	S3	R1
-3	a	-	-	R2	R2

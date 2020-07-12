@@ -1,0 +1,7 @@
+<S> => <A> <B> <C> # / <A> <B> <C> # ID INTEGER SEMICOLON
+<A> => <A> ID / <A>
+<A> => e / <B> <C> # ID INTEGER SEMICOLON
+<B> => <B> INTEGER / <B>
+<B> => e / <C> # INTEGER SEMICOLON
+<C> => <C> SEMICOLON / <C>
+<C> => e / # SEMICOLON

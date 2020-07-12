@@ -1,6 +1,5 @@
 ﻿#include "LRReader.h"
 #include "SyntacticalAnalyzer.h"
-#include <iostream>
 
 int main(int argc, char* argv[])
 {
@@ -16,7 +15,7 @@ int main(int argc, char* argv[])
 		std::ifstream fileGuideSetsInput(argv[1]);
 		std::ifstream fileTableInput(argv[2]);
 		std::ifstream fileSentenceInput(argv[3]);
-		std::ofstream fileOutput(argv[4]);
+		Logger logger(argv[4]);
 
 		if (!fileTableInput.is_open() || !fileSentenceInput.is_open())
 		{
@@ -34,7 +33,7 @@ int main(int argc, char* argv[])
 		auto lrData = lrReader.GetLRData();
 		auto sentence = lrReader.GetSentence();
 
-		SyntacticalAnalyzer analyzer(guideSets, headerSymbols, lrData, sentence);
+		SyntacticalAnalyzer analyzer(guideSets, headerSymbols, lrData, sentence, logger);
 		analyzer.Run();
 	}
 	catch (const std::exception& e)

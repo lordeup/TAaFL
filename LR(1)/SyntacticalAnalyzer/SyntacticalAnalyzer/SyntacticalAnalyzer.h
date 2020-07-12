@@ -1,18 +1,18 @@
 #pragma once
+#include "Helper.h"
 #include "LRData.h"
 #include "Lexer.h"
 #include "Logger.h"
-#include "Helper.h"
-#include <set>
-#include <fstream>
-#include <list>
 #include <algorithm>
+#include <fstream>
 #include <iostream>
+#include <list>
+#include <set>
 
 class SyntacticalAnalyzer
 {
 public:
-	SyntacticalAnalyzer(std::vector<GuideSetsData> guideSets, std::vector<std::string> headerSymbols, std::vector<LRData> lrData, std::list<Token> sentence);
+	SyntacticalAnalyzer(std::vector<GuideSetsData> guideSets, std::vector<std::string> headerSymbols, std::vector<LRData> lrData, std::list<Token> sentence, Logger& logger);
 	void Run();
 
 private:
@@ -35,5 +35,5 @@ private:
 	std::stack<LRData> m_stackLRData;
 	std::stack<Token> m_stackSentence;
 	LRData m_currentLRData;
-	Logger m_logger;
+	Logger& m_logger;
 };

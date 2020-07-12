@@ -1,13 +1,12 @@
 #pragma once
-#include <iostream>
-#include <vector>
-#include <string>
 #include <fstream>
+#include <string>
+#include <vector>
 
 class Logger
 {
 public:
-	Logger();
+	Logger(const std::string fileName);
 	void Log(std::string str);
 	void Print();
 
